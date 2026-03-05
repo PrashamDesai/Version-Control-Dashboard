@@ -17,8 +17,7 @@ import BuildChecklist from './pages/BuildChecklist';
 import StoreListing from './pages/StoreListing';
 import ClosedTestReports from './pages/ClosedTestReports';
 import FirestoreRules from './pages/FirestoreRules';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
+import Auth from './pages/Auth';
 import AdminDashboard from './pages/AdminDashboard';
 import Team from './pages/Team';
 import QABug from './pages/QABug';
@@ -41,8 +40,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* Public Routes */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Auth />} />
+          <Route path="/signup" element={<Auth />} />
 
           {/* Protected Routes */}
           <Route element={<PrivateRoute />}>

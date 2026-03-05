@@ -11,7 +11,7 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID || 'dummy_client_id
 // @route   POST /api/auth/register
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-    const { name, email, phone, password, role } = req.body;
+    const { name, email, phone, password } = req.body;
 
     if (!email) return errorResponse(res, 400, 'Email is required');
     if (!phone) return errorResponse(res, 400, 'Phone number is required');
@@ -23,8 +23,9 @@ const registerUser = asyncHandler(async (req, res) => {
         return errorResponse(res, 400, 'User already exists with this email or phone');
     }
 
-    const allowedRoles = ['user', 'admin'];
-    const assignedRole = allowedRoles.includes(role) ? role : 'user';
+    // Assign super_admin if it's the first user ever
+    const userCount = await User.countDocuments({});
+    const assignedRole = userCount === 0 ? 'super_admin' : 'user';
 
     const user = await User.create({ name, email, phone, password, role: assignedRole });
 
@@ -105,13 +106,17 @@ const googleAuth = asyncHandler(async (req, res) => {
                 await user.save();
             }
         } else {
+            // Assign super_admin if it's the first user ever
+            const userCount = await User.countDocuments({});
+            const assignedRole = userCount === 0 ? 'super_admin' : 'user';
+
             // Create a new user with default 'user' role
             user = await User.create({
                 name,
                 email,
                 googleId,
                 avatarUrl,
-                role: 'user'
+                role: assignedRole
             });
         }
 
