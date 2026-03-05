@@ -15,7 +15,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-    origin: "https://version-control-dashboard.onrender.com"
+    origin: ["https://version-control-dashboard.onrender.com", "https://version-control-dashboard-1.onrender.com"]
 }));
 app.use(express.json()); // Body parser
 
