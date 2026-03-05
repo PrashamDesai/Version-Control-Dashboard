@@ -16,7 +16,8 @@ const app = express();
 const allowedOrigins = [
     'http://localhost:5173', // Local development
     'http://localhost:3000',
-    process.env.FRONTEND_URL // Production frontend
+    'https://resonant-florentine-05f423.netlify.app', // Production Netlify frontend
+    process.env.FRONTEND_URL // Fallback env variable
 ].filter(Boolean);
 
 // Middleware
