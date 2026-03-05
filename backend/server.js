@@ -14,7 +14,9 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: "https://version-control-dashboard.onrender.com"
+}));
 app.use(express.json()); // Body parser
 
 // Make uploads folder static to serve images
