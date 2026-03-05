@@ -119,7 +119,7 @@ export default function StoreListing() {
     if (loading) {
         return (
             <div className="flex items-center justify-center p-12">
-                <Loader2 className="animate-spin text-blue-500" size={32} />
+                <Loader2 className="animate-spin text-violet-500" size={32} />
             </div>
         );
     }
@@ -165,7 +165,7 @@ export default function StoreListing() {
                 <button
                     onClick={handleSave}
                     disabled={saving}
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-blue-500/20"
+                    className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
                 >
                     {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                     {saving ? 'Saving...' : 'Save Changes'}
@@ -192,7 +192,7 @@ export default function StoreListing() {
                         className={cn(
                             "px-4 py-3 font-medium text-sm flex items-center gap-2 border-b-2 transition-all",
                             platform === 'iOS'
-                                ? "border-blue-500 text-blue-400 bg-blue-500/5 rounded-t-lg"
+                                ? "border-violet-500 text-violet-400 bg-violet-500/5 rounded-t-lg"
                                 : "border-transparent text-zinc-500 hover:text-zinc-300"
                         )}
                     >
@@ -214,7 +214,7 @@ export default function StoreListing() {
                                     name="title"
                                     value={currentData.title || ''}
                                     onChange={handleChange}
-                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
+                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
                                 />
                             </div>
 
@@ -225,7 +225,7 @@ export default function StoreListing() {
                                     value={currentData.shortDescription || ''}
                                     onChange={handleChange}
                                     rows={2}
-                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all resize-none placeholder:text-zinc-600 focus:bg-zinc-800/50"
+                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all resize-none placeholder:text-zinc-600 focus:bg-zinc-800/50"
                                 />
                             </div>
 
@@ -235,7 +235,7 @@ export default function StoreListing() {
                                     name="longDescription"
                                     value={currentData.longDescription || ''}
                                     onChange={handleChange}
-                                    className="w-full flex-1 bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all resize-none placeholder:text-zinc-600 focus:bg-zinc-800/50 font-mono min-h-[200px]"
+                                    className="w-full flex-1 bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all resize-none placeholder:text-zinc-600 focus:bg-zinc-800/50 font-mono min-h-[200px]"
                                 />
                             </div>
 
@@ -246,7 +246,7 @@ export default function StoreListing() {
                                         name="address"
                                         value={currentData.address || ''}
                                         onChange={handleChange}
-                                        className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
+                                        className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
                                     />
                                 </div>
                                 <div className="space-y-2">
@@ -255,7 +255,7 @@ export default function StoreListing() {
                                         name="postalCode"
                                         value={currentData.postalCode || ''}
                                         onChange={handleChange}
-                                        className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
+                                        className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
                                     />
                                 </div>
                             </div>
@@ -277,14 +277,14 @@ export default function StoreListing() {
                                             value={currentData[field.name] || ''}
                                             onChange={handleChange}
                                             rows={3}
-                                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all resize-none placeholder:text-zinc-600 focus:bg-zinc-800/50"
+                                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all resize-none placeholder:text-zinc-600 focus:bg-zinc-800/50"
                                         />
                                     ) : (
                                         <input
                                             name={field.name}
                                             value={currentData[field.name] || ''}
                                             onChange={handleChange}
-                                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
+                                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
                                         />
                                     )}
                                 </div>
@@ -297,3 +297,4 @@ export default function StoreListing() {
         </div>
     );
 }
+

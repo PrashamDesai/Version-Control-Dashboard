@@ -111,7 +111,7 @@ export default function AdminDashboard() {
 
                 {loading ? (
                     <div className="flex items-center justify-center py-16">
-                        <Loader2 size={28} className="animate-spin text-blue-500" />
+                        <Loader2 size={28} className="animate-spin text-violet-500" />
                     </div>
                 ) : users.length === 0 ? (
                     <div className="text-center py-16 text-zinc-500 text-sm">No users found.</div>
@@ -122,7 +122,7 @@ export default function AdminDashboard() {
                                 key={u._id}
                                 className={cn(
                                     'grid grid-cols-[1fr_auto_auto_auto] items-center px-4 py-3.5 transition-colors',
-                                    u._id === me?._id ? 'bg-blue-500/5' : 'hover:bg-zinc-900/40'
+                                    u._id === me?._id ? 'bg-violet-500/5' : 'hover:bg-zinc-900/40'
                                 )}
                             >
                                 {/* User info */}
@@ -138,7 +138,7 @@ export default function AdminDashboard() {
                                         <p className="text-sm font-medium text-zinc-100 truncate">
                                             {u.name}
                                             {u._id === me?._id && (
-                                                <span className="ml-2 text-[10px] text-blue-400 font-semibold">(you)</span>
+                                                <span className="ml-2 text-[10px] text-violet-400 font-semibold">(you)</span>
                                             )}
                                         </p>
                                         <p className="text-xs text-zinc-500 truncate">{u.email || u.phone || '—'}</p>
@@ -163,7 +163,7 @@ export default function AdminDashboard() {
                                                 value={u.role}
                                                 disabled={updatingId === u._id || u._id === me?._id}
                                                 onChange={e => handleRoleChange(u._id, e.target.value)}
-                                                className="appearance-none bg-zinc-900 border border-zinc-700 text-zinc-200 text-xs rounded-lg px-3 py-1.5 pr-7 focus:outline-none focus:border-blue-500 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                                                className="appearance-none bg-zinc-900 border border-zinc-700 text-zinc-200 text-xs rounded-lg px-3 py-1.5 pr-7 focus:outline-none focus:border-violet-500 transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                                             >
                                                 {ROLES.map(r => (
                                                     <option key={r} value={r}>{r.replace('_', ' ')}</option>
@@ -208,3 +208,4 @@ export default function AdminDashboard() {
         </div>
     );
 }
+

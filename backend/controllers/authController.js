@@ -124,6 +124,7 @@ const googleAuth = asyncHandler(async (req, res) => {
             _id: user._id,
             name: user.name,
             email: user.email,
+            phone: user.phone,
             avatarUrl: user.avatarUrl,
             role: user.role,
             token: generateToken(user._id),

@@ -67,12 +67,12 @@ async function sendBugEmail({ toEmail, toName, gameName, gameSlug, reportedBy, w
         <a href="${bugUrl}" style="display:inline-block;padding:10px 18px;background:#dc2626;color:#ffffff;text-decoration:none;font-size:14px;font-weight:600;border-radius:6px;">View Bug in Dashboard</a>
       </div>
 
-      <p style="margin:24px 0 0;font-size:11px;color:#52525b">Sent by Version Control Dashboard · Do not reply to this email.</p>
+      <p style="margin:24px 0 0;font-size:11px;color:#52525b">Sent by EchoGames Dash · Do not reply to this email.</p>
     </div>`;
 
   try {
     await transporter.sendMail({
-      from: `"VC Dashboard" <${process.env.SMTP_USER}>`,
+      from: `"EchoGames" <${process.env.SMTP_USER}>`,
       to: toEmail,
       subject,
       html,

@@ -33,7 +33,7 @@ export default function GameLayout() {
     if (loading) {
         return (
             <div className="flex h-screen bg-[#09090b] text-zinc-100 items-center justify-center">
-                <Loader2 className="animate-spin text-blue-500" size={40} />
+                <Loader2 className="animate-spin text-violet-500" size={40} />
             </div>
         );
     }
@@ -45,7 +45,7 @@ export default function GameLayout() {
             <Sidebar game={game} />
             <div className="flex flex-col flex-1 min-w-0">
                 <TopNav showGameSwitcher={true} game={game} />
-                <main className="flex-1 overflow-y-auto p-6 md:p-8">
+                <main className="flex-1 overflow-y-auto py-10 px-6 md:px-16 pl-20 md:pl-28">
                     <div key={location.pathname} className="tab-panel max-w-7xl mx-auto space-y-8">
                         <Outlet context={{ game }} />
                     </div>
@@ -54,3 +54,4 @@ export default function GameLayout() {
         </div>
     );
 }
+

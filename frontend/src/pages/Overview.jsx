@@ -12,7 +12,7 @@ import { toast } from 'sonner';
 // ── Stat card ─────────────────────────────────────────────────────────────────
 const StatCard = ({ title, value, subtitle, icon: Icon, accent = 'blue' }) => {
     const accentMap = {
-        blue: 'text-blue-400 bg-blue-500/10',
+        blue: 'text-violet-400 bg-violet-500/10',
         green: 'text-emerald-400 bg-emerald-500/10',
         amber: 'text-amber-400 bg-amber-500/10',
         purple: 'text-purple-400 bg-purple-500/10',
@@ -77,7 +77,7 @@ const BigStoreLogoLink = ({ platform, icon, url, onSave }) => {
                     className="w-full text-[10px] sm:text-xs bg-zinc-900 border border-zinc-700 rounded mb-2 px-1 py-1 text-zinc-100 text-center"
                 />
                 <div className="flex gap-1 w-full">
-                    <button onClick={handleSave} disabled={saving} className="flex-1 py-1 bg-blue-600 hover:bg-blue-700 rounded text-white flex justify-center items-center">
+                    <button onClick={handleSave} disabled={saving} className="flex-1 py-1 bg-violet-600 hover:bg-violet-700 rounded text-white flex justify-center items-center">
                         {saving ? <Loader2 size={10} className="animate-spin" /> : <Check size={10} />}
                     </button>
                     <button onClick={() => { setEditing(false); setVal(url || ''); }} className="flex-1 py-1 bg-zinc-800 hover:bg-zinc-700 rounded text-zinc-400 flex justify-center items-center">
@@ -122,9 +122,13 @@ export default function Overview() {
     const [releases, setReleases] = useState([]);
     const [environmentsCount, setCount] = useState(0);
     const [loading, setLoading] = useState(true);
-    // Local mutable store URLs (updated without re-fetching all)
+
+    // Local mutable state
     const [playStoreUrl, setPlayStoreUrl] = useState(game?.playStoreUrl || '');
     const [appStoreUrl, setAppStoreUrl] = useState(game?.appStoreUrl || '');
+
+    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+    const isAdmin = userInfo?.user?.role === 'admin' || userInfo?.user?.role === 'super_admin';
 
     useEffect(() => {
         setPlayStoreUrl(game?.playStoreUrl || '');
@@ -166,7 +170,7 @@ export default function Overview() {
     if (loading) {
         return (
             <div className="flex items-center justify-center p-12">
-                <Loader2 className="animate-spin text-blue-500" size={32} />
+                <Loader2 className="animate-spin text-violet-500" size={32} />
             </div>
         );
     }
@@ -185,7 +189,7 @@ export default function Overview() {
         <div className="space-y-6">
             {/* ── Hero card ─────────────────────────────────────────────────── */}
             <div className="glass-panel p-6 rounded-2xl relative overflow-hidden border border-zinc-800/80 bg-gradient-to-br from-[#0d0d10] via-[#111114] to-[#0a0a0e]">
-                <div className="absolute -top-16 -right-16 w-64 h-64 bg-blue-500/8 rounded-full blur-3xl pointer-events-none" />
+                <div className="absolute -top-16 -right-16 w-64 h-64 bg-violet-500/8 rounded-full blur-3xl pointer-events-none" />
                 <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-purple-500/6 rounded-full blur-3xl pointer-events-none" />
 
                 <div className="relative z-10 flex flex-col sm:flex-row gap-5 items-start justify-between w-full">
@@ -219,7 +223,7 @@ export default function Overview() {
                                 )}
                                 {isIos && (
                                     <span className="flex items-center gap-1.5">
-                                        <MonitorPlay size={13} className="text-blue-400" /> iOS
+                                        <MonitorPlay size={13} className="text-violet-400" /> iOS
                                     </span>
                                 )}
                                 {game.slug && (
@@ -237,7 +241,7 @@ export default function Overview() {
                                     </span>
                                 )}
                                 {liveIos && (
-                                    <span className="flex items-center gap-1.5 text-blue-400">
+                                    <span className="flex items-center gap-1.5 text-violet-400">
                                         iOS live: <strong>{liveIos.versionName}</strong>
                                     </span>
                                 )}
@@ -300,9 +304,8 @@ export default function Overview() {
             </div>
 
             {/* ── Bottom section ─────────────────────────────────────────────── */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Recent releases table */}
-                <div className="lg:col-span-2 glass-panel rounded-xl border border-zinc-800/50 overflow-hidden">
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+                <div className="lg:col-span-3 glass-panel rounded-xl border border-zinc-800/50 overflow-hidden">
                     <div className="p-5 border-b border-zinc-800/50 bg-[#111114] flex items-center justify-between">
                         <div className="flex items-center gap-2">
                             <Layers size={15} className="text-zinc-500" />
@@ -341,43 +344,27 @@ export default function Overview() {
                     )}
                 </div>
 
-                {/* Sidebar panels */}
-                <div className="space-y-4">
-                    {/* Developer Consoles */}
+                <div className="lg:col-span-2 space-y-4">
                     <div className="glass-panel rounded-xl p-6 border border-zinc-800/50 flex flex-col items-center text-center">
-                        <div className="w-14 h-14 bg-blue-500/10 border border-blue-500/20 rounded-full flex items-center justify-center mb-5 shadow-inner">
-                            <ExternalLink size={24} className="text-blue-400" />
+                        <div className="w-14 h-14 bg-violet-500/10 border border-violet-500/20 rounded-full flex items-center justify-center mb-5 shadow-inner">
+                            <ExternalLink size={24} className="text-violet-400" />
                         </div>
                         <h2 className="text-lg font-bold text-white mb-2">Developer Consoles</h2>
                         <p className="text-sm text-zinc-400 mb-6 leading-relaxed">
                             Quickly jump to the developer portals to manage this game's store listings and production builds.
                         </p>
-
                         <div className="w-full space-y-3">
                             {isAndroid && (
-                                <a
-                                    href={`https://play.google.com/console/u/0/developers`}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="flex items-center justify-center gap-3 w-full py-3 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-xl text-sm text-zinc-200 transition-colors font-medium shadow-sm hover:shadow-lg"
-                                >
+                                <a href="https://play.google.com/console/u/0/developers" target="_blank" rel="noreferrer" className="flex items-center justify-center gap-3 w-full py-3 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-xl text-sm text-zinc-200 transition-colors font-medium">
                                     <PlayStoreIcon className="w-5 h-5" />
                                     <span>Google Play Console</span>
                                 </a>
                             )}
                             {isIos && (
-                                <a
-                                    href={`https://appstoreconnect.apple.com/`}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="flex items-center justify-center gap-3 w-full py-3 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-xl text-sm text-zinc-200 transition-colors font-medium shadow-sm hover:shadow-lg"
-                                >
+                                <a href="https://appstoreconnect.apple.com/" target="_blank" rel="noreferrer" className="flex items-center justify-center gap-3 w-full py-3 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 rounded-xl text-sm text-zinc-200 transition-colors font-medium">
                                     <AppStoreIcon className="w-5 h-5" />
                                     <span>App Store Connect</span>
                                 </a>
-                            )}
-                            {!isAndroid && !isIos && (
-                                <span className="text-sm text-zinc-500 italic block py-4">No platforms configured</span>
                             )}
                         </div>
                     </div>

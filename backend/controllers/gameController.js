@@ -100,6 +100,68 @@ const uploadIcon = asyncHandler(async (req, res) => {
     });
 });
 
+// @desc    Upload Game Screenshots
+// @route   POST /api/games/:id/screenshots/:platform
+// @access  Private/Admin
+const uploadScreenshots = asyncHandler(async (req, res) => {
+    const { id, platform } = req.params;
+    console.log(`[DEBUG] Screenshot Upload - GameID: ${id}, Platform: ${platform}`);
+
+    const game = await Game.findById(id);
+
+    if (!game) {
+        console.log(`[DEBUG] Game not found with ID: ${id}`);
+        return errorResponse(res, 404, `Game not found with ID: ${id}`);
+    }
+
+    if (!['android', 'ios'].includes(platform.toLowerCase())) {
+        return errorResponse(res, 400, 'Invalid platform. Must be android or ios.');
+    }
+
+    if (!req.files || req.files.length === 0) {
+        return errorResponse(res, 400, 'Please upload at least one image file');
+    }
+
+    const field = platform.toLowerCase() === 'android' ? 'androidScreenshots' : 'iosScreenshots';
+    const newScreenshots = req.files.map(file => `/uploads/games/${file.filename}`);
+
+    game[field] = [...(game[field] || []), ...newScreenshots];
+    await game.save();
+
+    successResponse(res, 200, `${platform} screenshots uploaded successfully`, {
+        screenshots: game[field],
+        game
+    });
+});
+
+// @desc    Delete a screenshot
+// @route   DELETE /api/games/:id/screenshots/:platform
+// @access  Private/Admin
+const deleteScreenshot = asyncHandler(async (req, res) => {
+    const { platform } = req.params;
+    const { screenshotUrl } = req.body;
+    console.log(`[DEBUG] Screenshot Delete - GameID: ${req.params.id}, Platform: ${platform}, URL: ${screenshotUrl}`);
+    const game = await Game.findById(req.params.id);
+
+    if (!game) {
+        return errorResponse(res, 404, 'Game not found');
+    }
+
+    if (!['android', 'ios'].includes(platform.toLowerCase())) {
+        return errorResponse(res, 400, 'Invalid platform');
+    }
+
+    if (!screenshotUrl) {
+        return errorResponse(res, 400, 'screenshotUrl is required');
+    }
+
+    const field = platform.toLowerCase() === 'android' ? 'androidScreenshots' : 'iosScreenshots';
+    game[field] = game[field].filter(url => url !== screenshotUrl);
+    await game.save();
+
+    successResponse(res, 200, 'Screenshot deleted successfully', game[field]);
+});
+
 module.exports = {
     getGames,
     getGameBySlug,
@@ -107,4 +169,6 @@ module.exports = {
     updateGame,
     deleteGame,
     uploadIcon,
+    uploadScreenshots,
+    deleteScreenshot,
 };

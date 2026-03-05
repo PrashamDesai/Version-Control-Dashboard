@@ -130,19 +130,19 @@ export default function Team() {
     };
 
     return (
-        <div className="p-6 space-y-6 max-w-5xl mx-auto">
+        <div className="p-4 space-y-6">
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-xl font-bold text-white flex items-center gap-2">
-                        <Users size={20} className="text-blue-400" /> Team
+                        <Users size={20} className="text-violet-400" /> Team
                     </h1>
                     <p className="text-zinc-400 text-sm mt-0.5">Meet the people behind the dashboard.</p>
                 </div>
                 {isAdmin && (
                     <button
                         onClick={openCreate}
-                        className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-violet-600 hover:bg-violet-700 text-white rounded-lg transition-colors"
                     >
                         <Plus size={15} /> Add Member
                     </button>
@@ -227,7 +227,7 @@ export default function Team() {
                                 <select
                                     value={form.linkedUserId}
                                     onChange={e => setForm(p => ({ ...p, linkedUserId: e.target.value }))}
-                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:border-blue-500 focus:outline-none"
+                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 focus:border-violet-500 focus:outline-none"
                                 >
                                     <option value="">— None —</option>
                                     {users.map(u => (
@@ -244,7 +244,7 @@ export default function Team() {
                             <button
                                 onClick={handleSave}
                                 disabled={saving}
-                                className="px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-lg transition-colors flex items-center gap-2"
+                                className="px-4 py-2 text-sm font-medium bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white rounded-lg transition-colors flex items-center gap-2"
                             >
                                 {saving && <Loader2 size={13} className="animate-spin" />}
                                 {editing ? 'Save Changes' : 'Add Member'}
@@ -270,11 +270,11 @@ function MemberCard({ member, isAdmin, onEdit, onDelete }) {
     const photo = resolvePhoto(member.photoUrl);
 
     return (
-        <div className={`relative bg-zinc-900/60 border rounded-xl p-5 flex flex-col items-center text-center gap-3 transition-all hover:border-zinc-700 ${member.isCurrentUser ? 'border-blue-500/40 shadow-[0_0_0_1px_rgba(59,130,246,0.15)]' : 'border-zinc-800'
+        <div className={`relative bg-zinc-900/60 border rounded-xl p-5 flex flex-col items-center text-center gap-3 transition-all hover:border-zinc-700 ${member.isCurrentUser ? 'border-violet-500/40 shadow-[0_0_0_1px_rgba(59,130,246,0.15)]' : 'border-zinc-800'
             }`}>
             {/* "You" indicator */}
             {member.isCurrentUser && (
-                <span className="absolute top-2 right-2 text-[10px] font-semibold px-2 py-0.5 bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded-full flex items-center gap-1">
+                <span className="absolute top-2 right-2 text-[10px] font-semibold px-2 py-0.5 bg-violet-500/20 text-violet-400 border border-violet-500/30 rounded-full flex items-center gap-1">
                     <Star size={9} /> You
                 </span>
             )}
@@ -334,8 +334,9 @@ function FormField({ label, value, onChange, placeholder, type = 'text' }) {
                 value={value}
                 onChange={e => onChange(e.target.value)}
                 placeholder={placeholder}
-                className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-blue-500 focus:outline-none transition-colors"
+                className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-violet-500 focus:outline-none transition-colors"
             />
         </div>
     );
 }
+

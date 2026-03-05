@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { X, Camera, Phone, Loader2, User } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '../services/api';
@@ -18,6 +18,15 @@ export default function ProfileEditModal({ isOpen, user, onClose, onUpdated }) {
     const [saving, setSaving] = useState(false);
     const fileRef = useRef(null);
 
+    // Sync state when modal opens or user data changes (like after fetchMe or login)
+    useEffect(() => {
+        if (isOpen) {
+            setPhone(user?.phone || '');
+            setAvatarPreview(user?.avatarUrl || null);
+            setAvatarFile(null); // reset file selection
+        }
+    }, [isOpen, user]);
+
     if (!isOpen) return null;
 
     const handleFileChange = (e) => {
@@ -34,22 +43,24 @@ export default function ProfileEditModal({ isOpen, user, onClose, onUpdated }) {
             if (phone !== (user?.phone || '')) formData.append('phone', phone);
             if (avatarFile) formData.append('avatar', avatarFile);
 
-            const res = await api.patch('/auth/profile', formData, {
+            await api.patch('/auth/profile', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
-            const updated = res.data.data;
+            // Re-fetch canonical user data from DB to avoid stale local state
+            const meRes = await api.get('/auth/me');
+            const fresh = meRes.data.data;
 
-            // Persist the fresh user info into localStorage so sidebars reflect it immediately
+            // Persist to localStorage so sidebars and other components reflect changes
             const storedStr = localStorage.getItem('userInfo');
             if (storedStr) {
                 const stored = JSON.parse(storedStr);
-                stored.user = { ...stored.user, ...updated };
+                stored.user = { ...stored.user, ...fresh, id: fresh._id };
                 localStorage.setItem('userInfo', JSON.stringify(stored));
             }
 
             toast.success('Profile updated');
-            onUpdated?.(updated);
+            onUpdated?.(fresh);
             onClose();
         } catch (err) {
             toast.error(err.response?.data?.message || 'Failed to update profile');
@@ -138,7 +149,7 @@ export default function ProfileEditModal({ isOpen, user, onClose, onUpdated }) {
                         value={phone}
                         onChange={e => setPhone(e.target.value)}
                         placeholder="Enter phone number"
-                        className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-blue-500 focus:outline-none transition-colors"
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-violet-500 focus:outline-none transition-colors"
                     />
                 </div>
 
@@ -153,7 +164,7 @@ export default function ProfileEditModal({ isOpen, user, onClose, onUpdated }) {
                     <button
                         onClick={handleSave}
                         disabled={saving}
-                        className="px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-lg transition-colors flex items-center gap-2"
+                        className="px-4 py-2 text-sm font-medium bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white rounded-lg transition-colors flex items-center gap-2"
                     >
                         {saving && <Loader2 size={13} className="animate-spin" />}
                         Save
@@ -163,3 +174,4 @@ export default function ProfileEditModal({ isOpen, user, onClose, onUpdated }) {
         </div>
     );
 }
+

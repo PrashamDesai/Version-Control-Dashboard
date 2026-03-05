@@ -191,7 +191,7 @@ export default function BuildChecklist() {
     if (loading) {
         return (
             <div className="flex items-center justify-center p-12">
-                <Loader2 className="animate-spin text-blue-500" size={32} />
+                <Loader2 className="animate-spin text-violet-500" size={32} />
             </div>
         );
     }
@@ -211,7 +211,7 @@ export default function BuildChecklist() {
                 <button
                     onClick={handleBulkSave}
                     disabled={saving}
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-blue-500/20"
+                    className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
                 >
                     {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                     {saving ? 'Saving All...' : 'Save All Changes'}
@@ -252,7 +252,7 @@ export default function BuildChecklist() {
                             className={cn(
                                 "px-4 py-3 font-medium text-sm flex items-center gap-2 border-b-2 transition-all",
                                 platform === p
-                                    ? (p === 'Android' ? "border-green-500 text-green-400 bg-green-500/5 rounded-t-lg" : "border-blue-500 text-blue-400 bg-blue-500/5 rounded-t-lg")
+                                    ? (p === 'Android' ? "border-green-500 text-green-400 bg-green-500/5 rounded-t-lg" : "border-violet-500 text-violet-400 bg-violet-500/5 rounded-t-lg")
                                     : "border-transparent text-zinc-500 hover:text-zinc-300"
                             )}
                         >
@@ -298,7 +298,7 @@ export default function BuildChecklist() {
                                                 value={item.checkName}
                                                 onChange={(e) => handleChange(item.localId, 'checkName', e.target.value)}
                                                 placeholder="e.g., Verify Bundle ID"
-                                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md px-3 py-2 text-sm text-zinc-200 focus:border-blue-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
+                                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md px-3 py-2 text-sm text-zinc-200 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
                                             />
                                         </td>
                                         <td className="px-4 py-3">
@@ -323,7 +323,7 @@ export default function BuildChecklist() {
                                                 value={item.notes}
                                                 onChange={(e) => handleChange(item.localId, 'notes', e.target.value)}
                                                 placeholder="Additional info..."
-                                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md px-3 py-2 text-sm text-zinc-300 focus:border-blue-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
+                                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md px-3 py-2 text-sm text-zinc-300 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
                                             />
                                         </td>
                                         <td className="px-4 py-3 text-right">
@@ -332,7 +332,7 @@ export default function BuildChecklist() {
                                                     onClick={() => handleSaveRow(item)}
                                                     disabled={savingRows[item.localId] || deletingRows[item.localId]}
                                                     title="Save Check"
-                                                    className="p-1.5 bg-blue-500/10 text-blue-500 hover:bg-blue-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
+                                                    className="p-1.5 bg-violet-500/10 text-violet-500 hover:bg-violet-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
                                                 >
                                                     {savingRows[item.localId] ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
                                                 </button>
@@ -356,3 +356,4 @@ export default function BuildChecklist() {
         </div>
     );
 }
+

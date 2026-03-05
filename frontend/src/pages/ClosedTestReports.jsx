@@ -86,7 +86,7 @@ export default function ClosedTestReports() {
     if (loading) {
         return (
             <div className="flex items-center justify-center p-12">
-                <Loader2 className="animate-spin text-blue-500" size={32} />
+                <Loader2 className="animate-spin text-violet-500" size={32} />
             </div>
         );
     }
@@ -98,8 +98,8 @@ export default function ClosedTestReports() {
                 <p className="text-zinc-400 text-sm">Pre-filled answers required by Google Play Console.</p>
             </div>
 
-            <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-5 flex gap-4 flex-shrink-0">
-                <PlayCircle className="text-blue-500 shrink-0 mt-1" size={24} />
+            <div className="bg-violet-500/10 border border-violet-500/20 rounded-xl p-5 flex gap-4 flex-shrink-0">
+                <PlayCircle className="text-violet-500 shrink-0 mt-1" size={24} />
                 <div className="space-y-2">
                     <h3 className="font-semibold text-blue-100/90 text-sm">Automated QA Pre-fill</h3>
                     <p className="text-sm text-blue-200/70 leading-relaxed">
@@ -122,7 +122,7 @@ export default function ClosedTestReports() {
                             value={formData.recruitmentMethod}
                             onChange={handleChange}
                             rows={2} required
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-blue-500 outline-none resize-none"
+                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-violet-500 outline-none resize-none"
                         />
                     </div>
 
@@ -135,7 +135,7 @@ export default function ClosedTestReports() {
                                         type="radio" name="testerDifficulty" value={option}
                                         checked={formData.testerDifficulty === option}
                                         onChange={handleChange}
-                                        className="text-blue-500 bg-zinc-900 border-zinc-700"
+                                        className="text-violet-500 bg-zinc-900 border-zinc-700"
                                     />
                                     {option}
                                 </label>
@@ -150,7 +150,7 @@ export default function ClosedTestReports() {
                             value={formData.engagementSummary}
                             onChange={handleChange}
                             rows={3} required
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-blue-500 outline-none resize-none"
+                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-violet-500 outline-none resize-none"
                         />
                     </div>
 
@@ -162,7 +162,7 @@ export default function ClosedTestReports() {
                             value={formData.feedbackSummary}
                             onChange={handleChange}
                             rows={4} required
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-blue-500 outline-none resize-none"
+                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-violet-500 outline-none resize-none"
                         />
                     </div>
                 </div>
@@ -178,7 +178,7 @@ export default function ClosedTestReports() {
                             value={formData.intendedAudience}
                             onChange={handleChange}
                             rows={2} required
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-blue-500 outline-none resize-none"
+                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-violet-500 outline-none resize-none"
                         />
                     </div>
 
@@ -189,7 +189,7 @@ export default function ClosedTestReports() {
                             value={formData.gameStandOut}
                             onChange={handleChange}
                             rows={3} required
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-blue-500 outline-none resize-none"
+                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-violet-500 outline-none resize-none"
                         />
                     </div>
 
@@ -202,7 +202,7 @@ export default function ClosedTestReports() {
                                         type="radio" name="installExpectation" value={option}
                                         checked={formData.installExpectation === option}
                                         onChange={handleChange}
-                                        className="text-blue-500 bg-zinc-900 border-zinc-700"
+                                        className="text-violet-500 bg-zinc-900 border-zinc-700"
                                     />
                                     {option}
                                 </label>
@@ -222,7 +222,7 @@ export default function ClosedTestReports() {
                             value={formData.productionImprovements}
                             onChange={handleChange}
                             rows={3} required maxLength={300}
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-blue-500 outline-none resize-none"
+                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-violet-500 outline-none resize-none"
                         />
                         <div className="flex justify-between items-center text-xs">
                             <span className="text-red-400 font-medium">Need details under 300 characters</span>
@@ -239,7 +239,7 @@ export default function ClosedTestReports() {
                             value={formData.productionReadiness}
                             onChange={handleChange}
                             rows={3} required maxLength={300}
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-blue-500 outline-none resize-none"
+                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-violet-500 outline-none resize-none"
                         />
                         <div className="flex justify-between items-center text-xs">
                             <span className="text-red-400 font-medium">Need details under 300 characters</span>
@@ -257,7 +257,7 @@ export default function ClosedTestReports() {
                     <button
                         type="submit"
                         disabled={saving}
-                        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-5 py-2.5 rounded-lg font-medium text-sm transition-colors shadow-sm shadow-blue-500/20"
+                        className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white px-5 py-2.5 rounded-lg font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
                     >
                         {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                         {saving ? 'Saving...' : 'Save Changes'}
@@ -267,3 +267,4 @@ export default function ClosedTestReports() {
         </div>
     );
 }
+

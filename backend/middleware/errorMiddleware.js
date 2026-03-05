@@ -3,6 +3,9 @@ const { errorResponse } = require('../utils/responseFormat');
 const errorHandler = (err, req, res, next) => {
     const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
 
+    // Log the error for production monitoring
+    console.error(`[ERROR] ${err.message}\n${err.stack}`);
+
     // Mongoose bad ObjectId
     if (err.name === 'CastError' && err.kind === 'ObjectId') {
         return errorResponse(res, 404, 'Resource not found');

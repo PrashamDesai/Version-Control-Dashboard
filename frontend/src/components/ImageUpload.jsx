@@ -45,7 +45,7 @@ export default function ImageUpload({ onImageSelect, previewUrl }) {
             <div
                 className={cn(
                     "relative border-2 border-dashed rounded-xl p-6 transition-colors flex flex-col items-center justify-center text-center cursor-pointer overflow-hidden",
-                    dragActive ? "border-blue-500 bg-blue-500/5" : "border-zinc-700 hover:border-zinc-500 hover:bg-zinc-800/30",
+                    dragActive ? "border-violet-500 bg-violet-500/5" : "border-zinc-700 hover:border-zinc-500 hover:bg-zinc-800/30",
                     preview && "border-solid border-zinc-700 p-2"
                 )}
                 onDragEnter={handleDrag}
@@ -71,7 +71,7 @@ export default function ImageUpload({ onImageSelect, previewUrl }) {
                     </div>
                 ) : (
                     <div className="space-y-3 pointer-events-none">
-                        <div className="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center mx-auto text-blue-500">
+                        <div className="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center mx-auto text-violet-500">
                             <UploadCloud size={24} />
                         </div>
                         <div>
@@ -84,3 +84,4 @@ export default function ImageUpload({ onImageSelect, previewUrl }) {
         </div>
     );
 }
+

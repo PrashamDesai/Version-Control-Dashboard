@@ -64,7 +64,7 @@ export default function FirestoreRules() {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 flex-shrink-0">
                 <div>
                     <h1 className="text-2xl font-semibold tracking-tight text-white mb-1 flex items-center gap-2">
-                        <Database className="text-blue-500" size={24} />
+                        <Database className="text-violet-500" size={24} />
                         Firestore Rules
                     </h1>
                     <p className="text-zinc-400 text-sm">Manage security rules for Production and Development databases.</p>
@@ -72,7 +72,7 @@ export default function FirestoreRules() {
                 <button
                     onClick={handleSave}
                     disabled={saving || loading}
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-blue-500/20"
+                    className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
                 >
                     {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                     {saving ? 'Saving...' : 'Save Rules'}
@@ -117,3 +117,4 @@ export default function FirestoreRules() {
         </div>
     );
 }
+

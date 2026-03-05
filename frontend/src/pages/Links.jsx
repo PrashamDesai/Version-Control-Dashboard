@@ -105,7 +105,7 @@ export default function Links() {
     if (loading) {
         return (
             <div className="flex flex-col flex-1 h-[calc(100vh-8rem)] items-center justify-center p-12">
-                <Loader2 className="animate-spin text-blue-500" size={32} />
+                <Loader2 className="animate-spin text-violet-500" size={32} />
             </div>
         );
     }
@@ -126,7 +126,7 @@ export default function Links() {
                 </div>
                 <button
                     onClick={handleAddNew}
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-blue-500/20"
+                    className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
                 >
                     <Plus size={16} />
                     Add Link
@@ -144,7 +144,7 @@ export default function Links() {
                             <div className="flex justify-between items-start">
                                 <div className={cn(
                                     "w-10 h-10 rounded-lg flex items-center justify-center",
-                                    link.isDefaultEmpty ? "bg-zinc-800/50 text-zinc-500" : "bg-blue-500/10 text-blue-400"
+                                    link.isDefaultEmpty ? "bg-zinc-800/50 text-zinc-500" : "bg-violet-500/10 text-violet-400"
                                 )}>
                                     <LinkIcon size={20} />
                                 </div>
@@ -184,7 +184,7 @@ export default function Links() {
                                 {link.isDefaultEmpty ? (
                                     <button
                                         onClick={() => handleSetupDefault(link)}
-                                        className="text-xs font-medium text-blue-500 hover:text-blue-400 flex items-center gap-1 transition-colors bg-blue-500/10 px-2 py-1 rounded"
+                                        className="text-xs font-medium text-violet-500 hover:text-violet-400 flex items-center gap-1 transition-colors bg-violet-500/10 px-2 py-1 rounded"
                                     >
                                         <Wrench size={12} /> Setup
                                     </button>
@@ -193,7 +193,7 @@ export default function Links() {
                                         href={link.url}
                                         target="_blank"
                                         rel="noreferrer"
-                                        className="text-blue-500 hover:text-blue-400 transition-colors"
+                                        className="text-violet-500 hover:text-violet-400 transition-colors"
                                     >
                                         <ExternalLink size={16} />
                                     </a>
@@ -215,7 +215,7 @@ export default function Links() {
                             placeholder="e.g. Design Files"
                             value={formData.name}
                             onChange={e => setFormData({ ...formData, name: e.target.value })}
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
+                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
                         />
                     </div>
 
@@ -227,7 +227,7 @@ export default function Links() {
                             placeholder="https://..."
                             value={formData.url}
                             onChange={e => setFormData({ ...formData, url: e.target.value })}
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
+                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
                         />
                     </div>
 
@@ -237,7 +237,7 @@ export default function Links() {
                             <select
                                 value={formData.category}
                                 onChange={e => setFormData({ ...formData, category: e.target.value })}
-                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none"
+                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none"
                                 style={{ backgroundColor: '#18181b' }}
                             >
                                 <option value="Firebase">Firebase</option>
@@ -253,7 +253,7 @@ export default function Links() {
                             <select
                                 value={formData.environment}
                                 onChange={e => setFormData({ ...formData, environment: e.target.value })}
-                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none"
+                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none"
                                 style={{ backgroundColor: '#18181b' }}
                             >
                                 <option value="">All</option>
@@ -275,7 +275,7 @@ export default function Links() {
                         <button
                             type="submit"
                             disabled={submitting}
-                            className="px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-md transition-colors shadow-sm shadow-blue-500/20"
+                            className="px-4 py-2 text-sm font-medium bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white rounded-md transition-colors shadow-sm shadow-violet-500/20"
                         >
                             {submitting ? <Loader2 size={16} className="animate-spin" /> : 'Save Link'}
                         </button>
@@ -294,3 +294,4 @@ export default function Links() {
         </div>
     );
 }
+

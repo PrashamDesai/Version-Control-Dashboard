@@ -33,7 +33,8 @@ export default function Auth() {
                     emailOrPhone: formData.email || formData.phone,
                     password: formData.password
                 });
-                const { token, user } = res.data.data;
+                // Backend returns flat: { _id, name, email, phone, avatarUrl, role, token }
+                const { token, ...user } = res.data.data;
                 localStorage.setItem('userInfo', JSON.stringify({ token, user }));
                 toast.success('Login successful!');
                 navigate('/games');
@@ -48,7 +49,7 @@ export default function Auth() {
                     phone: formData.phone,
                     password: formData.password
                 });
-                const { token, user } = res.data.data;
+                const { token, ...user } = res.data.data;
                 localStorage.setItem('userInfo', JSON.stringify({ token, user }));
                 toast.success('Registration successful!');
                 navigate('/games');
@@ -64,8 +65,8 @@ export default function Auth() {
         <div className="min-h-screen bg-[#09090b] flex items-center justify-center p-4">
             <div className="w-full max-w-sm">
                 <div className="text-center mb-8">
-                    <div className="w-12 h-12 bg-blue-600 rounded-xl mx-auto flex items-center justify-center mb-4 shadow-lg shadow-blue-500/20">
-                        <span className="text-xl font-black text-white">VC</span>
+                    <div className="w-12 h-12 bg-violet-600 rounded-xl mx-auto flex items-center justify-center mb-4 shadow-lg shadow-violet-500/20">
+                        <span className="text-xl font-black text-white">EG</span>
                     </div>
                     <h1 className="text-2xl font-bold tracking-tight text-white mb-2">
                         {isLogin ? 'Welcome Back' : 'Create Account'}
@@ -87,7 +88,7 @@ export default function Auth() {
                                     name="name"
                                     value={formData.name}
                                     onChange={handleChange}
-                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all placeholder:text-zinc-600"
+                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600"
                                     placeholder="John Doe"
                                     required={!isLogin}
                                 />
@@ -103,7 +104,7 @@ export default function Auth() {
                                 name={isLogin ? "email" : "email"} // In login, we treat it as emailOrPhone
                                 value={formData.email}
                                 onChange={handleChange}
-                                className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all placeholder:text-zinc-600"
+                                className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600"
                                 placeholder={isLogin ? "Email or Phone" : "name@company.com"}
                                 required
                             />
@@ -119,7 +120,7 @@ export default function Auth() {
                                     name="phone"
                                     value={formData.phone}
                                     onChange={handleChange}
-                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all placeholder:text-zinc-600"
+                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600"
                                     placeholder="+91 98765 43210"
                                     required={!isLogin}
                                 />
@@ -135,7 +136,7 @@ export default function Auth() {
                                 name="password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all placeholder:text-zinc-600"
+                                className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600"
                                 placeholder="••••••••"
                                 required
                             />
@@ -149,7 +150,7 @@ export default function Auth() {
                                     name="confirmPassword"
                                     value={formData.confirmPassword}
                                     onChange={handleChange}
-                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all placeholder:text-zinc-600"
+                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600"
                                     placeholder="••••••••"
                                     required={!isLogin}
                                 />
@@ -159,7 +160,7 @@ export default function Auth() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium p-2.5 rounded-lg transition-all flex justify-center items-center mt-6 shadow-md shadow-blue-500/20 active:scale-[0.98]"
+                            className="w-full bg-violet-600 hover:bg-violet-700 text-white font-medium p-2.5 rounded-lg transition-all flex justify-center items-center mt-6 shadow-md shadow-violet-500/20 active:scale-[0.98]"
                         >
                             {loading ? (
                                 <Loader2 size={18} className="animate-spin" />
@@ -177,9 +178,9 @@ export default function Auth() {
                             className="text-sm text-zinc-400 hover:text-white transition-colors"
                         >
                             {isLogin ? (
-                                <>Don't have an account? <span className="text-blue-500 font-medium">Sign up</span></>
+                                <>Don't have an account? <span className="text-violet-500 font-medium">Sign up</span></>
                             ) : (
-                                <>Already have an account? <span className="text-blue-500 font-medium">Log in</span></>
+                                <>Already have an account? <span className="text-violet-500 font-medium">Log in</span></>
                             )}
                         </button>
                     </div>
@@ -188,3 +189,4 @@ export default function Auth() {
         </div>
     );
 }
+

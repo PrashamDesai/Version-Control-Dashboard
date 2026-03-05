@@ -236,7 +236,7 @@ export default function AdsConfig() {
     if (loading) {
         return (
             <div className="flex items-center justify-center p-12">
-                <Loader2 className="animate-spin text-blue-500" size={32} />
+                <Loader2 className="animate-spin text-violet-500" size={32} />
             </div>
         );
     }
@@ -266,7 +266,7 @@ export default function AdsConfig() {
                             className={cn(
                                 "px-6 py-3 font-medium text-sm border-b-2 transition-all",
                                 activeTab === tab
-                                    ? "border-blue-500 text-blue-400"
+                                    ? "border-violet-500 text-violet-400"
                                     : "border-transparent text-zinc-500 hover:text-zinc-300 hover:border-zinc-700"
                             )}
                         >
@@ -288,7 +288,7 @@ export default function AdsConfig() {
                         <button
                             onClick={handleSaveIds}
                             disabled={savingIds}
-                            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-blue-500/20"
+                            className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
                         >
                             {savingIds ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                             {savingIds ? 'Saving...' : 'Save IDs'}
@@ -309,7 +309,7 @@ export default function AdsConfig() {
                                     value={adIds[activeTab].appId}
                                     onChange={(e) => setAdIds(p => ({ ...p, [activeTab]: { ...p[activeTab], appId: e.target.value } }))}
                                     placeholder="ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy"
-                                    className="w-full bg-zinc-900 border border-zinc-700 rounded-md py-2 px-3 text-sm font-mono text-zinc-300 focus:border-blue-500 outline-none transition-all focus:ring-1 focus:ring-blue-500"
+                                    className="w-full bg-zinc-900 border border-zinc-700 rounded-md py-2 px-3 text-sm font-mono text-zinc-300 focus:border-violet-500 outline-none transition-all focus:ring-1 focus:ring-violet-500"
                                 />
                             </div>
                         </div>
@@ -331,7 +331,7 @@ export default function AdsConfig() {
                                         value={adIds[activeTab][field.type]}
                                         onChange={(e) => setAdIds(p => ({ ...p, [activeTab]: { ...p[activeTab], [field.type]: e.target.value } }))}
                                         placeholder="ca-app-pub-xxxxxxxxxxxxxxxx/zzzzzzzzzz"
-                                        className="w-full bg-zinc-900 border border-zinc-700 rounded-md py-2 px-3 text-sm font-mono text-zinc-300 focus:border-blue-500 outline-none transition-all focus:ring-1 focus:ring-blue-500"
+                                        className="w-full bg-zinc-900 border border-zinc-700 rounded-md py-2 px-3 text-sm font-mono text-zinc-300 focus:border-violet-500 outline-none transition-all focus:ring-1 focus:ring-violet-500"
                                     />
                                     <button
                                         onClick={() => handleCopy(adIds[activeTab][field.type], field.type)}
@@ -386,7 +386,7 @@ export default function AdsConfig() {
                                                 <select
                                                     value={row.adType}
                                                     onChange={e => handleRowChange(row.localId, 'adType', e.target.value)}
-                                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-sm text-zinc-300 focus:border-blue-500 outline-none"
+                                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-sm text-zinc-300 focus:border-violet-500 outline-none"
                                                     style={{ backgroundColor: '#18181b' }}
                                                 >
                                                     {AD_TYPES.map(t => <option key={t} value={t}>{t} Ad</option>)}
@@ -399,7 +399,7 @@ export default function AdsConfig() {
                                                     onChange={e => handleRowChange(row.localId, 'placement', e.target.value)}
                                                     placeholder="Menu, Settings..."
                                                     rows={3}
-                                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-sm text-zinc-300 focus:border-blue-500 outline-none resize-none"
+                                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-sm text-zinc-300 focus:border-violet-500 outline-none resize-none"
                                                 />
                                             </td>
 
@@ -409,7 +409,7 @@ export default function AdsConfig() {
                                                     onChange={e => handleRowChange(row.localId, 'frequency', e.target.value)}
                                                     placeholder="Always visible..."
                                                     rows={3}
-                                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-sm text-zinc-300 focus:border-blue-500 outline-none resize-none"
+                                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-sm text-zinc-300 focus:border-violet-500 outline-none resize-none"
                                                 />
                                             </td>
 
@@ -419,7 +419,7 @@ export default function AdsConfig() {
                                                     onChange={e => handleRowChange(row.localId, 'notes', e.target.value)}
                                                     placeholder="Avoid distraction..."
                                                     rows={3}
-                                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-sm text-zinc-300 focus:border-blue-500 outline-none resize-none"
+                                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-sm text-zinc-300 focus:border-violet-500 outline-none resize-none"
                                                 />
                                             </td>
 
@@ -429,7 +429,7 @@ export default function AdsConfig() {
                                                         onClick={() => handleSaveRow(row)}
                                                         disabled={savingRows[row.localId] || deletingRows[row.localId]}
                                                         title="Save Configuration"
-                                                        className="p-2 bg-blue-500/10 text-blue-500 hover:bg-blue-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
+                                                        className="p-2 bg-violet-500/10 text-violet-500 hover:bg-violet-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
                                                     >
                                                         {savingRows[row.localId] ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                                                     </button>
@@ -455,3 +455,4 @@ export default function AdsConfig() {
         </div>
     );
 }
+

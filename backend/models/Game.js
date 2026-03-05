@@ -36,6 +36,8 @@ const gameSchema = new mongoose.Schema(
         // Public store listing URLs (only relevant when game is live)
         playStoreUrl: { type: String, default: '' },
         appStoreUrl: { type: String, default: '' },
+        androidScreenshots: [{ type: String }],
+        iosScreenshots: [{ type: String }],
     },
     {
         timestamps: true,

@@ -122,7 +122,7 @@ export default function Releases() {
     };
 
     return (
-        <div className="space-y-6 flex flex-col h-[calc(100vh-8rem)]">
+        <div className="space-y-6 pb-10">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 flex-shrink-0">
                 <div>
                     <h1 className="text-2xl font-semibold tracking-tight text-white mb-1">Releases</h1>
@@ -130,7 +130,7 @@ export default function Releases() {
                 </div>
                 <button
                     onClick={() => { resetForm(); setIsAddModalOpen(true); }}
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-blue-500/20"
+                    className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
                 >
                     <Plus size={16} />
                     New Release
@@ -145,13 +145,13 @@ export default function Releases() {
                             <input
                                 type="text"
                                 placeholder="Search versions..."
-                                className="w-full pl-9 pr-4 py-1.5 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-zinc-300 focus:ring-1 focus:ring-blue-500 focus:border-zinc-700 outline-none transition-all"
+                                className="w-full pl-9 pr-4 py-1.5 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-zinc-300 focus:ring-1 focus:ring-violet-500 focus:border-zinc-700 outline-none transition-all"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
                         <select
-                            className="bg-zinc-900 flex items-center gap-2 px-3 py-1.5 border border-zinc-800 hover:bg-zinc-800 rounded-md text-sm text-zinc-400 transition-colors shrink-0 outline-none"
+                            className="bg-zinc-900 flex items-center gap-2 px-3 py-1.5 border border-zinc-800 hover:bg-zinc-800 rounded-md text-sm text-zinc-400 transition-colors shrink-0 outline-none cursor-pointer"
                             value={filterPlatform}
                             onChange={(e) => setFilterPlatform(e.target.value)}
                             style={{ backgroundColor: '#18181b' }}
@@ -166,7 +166,7 @@ export default function Releases() {
                 <div className="flex-1 overflow-auto">
                     {loading ? (
                         <div className="flex items-center justify-center p-12">
-                            <Loader2 className="animate-spin text-blue-500" size={32} />
+                            <Loader2 className="animate-spin text-violet-500" size={32} />
                         </div>
                     ) : releases.length === 0 ? (
                         <div className="flex flex-col items-center justify-center p-12 text-zinc-500">
@@ -192,7 +192,7 @@ export default function Releases() {
                                         <td className="px-6 py-4">
                                             <span className={cn(
                                                 "px-2 py-0.5 rounded text-[11px] font-semibold uppercase tracking-wider",
-                                                rel.platform === 'Android' ? "bg-green-500/10 text-green-400" : "bg-blue-500/10 text-blue-400"
+                                                rel.platform === 'Android' ? "bg-green-500/10 text-green-400" : "bg-violet-500/10 text-violet-400"
                                             )}>
                                                 {rel.platform}
                                             </span>
@@ -209,7 +209,7 @@ export default function Releases() {
                                             <div className="opacity-0 group-hover:opacity-100 transition-opacity flex justify-end gap-1">
                                                 <button
                                                     onClick={() => handleEdit(rel)}
-                                                    className="p-1.5 text-zinc-400 hover:text-blue-400 hover:bg-blue-500/10 rounded transition-colors"
+                                                    className="p-1.5 text-zinc-400 hover:text-violet-400 hover:bg-violet-500/10 rounded transition-colors"
                                                     title="Edit"
                                                 >
                                                     <Edit2 size={14} />
@@ -237,7 +237,7 @@ export default function Releases() {
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-zinc-300">Platform</label>
                             <select
-                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none"
+                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none"
                                 value={formData.platform}
                                 onChange={e => setFormData({ ...formData, platform: e.target.value })}
                                 required
@@ -254,7 +254,7 @@ export default function Releases() {
                                 required type="text" placeholder="e.g. 1.3.0"
                                 value={formData.versionName}
                                 onChange={e => setFormData({ ...formData, versionName: e.target.value })}
-                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all placeholder:text-zinc-600"
+                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600"
                             />
                         </div>
 
@@ -264,7 +264,7 @@ export default function Releases() {
                                 required type="number" placeholder="e.g. 43"
                                 value={formData.buildNumber}
                                 onChange={e => setFormData({ ...formData, buildNumber: e.target.value })}
-                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all placeholder:text-zinc-600"
+                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600"
                             />
                         </div>
 
@@ -274,7 +274,7 @@ export default function Releases() {
                                 required type="date"
                                 value={formData.releaseDate}
                                 onChange={e => setFormData({ ...formData, releaseDate: e.target.value })}
-                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all [color-scheme:dark]"
+                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all [color-scheme:dark]"
                             />
                         </div>
 
@@ -283,7 +283,7 @@ export default function Releases() {
                             <select
                                 value={formData.status}
                                 onChange={e => setFormData({ ...formData, status: e.target.value })}
-                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none"
+                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none"
                                 style={{ backgroundColor: '#18181b' }}
                             >
                                 <option value="In Internal Testing">In Internal Testing</option>
@@ -303,7 +303,7 @@ export default function Releases() {
                             rows={4}
                             value={formData.whatsNew}
                             onChange={e => setFormData({ ...formData, whatsNew: e.target.value })}
-                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all resize-none placeholder:text-zinc-600"
+                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all resize-none placeholder:text-zinc-600"
                         />
                     </div>
 
@@ -318,7 +318,7 @@ export default function Releases() {
                         <button
                             type="submit"
                             disabled={isSubmitting}
-                            className="px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-md transition-colors shadow-sm shadow-blue-500/20"
+                            className="px-4 py-2 text-sm font-medium bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white rounded-md transition-colors shadow-sm shadow-violet-500/20"
                         >
                             {isSubmitting ? <Loader2 size={16} className="animate-spin" /> : (isEditing ? 'Update Release' : 'Save Release')}
                         </button>
@@ -337,3 +337,4 @@ export default function Releases() {
         </div>
     );
 }
+

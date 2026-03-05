@@ -123,7 +123,7 @@ const SdkUrlEditor = ({ defaultUrl, currentUrl, onSave }) => {
                         href={effectiveUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-zinc-600 hover:text-blue-400 transition-colors flex-shrink-0"
+                        className="text-zinc-600 hover:text-violet-400 transition-colors flex-shrink-0"
                         title={effectiveUrl}
                     >
                         <Download size={13} />
@@ -150,11 +150,11 @@ const SdkUrlEditor = ({ defaultUrl, currentUrl, onSave }) => {
                 value={val}
                 onChange={e => setVal(e.target.value)}
                 placeholder="Paste URL…"
-                className="w-full bg-zinc-950 border border-zinc-700 rounded px-2 py-1 text-xs text-zinc-200 placeholder-zinc-700 focus:border-blue-500 outline-none"
+                className="w-full bg-zinc-950 border border-zinc-700 rounded px-2 py-1 text-xs text-zinc-200 placeholder-zinc-700 focus:border-violet-500 outline-none"
             />
             <button
                 onClick={() => { onSave(val.trim()); setOpen(false); }}
-                className="p-1 rounded bg-blue-600 hover:bg-blue-700 text-white transition-colors flex-shrink-0"
+                className="p-1 rounded bg-violet-600 hover:bg-violet-700 text-white transition-colors flex-shrink-0"
             >
                 <Check size={11} />
             </button>
@@ -314,7 +314,7 @@ export default function Environments() {
     if (loading) {
         return (
             <div className="flex items-center justify-center p-12">
-                <Loader2 className="animate-spin text-blue-500" size={32} />
+                <Loader2 className="animate-spin text-violet-500" size={32} />
             </div>
         );
     }
@@ -329,7 +329,7 @@ export default function Environments() {
                 <button
                     onClick={handleSave}
                     disabled={saving}
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-blue-500/20"
+                    className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
                 >
                     {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                     {saving ? 'Saving...' : 'Save Changes'}
@@ -341,7 +341,7 @@ export default function Environments() {
                     {TABS.map(tab => {
                         const getTabStyle = (t, isActive) => {
                             if (!isActive) return "border-transparent text-zinc-500 hover:text-zinc-300 hover:border-zinc-700";
-                            if (t === 'DEV') return "border-blue-500 text-blue-400 bg-blue-500/5";
+                            if (t === 'DEV') return "border-violet-500 text-violet-400 bg-violet-500/5";
                             if (t === 'PROD') return "border-emerald-500 text-emerald-400 bg-emerald-500/5";
                             return "border-zinc-500 text-zinc-400";
                         };
@@ -383,7 +383,7 @@ export default function Environments() {
                                         type="text"
                                         value={currentConfig[field.key] || ''}
                                         onChange={e => handleUpdateField(field.key, e.target.value)}
-                                        className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all"
+                                        className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all"
                                     />
                                 </div>
                             ))}
@@ -444,7 +444,7 @@ export default function Environments() {
                                                 type={item.noLink ? "text" : "url"}
                                                 value={currentConfig[item.key] || ''}
                                                 onChange={e => handleUpdateField(item.key, e.target.value)}
-                                                className="w-full pl-9 pr-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-zinc-100 focus:border-blue-500 outline-none transition-all"
+                                                className="w-full pl-9 pr-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all"
                                             />
                                         </div>
                                         {!item.noLink && currentConfig[item.key] && (
@@ -522,7 +522,7 @@ export default function Environments() {
                                                 href={sdk.downloadUrl}
                                                 target="_blank"
                                                 rel="noreferrer"
-                                                className="text-zinc-600 hover:text-blue-400 transition-colors flex-shrink-0"
+                                                className="text-zinc-600 hover:text-violet-400 transition-colors flex-shrink-0"
                                                 title="Download / docs"
                                             >
                                                 <Download size={13} />
@@ -535,7 +535,7 @@ export default function Environments() {
                                         placeholder="Download / docs URL"
                                         value={sdk.downloadUrl || ''}
                                         onChange={e => handleCustomSDKUrl(idx, e.target.value)}
-                                        className="w-full bg-zinc-950 border border-zinc-800 rounded p-1.5 text-xs text-zinc-300 placeholder-zinc-700 focus:border-blue-500 outline-none"
+                                        className="w-full bg-zinc-950 border border-zinc-800 rounded p-1.5 text-xs text-zinc-300 placeholder-zinc-700 focus:border-violet-500 outline-none"
                                     />
                                     <select
                                         value={sdk.status || 'Not Required'}
@@ -563,7 +563,7 @@ export default function Environments() {
                                         value={newSdkName}
                                         onChange={e => setNewSdkName(e.target.value)}
                                         onKeyDown={e => e.key === 'Enter' && handleCustomSDKAdd()}
-                                        className="w-full bg-zinc-900 border border-zinc-800 rounded p-1.5 text-xs text-zinc-100 focus:border-blue-500 outline-none"
+                                        className="w-full bg-zinc-900 border border-zinc-800 rounded p-1.5 text-xs text-zinc-100 focus:border-violet-500 outline-none"
                                     />
                                     <button
                                         onClick={handleCustomSDKAdd}
@@ -582,3 +582,4 @@ export default function Environments() {
         </div>
     );
 }
+

@@ -40,9 +40,9 @@ export default function ConfirmDialog({
                 <div className="flex items-start gap-4">
                     <div className={cn(
                         'w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0',
-                        danger ? 'bg-red-500/10 border border-red-500/20' : 'bg-blue-500/10 border border-blue-500/20'
+                        danger ? 'bg-red-500/10 border border-red-500/20' : 'bg-violet-500/10 border border-violet-500/20'
                     )}>
-                        <AlertTriangle size={18} className={danger ? 'text-red-400' : 'text-blue-400'} />
+                        <AlertTriangle size={18} className={danger ? 'text-red-400' : 'text-violet-400'} />
                     </div>
                     <div className="flex-1 min-w-0 pt-0.5">
                         <h3 className="text-sm font-semibold text-zinc-100">{title}</h3>
@@ -64,7 +64,7 @@ export default function ConfirmDialog({
                             'px-4 py-2 text-sm font-medium rounded-lg transition-colors',
                             danger
                                 ? 'bg-red-600 hover:bg-red-700 text-white shadow-sm shadow-red-500/20'
-                                : 'bg-blue-600 hover:bg-blue-700 text-white shadow-sm shadow-blue-500/20'
+                                : 'bg-violet-600 hover:bg-violet-700 text-white shadow-sm shadow-violet-500/20'
                         )}
                     >
                         {confirmLabel}
@@ -75,3 +75,4 @@ export default function ConfirmDialog({
         document.body
     );
 }
+

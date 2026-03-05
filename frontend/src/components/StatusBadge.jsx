@@ -23,7 +23,7 @@ export default function StatusBadge({ status, className }) {
             Icon = Clock;
             break;
         case 'In Closed Testing':
-            styles = "bg-blue-500/10 text-blue-400 border-blue-500/20";
+            styles = "bg-violet-500/10 text-violet-400 border-violet-500/20";
             Icon = Users;
             break;
         case 'In Internal Testing':
@@ -52,3 +52,4 @@ export default function StatusBadge({ status, className }) {
         </span>
     );
 }
+

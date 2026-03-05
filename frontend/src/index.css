@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-[#09090b] text-zinc-100 antialiased selection:bg-blue-500/30 selection:text-blue-200;
+    @apply bg-[#09090b] text-zinc-100 antialiased selection:bg-violet-500/30 selection:text-blue-200;
   }
 }
 

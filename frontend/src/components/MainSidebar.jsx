@@ -8,8 +8,9 @@ import {
     Trash2,
     User,
     Users,
-    ChevronRight,
     ShieldCheck,
+    PanelLeft,
+    PanelLeftClose,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import ConfirmDialog from './ConfirmDialog';
@@ -81,7 +82,10 @@ export default function MainSidebar() {
     };
 
     const handleProfileUpdated = (updated) => {
-        setUserData(prev => ({ ...prev, ...updated }));
+        // Updated data is already fresh from DB (ProfileEditModal re-fetches /auth/me)
+        setUserData(prev => ({ ...prev, ...updated, id: updated._id }));
+        // Also re-sync from DB in case other components need it
+        fetchMe();
     };
 
     // Resolve avatar URL (relative backend path → full URL)
@@ -99,24 +103,28 @@ export default function MainSidebar() {
                     collapsed ? 'w-16' : 'w-60'
                 )}
             >
-                {/* Logo */}
+                {/* Logo Section */}
                 <div className="h-16 flex items-center px-4 border-b border-zinc-800/50 gap-3 flex-shrink-0">
-                    <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <span className="text-sm font-black text-white">VC</span>
-                    </div>
-                    {!collapsed && (
-                        <span className="text-sm font-bold text-white tracking-tight">Dashboard</span>
-                    )}
-                    <button
-                        onClick={() => setCollapsed(!collapsed)}
-                        className="ml-auto text-zinc-500 hover:text-white transition-colors"
-                    >
-                        <ChevronRight size={16} className={cn('transition-transform', collapsed ? '' : 'rotate-180')} />
-                    </button>
+                    <Link to="/" className="flex items-center gap-3 overflow-hidden group">
+                        <div className="w-8 h-8 bg-violet-600 rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+                            <span className="text-sm font-black text-white italic">EG</span>
+                        </div>
+                        {!collapsed && (
+                            <span className="text-sm font-bold text-white tracking-tight group-hover:text-violet-400 transition-colors">EchoGames</span>
+                        )}
+                    </Link>
                 </div>
 
+                {/* Floating collapse button — same as in-game Sidebar */}
+                <button
+                    onClick={() => setCollapsed(!collapsed)}
+                    className="absolute -right-3 top-20 bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-white rounded-full p-1 z-10 transition-colors shadow-sm shadow-black/50"
+                >
+                    {collapsed ? <PanelLeft size={14} /> : <PanelLeftClose size={14} />}
+                </button>
+
                 {/* Nav items */}
-                <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
+                <nav className="flex-1 py-4 px-2 pr-4 space-y-1 overflow-y-auto">
                     {!collapsed && (
                         <div className="px-2 mb-3 text-[10px] font-semibold text-zinc-600 uppercase tracking-wider">
                             Navigation
@@ -241,13 +249,13 @@ export default function MainSidebar() {
     );
 }
 
-function SidebarLink({ to, icon: Icon, label, collapsed, active, accent = 'blue' }) {
+function SidebarLink({ to, icon: Icon, label, collapsed, active, accent = 'violet' }) {
     const accentClasses = {
-        blue: active ? 'bg-blue-500/10 text-blue-400' : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/40',
+        violet: active ? 'bg-violet-500/10 text-violet-400' : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/40',
         purple: active ? 'bg-purple-500/10 text-purple-400' : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/40',
     };
     const iconAccent = {
-        blue: active ? 'text-blue-500' : 'text-zinc-500 group-hover:text-zinc-300',
+        violet: active ? 'text-violet-500' : 'text-zinc-500 group-hover:text-zinc-300',
         purple: active ? 'text-purple-500' : 'text-zinc-500 group-hover:text-zinc-300',
     };
 

@@ -18,6 +18,7 @@ import {
     LogOut,
     Trash2,
     Bug,
+    Image,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import ConfirmDialog from './ConfirmDialog';
@@ -32,6 +33,7 @@ const navItems = [
     { name: 'Deploy Details', path: 'store', icon: Store },
     { name: 'CBD', path: 'checklist', icon: CheckSquare },
     { name: 'Links', path: 'links', icon: LinkIcon },
+    { name: 'Screenshots', path: 'screenshots', icon: Image },
     { name: 'Closed Test', path: 'closed-test', icon: FileCheck },
     { name: 'QA Bug', path: 'qa-bug', icon: Bug },
     { name: 'Firestore Rules', path: 'firestore-rules', icon: Database },
@@ -160,14 +162,14 @@ export default function Sidebar({ game }) {
                                 className={cn(
                                     'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-all duration-200 group relative',
                                     isActive
-                                        ? 'bg-blue-500/10 text-blue-400 font-medium'
+                                        ? 'bg-violet-500/10 text-violet-400 font-medium'
                                         : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/40'
                                 )}
                             >
-                                <item.icon size={18} className={cn('flex-shrink-0', isActive ? 'text-blue-500' : 'text-zinc-500 group-hover:text-zinc-300')} />
+                                <item.icon size={18} className={cn('flex-shrink-0', isActive ? 'text-violet-500' : 'text-zinc-500 group-hover:text-zinc-300')} />
                                 {!collapsed && <span>{item.name}</span>}
                                 {isActive && collapsed && (
-                                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-blue-500 rounded-r-md" />
+                                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-violet-500 rounded-r-md" />
                                 )}
                             </Link>
                         );
@@ -248,3 +250,4 @@ export default function Sidebar({ game }) {
         </>
     );
 }
+

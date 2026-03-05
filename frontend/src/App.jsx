@@ -18,9 +18,11 @@ import StoreListing from './pages/StoreListing';
 import ClosedTestReports from './pages/ClosedTestReports';
 import FirestoreRules from './pages/FirestoreRules';
 import Auth from './pages/Auth';
+import Landing from './pages/Landing';
 import AdminDashboard from './pages/AdminDashboard';
 import Team from './pages/Team';
 import QABug from './pages/QABug';
+import Screenshots from './pages/Screenshots';
 import PrivateRoute from './components/PrivateRoute';
 
 // Simple Settings placeholder component
@@ -40,18 +42,18 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* Public Routes */}
+          <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Auth />} />
           <Route path="/signup" element={<Auth />} />
 
           {/* Protected Routes */}
           <Route element={<PrivateRoute />}>
             {/* Main Dashboard - List of Games */}
-            <Route path="/" element={<MainLayout />}>
-              <Route index element={<Navigate to="/games" replace />} />
-              <Route path="games" element={<GamesDashboard />} />
-              <Route path="admin" element={<AdminDashboard />} />
-              <Route path="team" element={<Team />} />
-              <Route path="settings" element={<Settings />} />
+            <Route element={<MainLayout />}>
+              <Route path="/games" element={<GamesDashboard />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/team" element={<Team />} />
+              <Route path="/settings" element={<Settings />} />
             </Route>
 
             {/* Specific Game View */}
@@ -67,6 +69,7 @@ function App() {
               <Route path="closed-test" element={<ClosedTestReports />} />
               <Route path="firestore-rules" element={<FirestoreRules />} />
               <Route path="qa-bug" element={<QABug />} />
+              <Route path="screenshots" element={<Screenshots />} />
             </Route>
           </Route>
         </Routes>

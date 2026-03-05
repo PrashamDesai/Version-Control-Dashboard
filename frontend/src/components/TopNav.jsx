@@ -47,105 +47,104 @@ export default function TopNav({ showGameSwitcher = false, game = null }) {
         : [];
 
     return (
-        <header className="h-16 flex items-center justify-between px-6 bg-[#09090b]/80 backdrop-blur-md border-b border-zinc-800/50 sticky top-0 z-10 hidden sm:flex">
-            <div className="flex items-center flex-1 gap-4 lg:gap-8">
-                {showGameSwitcher && game ? (
-                    <div className="relative" ref={gameSwitcherRef}>
-                        <div
-                            onClick={() => setIsGameSwitcherOpen(!isGameSwitcherOpen)}
-                            className="flex items-center gap-2 cursor-pointer group bg-zinc-900/50 hover:bg-zinc-800/80 border border-zinc-800/80 px-3 py-1.5 rounded-lg transition-colors"
-                        >
-                            <div className="w-5 h-5 rounded overflow-hidden bg-zinc-800 flex items-center justify-center shrink-0">
-                                {game.iconUrl ? (
-                                    <img src={`http://localhost:5000${game.iconUrl}`} alt="Icon" className="w-full h-full object-cover" />
-                                ) : (
-                                    <span className="text-zinc-500 text-xs font-bold">{game.name.charAt(0)}</span>
-                                )}
-                            </div>
-                            <div className="text-sm font-medium text-zinc-300 group-hover:text-white transition-colors truncate max-w-[150px]">
-                                {game.name}
-                            </div>
-                            <ChevronDown size={14} className="text-zinc-500 ml-1 group-hover:text-zinc-300" />
+        <header className="h-16 border-b border-zinc-800/50 sticky top-0 z-10 hidden sm:flex bg-[#09090b]/80 backdrop-blur-md px-6 md:px-16 pl-20 md:pl-28">
+            <div className="w-full max-w-7xl mx-auto flex items-center justify-between">
+                {/* Search Bar - Aligned with content left edge */}
+                <div className="flex-1 flex justify-start">
+                    <div className="relative w-full max-w-md hidden md:block" ref={searchRef}>
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <Search size={16} className="text-zinc-500" />
                         </div>
+                        <input
+                            type="text"
+                            className="block w-full pl-9 pr-3 py-1.5 border border-zinc-800/80 rounded-md leading-5 bg-zinc-900/40 text-zinc-300 placeholder-zinc-500 focus:outline-none focus:bg-zinc-900 focus:border-zinc-700 mb-0 sm:text-sm transition-colors text-left"
+                            placeholder={showGameSwitcher ? "Search releases, envs..." : "Search entire portfolio..."}
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onFocus={() => setIsSearchFocused(true)}
+                        />
 
-                        {isGameSwitcherOpen && (
-                            <div className="absolute top-full left-0 mt-2 w-64 bg-zinc-900 border border-zinc-800 rounded-lg shadow-xl py-2 z-50">
-                                <div className="px-3 pb-2 mb-2 border-b border-zinc-800 text-xs font-semibold text-zinc-500 uppercase">
-                                    Switch Game
-                                </div>
-                                <div className="max-h-64 overflow-y-auto">
-                                    {games.map(g => (
+                        {isSearchFocused && searchQuery.trim() !== '' && (
+                            <div className="absolute top-full left-0 mt-2 w-full bg-zinc-900 border border-zinc-800 rounded-lg shadow-xl py-2 z-50 max-h-64 overflow-y-auto">
+                                {filteredSearch.length > 0 ? (
+                                    filteredSearch.map((result, idx) => (
                                         <button
-                                            key={g._id}
+                                            key={idx}
                                             onClick={() => {
-                                                setIsGameSwitcherOpen(false);
-                                                navigate(`/games/${g.slug}`);
+                                                setSearchQuery('');
+                                                setIsSearchFocused(false);
+                                                navigate(result.path);
                                             }}
-                                            className={`w-full text-left px-3 py-2 text-sm flex items-center gap-3 transition-colors ${g._id === game._id ? 'bg-zinc-800 text-white' : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'}`}
+                                            className="w-full text-left px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors"
                                         >
-                                            <div className="w-6 h-6 rounded bg-zinc-800 flex items-center justify-center shrink-0 overflow-hidden">
-                                                {g.iconUrl ? (
-                                                    <img src={`http://localhost:5000${g.iconUrl}`} alt="" className="w-full h-full object-cover" />
-                                                ) : (
-                                                    <span className="text-xs font-bold text-zinc-500">{g.name.charAt(0)}</span>
-                                                )}
-                                            </div>
-                                            <span className="truncate">{g.name}</span>
+                                            {result.name}
                                         </button>
-                                    ))}
-                                    {games.length === 0 && (
-                                        <div className="px-3 py-2 text-sm text-zinc-500 text-center">No other games found</div>
-                                    )}
-                                </div>
+                                    ))
+                                ) : (
+                                    <div className="px-4 py-2 text-sm text-zinc-500 text-center">No results found</div>
+                                )}
                             </div>
                         )}
                     </div>
-                ) : (
-                    <Link to="/games" className="text-lg font-bold tracking-tight text-white flex items-center gap-2 hover:opacity-80 transition-opacity">
-                        <div className="w-6 h-6 rounded bg-blue-600 flex items-center justify-center">
-                            <span className="text-xs font-black">VC</span>
-                        </div>
-                        Dashboard
-                    </Link>
-                )}
+                </div>
 
-                <div className="relative flex-1 max-w-md hidden md:block" ref={searchRef}>
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Search size={16} className="text-zinc-500" />
-                    </div>
-                    <input
-                        type="text"
-                        className="block w-full pl-9 pr-3 py-1.5 border border-zinc-800/80 rounded-md leading-5 bg-zinc-900/40 text-zinc-300 placeholder-zinc-500 focus:outline-none focus:bg-zinc-900 focus:border-zinc-700 mb-0 sm:text-sm transition-colors"
-                        placeholder={showGameSwitcher ? "Search releases, envs..." : "Search entire portfolio..."}
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        onFocus={() => setIsSearchFocused(true)}
-                    />
+                {/* Right Section - Game Switcher */}
+                <div className="flex-shrink-0 flex justify-end">
+                    {showGameSwitcher && game && (
+                        <div className="relative" ref={gameSwitcherRef}>
+                            <div
+                                onClick={() => setIsGameSwitcherOpen(!isGameSwitcherOpen)}
+                                className="flex items-center gap-2 cursor-pointer group bg-zinc-900/50 hover:bg-zinc-800/80 border border-zinc-800/80 px-3 py-1.5 rounded-lg transition-colors"
+                            >
+                                <div className="w-5 h-5 rounded overflow-hidden bg-zinc-800 flex items-center justify-center shrink-0">
+                                    {game.iconUrl ? (
+                                        <img src={`http://localhost:5000${game.iconUrl}`} alt="Icon" className="w-full h-full object-cover" />
+                                    ) : (
+                                        <span className="text-zinc-500 text-xs font-bold">{game.name.charAt(0)}</span>
+                                    )}
+                                </div>
+                                <div className="text-sm font-medium text-zinc-300 group-hover:text-white transition-colors truncate max-w-[120px]">
+                                    {game.name}
+                                </div>
+                                <ChevronDown size={14} className="text-zinc-500 ml-1 group-hover:text-zinc-300" />
+                            </div>
 
-                    {isSearchFocused && searchQuery.trim() !== '' && (
-                        <div className="absolute top-full left-0 mt-2 w-full bg-zinc-900 border border-zinc-800 rounded-lg shadow-xl py-2 z-50 max-h-64 overflow-y-auto">
-                            {filteredSearch.length > 0 ? (
-                                filteredSearch.map((result, idx) => (
-                                    <button
-                                        key={idx}
-                                        onClick={() => {
-                                            setSearchQuery('');
-                                            setIsSearchFocused(false);
-                                            navigate(result.path);
-                                        }}
-                                        className="w-full text-left px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors"
-                                    >
-                                        {result.name}
-                                    </button>
-                                ))
-                            ) : (
-                                <div className="px-4 py-2 text-sm text-zinc-500 text-center">No results found</div>
+                            {isGameSwitcherOpen && (
+                                <div className="absolute top-full right-0 mt-2 w-64 bg-zinc-900 border border-zinc-800 rounded-lg shadow-xl py-2 z-50">
+                                    <div className="px-3 pb-2 mb-2 border-b border-zinc-800 text-xs font-semibold text-zinc-500 uppercase">
+                                        Switch Game
+                                    </div>
+                                    <div className="max-h-64 overflow-y-auto">
+                                        {games.map(g => (
+                                            <button
+                                                key={g._id}
+                                                onClick={() => {
+                                                    setIsGameSwitcherOpen(false);
+                                                    navigate(`/games/${g.slug}`);
+                                                }}
+                                                className={`w-full text-left px-3 py-2 text-sm flex items-center gap-3 transition-colors ${g._id === game._id ? 'bg-zinc-800 text-white' : 'text-zinc-300 hover:bg-zinc-800 hover:text-white'}`}
+                                            >
+                                                <div className="w-6 h-6 rounded bg-zinc-800 flex items-center justify-center shrink-0 overflow-hidden">
+                                                    {g.iconUrl ? (
+                                                        <img src={`http://localhost:5000${g.iconUrl}`} alt="" className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        <span className="text-xs font-bold text-zinc-500">{g.name.charAt(0)}</span>
+                                                    )}
+                                                </div>
+                                                <span className="truncate">{g.name}</span>
+                                            </button>
+                                        ))}
+                                        {games.length === 0 && (
+                                            <div className="px-3 py-2 text-sm text-zinc-500 text-center">No other games found</div>
+                                        )}
+                                    </div>
+                                </div>
                             )}
                         </div>
                     )}
                 </div>
             </div>
-
         </header>
     );
 }
+
