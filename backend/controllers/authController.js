@@ -153,6 +153,8 @@ const getMe = asyncHandler(async (req, res) => {
     });
 });
 
+const Image = require('../models/Image');
+
 // @desc    Update profile (phone, avatar)
 // @route   PATCH /api/auth/profile
 // @access  Private
@@ -171,7 +173,12 @@ const updateProfile = asyncHandler(async (req, res) => {
 
     // Avatar: uploaded file takes priority, else accept a URL string
     if (req.file) {
-        user.avatarUrl = `/uploads/avatars/${req.file.filename}`;
+        const imageDoc = await Image.create({
+            filename: req.file.originalname,
+            contentType: req.file.mimetype,
+            data: req.file.buffer
+        });
+        user.avatarUrl = `/api/images/${imageDoc._id}`;
     } else if (avatarUrl !== undefined) {
         user.avatarUrl = avatarUrl;
     }

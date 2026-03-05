@@ -2,25 +2,9 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Ensure upload directory exists
-const uploadDir = path.join(__dirname, '../uploads/games');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
 
-// Multer Config
-const storage = multer.diskStorage({
-    destination(req, file, cb) {
-        cb(null, uploadDir);
-    },
-    filename(req, file, cb) {
-        // Set filename as: game-<gameId>-<timestamp>.ext
-        cb(
-            null,
-            `game-${req.params.id}-${Date.now()}${path.extname(file.originalname)}`
-        );
-    },
-});
+// Multer Config: Use Memory Storage to keep files in a Buffer
+const storage = multer.memoryStorage();
 
 // File validation
 function checkFileType(file, cb) {

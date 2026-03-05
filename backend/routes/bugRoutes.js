@@ -6,16 +6,10 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Ensure bug media upload dir exists
-const bugDir = path.join(__dirname, '../uploads/bugs');
-if (!fs.existsSync(bugDir)) fs.mkdirSync(bugDir, { recursive: true });
+
 
 const bugUpload = multer({
-    storage: multer.diskStorage({
-        destination: (req, file, cb) => cb(null, bugDir),
-        filename: (req, file, cb) =>
-            cb(null, `bug-${Date.now()}-${Math.random().toString(36).slice(2)}${path.extname(file.originalname)}`),
-    }),
+    storage: multer.memoryStorage(),
     limits: { fileSize: 50 * 1024 * 1024 }, // 50 MB – videos can be large
     fileFilter: (req, file, cb) => {
         // Allow images and videos

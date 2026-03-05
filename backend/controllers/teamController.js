@@ -21,6 +21,8 @@ const getTeamMembers = asyncHandler(async (req, res) => {
     successResponse(res, 200, 'Team members fetched', enriched);
 });
 
+const Image = require('../models/Image');
+
 // @desc    Create a team member
 // @route   POST /api/team
 // @access  Admin / Super Admin
@@ -28,7 +30,15 @@ const createTeamMember = asyncHandler(async (req, res) => {
     const { name, role, email, phone, linkedUserId, order } = req.body;
     if (!name) return errorResponse(res, 400, 'Name is required');
 
-    const photoUrl = req.file ? `/uploads/team/${req.file.filename}` : undefined;
+    let photoUrl;
+    if (req.file) {
+        const imageDoc = await Image.create({
+            filename: req.file.originalname,
+            contentType: req.file.mimetype,
+            data: req.file.buffer
+        });
+        photoUrl = `/api/images/${imageDoc._id}`;
+    }
 
     const member = await TeamMember.create({
         name,
@@ -57,7 +67,15 @@ const updateTeamMember = asyncHandler(async (req, res) => {
     if (phone !== undefined) member.phone = phone;
     if (linkedUserId !== undefined) member.linkedUserId = linkedUserId || null;
     if (order !== undefined) member.order = order;
-    if (req.file) member.photoUrl = `/uploads/team/${req.file.filename}`;
+
+    if (req.file) {
+        const imageDoc = await Image.create({
+            filename: req.file.originalname,
+            contentType: req.file.mimetype,
+            data: req.file.buffer
+        });
+        member.photoUrl = `/api/images/${imageDoc._id}`;
+    }
 
     await member.save();
     successResponse(res, 200, 'Team member updated', member);

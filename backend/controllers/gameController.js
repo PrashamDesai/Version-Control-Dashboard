@@ -75,6 +75,8 @@ const deleteGame = asyncHandler(async (req, res) => {
     successResponse(res, 200, 'Game and all associated data deleted successfully');
 });
 
+const Image = require('../models/Image');
+
 // @desc    Upload Game Icon
 // @route   POST /api/games/:id/upload-icon
 // @access  Private/Admin
@@ -89,8 +91,14 @@ const uploadIcon = asyncHandler(async (req, res) => {
         return errorResponse(res, 400, 'Please upload a valid image file');
     }
 
-    // Save relative path
-    const iconUrl = `/uploads/games/${req.file.filename}`;
+    // Save image buffer to DB
+    const imageDoc = await Image.create({
+        filename: req.file.originalname,
+        contentType: req.file.mimetype,
+        data: req.file.buffer
+    });
+
+    const iconUrl = `/api/images/${imageDoc._id}`;
     game.iconUrl = iconUrl;
     await game.save();
 
@@ -123,7 +131,17 @@ const uploadScreenshots = asyncHandler(async (req, res) => {
     }
 
     const field = platform.toLowerCase() === 'android' ? 'androidScreenshots' : 'iosScreenshots';
-    const newScreenshots = req.files.map(file => `/uploads/games/${file.filename}`);
+
+    // Save image buffers to DB
+    const imageDocs = await Promise.all(
+        req.files.map(file => Image.create({
+            filename: file.originalname,
+            contentType: file.mimetype,
+            data: file.buffer
+        }))
+    );
+
+    const newScreenshots = imageDocs.map(doc => `/api/images/${doc._id}`);
 
     game[field] = [...(game[field] || []), ...newScreenshots];
     await game.save();

@@ -34,20 +34,21 @@ app.use(cors({
 
 app.use(express.json()); // Body parser
 
-// Make uploads folder static to serve images
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 // Route files
 const authRoutes = require('./routes/authRoutes');
 const gameRoutes = require('./routes/gameRoutes'); // Primary router for games and nested entities
 const adminRoutes = require('./routes/adminRoutes');
 const teamRoutes = require('./routes/teamRoutes');
+const imageRoutes = require('./routes/imageRoutes');
 
-// Mount routes
+// Mount// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/games', gameRoutes);
-app.use('/api/admin', adminRoutes);
 app.use('/api/team', teamRoutes);
+app.use('/api/images', imageRoutes);
+app.use('/api/admin', adminRoutes);
 
 // General route
 app.get('/', (req, res) => {

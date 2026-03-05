@@ -16,6 +16,8 @@ const getBugs = asyncHandler(async (req, res) => {
     successResponse(res, 200, 'Bugs fetched', bugs);
 });
 
+const Image = require('../models/Image');
+
 // @desc    Create a bug report
 // @route   POST /api/games/:gameId/bugs
 // @access  Private (any authenticated user)
@@ -27,11 +29,21 @@ const createBug = asyncHandler(async (req, res) => {
     if (!frequency) return errorResponse(res, 400, 'Frequency is required');
     if (!assignedTo) return errorResponse(res, 400, 'You must assign the bug to a team member');
 
-    // Build media array from uploaded files
-    const media = (req.files || []).map(file => ({
-        url: `/uploads/bugs/${file.filename}`,
-        type: file.mimetype.startsWith('video/') ? 'video' : 'image',
-    }));
+    // Build media array from uploaded files by saving them to MongoDB Image collection
+    let media = [];
+    if (req.files && req.files.length > 0) {
+        const imageDocs = await Promise.all(
+            req.files.map(file => Image.create({
+                filename: file.originalname,
+                contentType: file.mimetype,
+                data: file.buffer
+            }))
+        );
+        media = imageDocs.map((doc, index) => ({
+            url: `/api/images/${doc._id}`,
+            type: req.files[index].mimetype.startsWith('video/') ? 'video' : 'image',
+        }));
+    }
 
     const bug = await Bug.create({
         gameId,
@@ -103,9 +115,16 @@ const updateBug = asyncHandler(async (req, res) => {
 
     // Append any new uploaded media
     if (req.files?.length) {
-        const newMedia = req.files.map(file => ({
-            url: `/uploads/bugs/${file.filename}`,
-            type: file.mimetype.startsWith('video/') ? 'video' : 'image',
+        const imageDocs = await Promise.all(
+            req.files.map(file => Image.create({
+                filename: file.originalname,
+                contentType: file.mimetype,
+                data: file.buffer
+            }))
+        );
+        const newMedia = imageDocs.map((doc, index) => ({
+            url: `/api/images/${doc._id}`,
+            type: req.files[index].mimetype.startsWith('video/') ? 'video' : 'image',
         }));
         bug.media.push(...newMedia);
     }
