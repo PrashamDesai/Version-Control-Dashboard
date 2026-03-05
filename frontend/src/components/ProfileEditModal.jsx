@@ -73,7 +73,7 @@ export default function ProfileEditModal({ isOpen, user, onClose, onUpdated }) {
     const resolvedAvatar = avatarPreview?.startsWith('http')
         ? avatarPreview
         : avatarPreview
-            ? `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}${avatarPreview}`
+            ? `${import.meta.env.VITE_IMAGE_BASE_URL || ''}${avatarPreview}`
             : null;
 
     return (
@@ -98,15 +98,11 @@ export default function ProfileEditModal({ isOpen, user, onClose, onUpdated }) {
                 {/* Avatar */}
                 <div className="flex flex-col items-center gap-3">
                     <div
-                        className="relative w-20 h-20 rounded-full cursor-pointer group"
-                        onClick={() => fileRef.current?.click()}
-                    >
+                        className="relative w-24 h-24 rounded-full overflow-hidden bg-zinc-800 border-2 border-zinc-700 cursor-pointer group flex items-center justify-center flex-shrink-0" onClick={() => fileRef.current?.click()}>
                         {resolvedAvatar ? (
-                            <img
-                                src={resolvedAvatar}
-                                alt="avatar"
-                                className="w-full h-full rounded-full object-cover border-2 border-zinc-700"
-                            />
+                            <img src={resolvedAvatar} alt="Preview" className="w-full h-full object-cover" />
+                        ) : user?.avatarUrl ? (
+                            <img src={`${import.meta.env.VITE_IMAGE_BASE_URL || ''}${user.avatarUrl}`} alt="Profile" className="w-full h-full object-cover" />
                         ) : (
                             <div className="w-full h-full rounded-full bg-zinc-800 border-2 border-zinc-700 flex items-center justify-center">
                                 <User size={28} className="text-zinc-500" />

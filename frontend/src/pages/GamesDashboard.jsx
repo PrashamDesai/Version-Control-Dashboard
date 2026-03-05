@@ -21,7 +21,7 @@ const IconEditor = ({ currentUrl, onSelect }) => {
         onSelect(file);
     };
 
-    const displaySrc = preview || (currentUrl ? `http://localhost:5000${currentUrl}` : null);
+    const displaySrc = preview || (currentUrl ? `${import.meta.env.VITE_IMAGE_BASE_URL}${currentUrl}` : null);
 
     return (
         <div
@@ -327,7 +327,7 @@ export default function GamesDashboard() {
                                 <div className="flex items-center gap-4">
                                     <div className="w-16 h-16 rounded-xl overflow-hidden bg-zinc-800 border border-zinc-700 flex-shrink-0 flex items-center justify-center">
                                         {game.iconUrl
-                                            ? <img src={`http://localhost:5000${game.iconUrl}`} alt={game.name} className="w-full h-full object-cover" />
+                                            ? <img src={`${import.meta.env.VITE_IMAGE_BASE_URL}${game.iconUrl}`} alt={game.name} className="w-full h-full object-cover" />
                                             : <MonitorPlay className="text-zinc-500" />
                                         }
                                     </div>

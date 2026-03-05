@@ -92,7 +92,7 @@ export default function MainSidebar() {
     const avatarSrc = userData?.avatarUrl
         ? userData.avatarUrl.startsWith('http')
             ? userData.avatarUrl
-            : `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}${userData.avatarUrl}`
+            : `${import.meta.env.VITE_IMAGE_BASE_URL || ''}${userData.avatarUrl}`
         : null;
 
     return (
@@ -221,7 +221,7 @@ export default function MainSidebar() {
                             className="w-full flex items-center justify-center py-2 text-zinc-500 hover:text-white transition-colors overflow-hidden"
                         >
                             {avatarSrc ? (
-                                <img src={avatarSrc} alt="" className="w-7 h-7 rounded-full object-cover" />
+                                <img src={avatarSrc} alt="Profile" className="w-8 h-8 rounded-full object-cover border border-zinc-700" />
                             ) : (
                                 <User size={18} />
                             )}

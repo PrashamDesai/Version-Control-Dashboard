@@ -98,7 +98,7 @@ export default function TopNav({ showGameSwitcher = false, game = null }) {
                             >
                                 <div className="w-5 h-5 rounded overflow-hidden bg-zinc-800 flex items-center justify-center shrink-0">
                                     {game.iconUrl ? (
-                                        <img src={`http://localhost:5000${game.iconUrl}`} alt="Icon" className="w-full h-full object-cover" />
+                                        <img src={`${import.meta.env.VITE_IMAGE_BASE_URL}${game.iconUrl}`} alt="Icon" className="w-full h-full object-cover" />
                                     ) : (
                                         <span className="text-zinc-500 text-xs font-bold">{game.name.charAt(0)}</span>
                                     )}
@@ -126,7 +126,7 @@ export default function TopNav({ showGameSwitcher = false, game = null }) {
                                             >
                                                 <div className="w-6 h-6 rounded bg-zinc-800 flex items-center justify-center shrink-0 overflow-hidden">
                                                     {g.iconUrl ? (
-                                                        <img src={`http://localhost:5000${g.iconUrl}`} alt="" className="w-full h-full object-cover" />
+                                                        <img src={`${import.meta.env.VITE_IMAGE_BASE_URL}${g.iconUrl}`} alt="" className="w-full h-full object-cover" />
                                                     ) : (
                                                         <span className="text-xs font-bold text-zinc-500">{g.name.charAt(0)}</span>
                                                     )}

@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 import api from '../services/api';
 import ConfirmDialog from '../components/ConfirmDialog';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const BASE_URL = import.meta.env.VITE_IMAGE_BASE_URL || '';
 
 const FREQ_OPTIONS = ['Always', 'Often', 'Sometimes', 'Rarely'];
 

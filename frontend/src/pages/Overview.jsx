@@ -197,7 +197,7 @@ export default function Overview() {
                         {/* Game icon */}
                         <div className="w-20 h-20 rounded-2xl overflow-hidden bg-zinc-800 shadow-2xl border border-zinc-700 flex-shrink-0 flex items-center justify-center">
                             {game.iconUrl ? (
-                                <img src={`http://localhost:5000${game.iconUrl}`} alt="Game Icon" className="w-full h-full object-cover" />
+                                <img src={`${import.meta.env.VITE_IMAGE_BASE_URL}${game.iconUrl}`} alt="Game Icon" className="w-full h-full object-cover" />
                             ) : (
                                 <span className="text-zinc-400 font-bold text-3xl">{game.name?.charAt(0)}</span>
                             )}

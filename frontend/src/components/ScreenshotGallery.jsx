@@ -181,9 +181,10 @@ export default function ScreenshotGallery({ gameId, screenshots = [], isAdmin, o
                                     onClick={() => setSelectedImage(url)}
                                 >
                                     <img
-                                        src={`http://localhost:5000${url}`}
-                                        alt={`${platform} screen ${i + 1}`}
-                                        className="w-full h-full object-cover transition-transform duration-500 group-hover/item:scale-105"
+                                        src={`${import.meta.env.VITE_IMAGE_BASE_URL}${url}`}
+                                        alt={`Screenshot ${i + 1}`}
+                                        className="w-full h-full object-cover cursor-pointer"
+                                        onClick={() => setSelectedImage(url)}
                                     />
 
                                     {/* Expand hint overlay */}
@@ -228,9 +229,9 @@ export default function ScreenshotGallery({ gameId, screenshots = [], isAdmin, o
                         <X size={24} />
                     </button>
                     <img
-                        src={`http://localhost:5000${selectedImage}`}
-                        alt="Fullscreen screenshot"
-                        className="max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl"
+                        src={`${import.meta.env.VITE_IMAGE_BASE_URL}${selectedImage}`}
+                        alt="Screenshot Full"
+                        className="max-w-[90vw] max-h-[90vh] object-contain"
                         onClick={(e) => e.stopPropagation()}
                     />
                 </div>

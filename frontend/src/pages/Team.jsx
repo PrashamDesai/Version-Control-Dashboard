@@ -7,11 +7,11 @@ import { toast } from 'sonner';
 import api from '../services/api';
 import ConfirmDialog from '../components/ConfirmDialog';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 
 /** Resolve a relative /uploads/... path to a full URL */
 const resolvePhoto = (url) =>
-    url ? (url.startsWith('http') ? url : `${BASE_URL}${url}`) : null;
+    url ? (url.startsWith('http') ? url : `${import.meta.env.VITE_IMAGE_BASE_URL || ''}${url}`) : null;
 
 /** Role badge colours */
 const BADGE = {
@@ -293,8 +293,8 @@ function MemberCard({ member, isAdmin, onEdit, onDelete }) {
 
             {/* Avatar */}
             <div className="w-16 h-16 rounded-full bg-zinc-700 flex items-center justify-center overflow-hidden border-2 border-zinc-700 flex-shrink-0">
-                {photo ? (
-                    <img src={photo} alt={member.name} className="w-full h-full object-cover" />
+                {member.iconUrl ? (
+                    <img src={`${import.meta.env.VITE_IMAGE_BASE_URL}${member.iconUrl}`} alt={member.name} className="w-full h-full object-cover" />
                 ) : (
                     <User size={24} className="text-zinc-400" />
                 )}
