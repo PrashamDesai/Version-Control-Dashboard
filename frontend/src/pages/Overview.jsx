@@ -49,6 +49,15 @@ const AppStoreIcon = ({ className }) => (
     />
 );
 
+// ── Gitlab icon ────────────────────────────────────────────────────────────────
+const GitlabIcon = ({ className }) => (
+    <img
+        src={`${import.meta.env.VITE_IMAGE_BASE_URL}/uploads/gitlab-enterprise.png`}
+        alt="GitLab"
+        className={cn("w-6 h-6 sm:w-8 sm:h-8 object-contain", className)}
+    />
+);
+
 // ── Big Store URL Card ─────────────────────────────────────────────────────
 const BigStoreLogoLink = ({ platform, icon, url, onSave, canEdit = true }) => {
     const [editing, setEditing] = useState(false);
@@ -128,6 +137,7 @@ export default function Overview() {
     // Local mutable state
     const [playStoreUrl, setPlayStoreUrl] = useState(game?.playStoreUrl || '');
     const [appStoreUrl, setAppStoreUrl] = useState(game?.appStoreUrl || '');
+    const [gitlabUrl, setGitlabUrl] = useState(game?.gitlabUrl || '');
 
     const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
     const isAdmin = userInfo?.user?.role === 'admin' || userInfo?.user?.role === 'super_admin';
@@ -135,6 +145,7 @@ export default function Overview() {
     useEffect(() => {
         setPlayStoreUrl(game?.playStoreUrl || '');
         setAppStoreUrl(game?.appStoreUrl || '');
+        setGitlabUrl(game?.gitlabUrl || '');
     }, [game]);
 
     useEffect(() => {
@@ -157,15 +168,15 @@ export default function Overview() {
         fetchStats();
     }, [game]);
 
-    // Save a store URL field to the backend
     const saveStoreUrl = async (field, value) => {
         try {
             await api.put(`/games/${game._id}`, { [field]: value });
             if (field === 'playStoreUrl') setPlayStoreUrl(value);
-            else setAppStoreUrl(value);
-            toast.success('Store URL updated!');
+            else if (field === 'appStoreUrl') setAppStoreUrl(value);
+            else if (field === 'gitlabUrl') setGitlabUrl(value);
+            toast.success('URL updated!');
         } catch {
-            toast.error('Failed to update store URL');
+            toast.error('Failed to update URL');
         }
     };
 
@@ -271,6 +282,13 @@ export default function Overview() {
                                 canEdit={isAdmin}
                             />
                         )}
+                        <BigStoreLogoLink
+                            platform="GitLab"
+                            icon={<GitlabIcon className="w-8 h-8 sm:w-10 sm:h-10" />}
+                            url={gitlabUrl}
+                            onSave={v => saveStoreUrl('gitlabUrl', v)}
+                            canEdit={isAdmin}
+                        />
                     </div>
                 </div>
             </div>
