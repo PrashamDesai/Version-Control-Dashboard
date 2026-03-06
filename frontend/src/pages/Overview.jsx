@@ -52,7 +52,7 @@ const AppStoreIcon = ({ className }) => (
 // ── Gitlab icon ────────────────────────────────────────────────────────────────
 const GitlabIcon = ({ className }) => (
     <img
-        src={`${import.meta.env.VITE_IMAGE_BASE_URL}/uploads/gitlab-enterprise.png`}
+        src={`${import.meta.env.VITE_API_URL}/images/69aa69ad055df9bceedd87eb`}
         alt="GitLab"
         className={cn("w-6 h-6 sm:w-8 sm:h-8 object-contain", className)}
     />
