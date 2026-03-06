@@ -13,23 +13,13 @@ connectDB();
 
 const app = express();
 
-const allowedOrigins = [
-    'http://localhost:5173', // Local development
-    'http://localhost:3000',
-    'https://resonant-florentine-05f423.netlify.app', // Production Netlify frontend
-    process.env.FRONTEND_URL // Fallback env variable
-].filter(Boolean);
-
 // Middleware
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true,
+    origin: [
+        "http://localhost:5173",
+        "https://v0-version-control-dashboard-g7yzh5y3t-prashamd-5364s-projects.vercel.app"
+    ],
+    credentials: true
 }));
 
 app.use(express.json()); // Body parser
