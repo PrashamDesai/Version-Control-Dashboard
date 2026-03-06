@@ -43,6 +43,9 @@ const adminRoutes = require('./routes/adminRoutes');
 const teamRoutes = require('./routes/teamRoutes');
 const imageRoutes = require('./routes/imageRoutes');
 
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // Mount// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/games', gameRoutes);
