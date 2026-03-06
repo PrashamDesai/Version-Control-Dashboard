@@ -434,7 +434,7 @@ export default function GamesDashboard() {
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-zinc-300">Organization</label>
                             <input
-                                type="text" placeholder="e.g. Indianic"
+                                type="text" placeholder="e.g. CompanyName"
                                 className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600"
                                 value={formData.organization}
                                 onChange={e => setFormData({ ...formData, organization: e.target.value })}
@@ -443,7 +443,7 @@ export default function GamesDashboard() {
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-zinc-300">Access Domain</label>
                             <input
-                                type="text" placeholder="e.g. @indianic.com"
+                                type="text" placeholder="e.g. @companyname.com"
                                 className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600"
                                 value={formData.accessDomain}
                                 onChange={e => setFormData({ ...formData, accessDomain: e.target.value })}
@@ -533,7 +533,7 @@ export default function GamesDashboard() {
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-zinc-300">Organization</label>
                                 <input
-                                    type="text"
+                                    type="text" placeholder="e.g. CompanyName"
                                     className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all"
                                     value={editForm.organization}
                                     onChange={e => setEditForm({ ...editForm, organization: e.target.value })}
@@ -542,7 +542,7 @@ export default function GamesDashboard() {
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-zinc-300">Access Domain</label>
                                 <input
-                                    type="text"
+                                    type="text" placeholder="e.g. @companyname.com"
                                     className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all"
                                     value={editForm.accessDomain}
                                     onChange={e => setEditForm({ ...editForm, accessDomain: e.target.value })}
