@@ -9,6 +9,9 @@ export default function FirestoreRules() {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
 
+    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+    const isAdmin = userInfo?.user?.role === 'admin' || userInfo?.user?.role === 'super_admin';
+
     const [data, setData] = useState({
         productionRules: '',
         developmentRules: ''
@@ -69,14 +72,16 @@ export default function FirestoreRules() {
                     </h1>
                     <p className="text-zinc-400 text-sm">Manage security rules for Production and Development databases.</p>
                 </div>
-                <button
-                    onClick={handleSave}
-                    disabled={saving || loading}
-                    className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
-                >
-                    {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-                    {saving ? 'Saving...' : 'Save Rules'}
-                </button>
+                {isAdmin && (
+                    <button
+                        onClick={handleSave}
+                        disabled={saving || loading}
+                        className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
+                    >
+                        {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                        {saving ? 'Saving...' : 'Save Rules'}
+                    </button>
+                )}
             </div>
 
             <div className="glass-panel flex-1 rounded-xl border border-zinc-800/50 p-6 md:p-8 flex flex-col overflow-hidden">
@@ -91,6 +96,7 @@ export default function FirestoreRules() {
                             name="productionRules"
                             value={data.productionRules}
                             onChange={handleChange}
+                            readOnly={!isAdmin}
                             spellCheck="false"
                             className="flex-1 w-full bg-[#1e1e1e] border-2 border-zinc-800 rounded-b-lg p-4 text-sm text-zinc-300 focus:border-yellow-500/50 outline-none transition-all resize-none font-mono"
                             placeholder="// Write your production rules here..."
@@ -106,6 +112,7 @@ export default function FirestoreRules() {
                             name="developmentRules"
                             value={data.developmentRules}
                             onChange={handleChange}
+                            readOnly={!isAdmin}
                             spellCheck="false"
                             className="flex-1 w-full bg-[#1e1e1e] border-2 border-zinc-800 rounded-b-lg p-4 text-sm text-zinc-300 focus:border-green-500/50 outline-none transition-all resize-none font-mono"
                             placeholder="// Write your development/editor rules here..."

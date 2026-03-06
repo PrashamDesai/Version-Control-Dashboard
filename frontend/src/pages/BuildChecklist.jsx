@@ -26,6 +26,9 @@ export default function BuildChecklist() {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
 
+    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+    const isAdmin = userInfo?.user?.role === 'admin' || userInfo?.user?.role === 'super_admin';
+
     // Array of checklist items
     const [checklist, setChecklist] = useState([]);
     const [savingRows, setSavingRows] = useState({});
@@ -208,14 +211,16 @@ export default function BuildChecklist() {
                     <h1 className="text-2xl font-semibold tracking-tight text-white mb-1">CBD (Check Build Details)</h1>
                     <p className="text-zinc-400 text-sm">Validate critical steps prior to submitting a build for review.</p>
                 </div>
-                <button
-                    onClick={handleBulkSave}
-                    disabled={saving}
-                    className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
-                >
-                    {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-                    {saving ? 'Saving All...' : 'Save All Changes'}
-                </button>
+                {isAdmin && (
+                    <button
+                        onClick={handleBulkSave}
+                        disabled={saving}
+                        className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
+                    >
+                        {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                        {saving ? 'Saving All...' : 'Save All Changes'}
+                    </button>
+                )}
             </div>
 
             <div className="glass-panel flex-shrink-0 rounded-xl p-4 border border-zinc-800/80 flex items-center gap-4">
@@ -264,12 +269,14 @@ export default function BuildChecklist() {
 
             <div className="glass-panel rounded-xl flex-1 flex flex-col overflow-hidden border border-zinc-800/50 bg-[#121214]">
                 <div className="flex border-b border-zinc-800/80 bg-[#121214] shrink-0 justify-end items-center pr-4 h-12">
-                    <button
-                        onClick={handleAddRow}
-                        className="flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white px-3 py-1.5 rounded-md text-sm transition-colors border border-zinc-700"
-                    >
-                        <Plus size={16} /> Add Validation Check
-                    </button>
+                    {isAdmin && (
+                        <button
+                            onClick={handleAddRow}
+                            className="flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white px-3 py-1.5 rounded-md text-sm transition-colors border border-zinc-700"
+                        >
+                            <Plus size={16} /> Add Validation Check
+                        </button>
+                    )}
                 </div>
 
                 <div key={platform} className="tab-panel flex-1 overflow-auto">
@@ -297,6 +304,7 @@ export default function BuildChecklist() {
                                                 type="text"
                                                 value={item.checkName}
                                                 onChange={(e) => handleChange(item.localId, 'checkName', e.target.value)}
+                                                readOnly={!isAdmin}
                                                 placeholder="e.g., Verify Bundle ID"
                                                 className="w-full bg-zinc-900 border border-zinc-800 rounded-md px-3 py-2 text-sm text-zinc-200 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
                                             />
@@ -305,6 +313,7 @@ export default function BuildChecklist() {
                                             <select
                                                 value={item.status}
                                                 onChange={(e) => handleChange(item.localId, 'status', e.target.value)}
+                                                disabled={!isAdmin}
                                                 className={cn(
                                                     "w-full bg-zinc-900 border border-zinc-800 rounded-md px-3 py-2 text-sm font-semibold outline-none",
                                                     getStatusColor(item.status)
@@ -322,29 +331,32 @@ export default function BuildChecklist() {
                                                 type="text"
                                                 value={item.notes}
                                                 onChange={(e) => handleChange(item.localId, 'notes', e.target.value)}
+                                                readOnly={!isAdmin}
                                                 placeholder="Additional info..."
                                                 className="w-full bg-zinc-900 border border-zinc-800 rounded-md px-3 py-2 text-sm text-zinc-300 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
                                             />
                                         </td>
                                         <td className="px-4 py-3 text-right">
-                                            <div className="flex items-center justify-end gap-2">
-                                                <button
-                                                    onClick={() => handleSaveRow(item)}
-                                                    disabled={savingRows[item.localId] || deletingRows[item.localId]}
-                                                    title="Save Check"
-                                                    className="p-1.5 bg-violet-500/10 text-violet-500 hover:bg-violet-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
-                                                >
-                                                    {savingRows[item.localId] ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDeleteRow(item)}
-                                                    disabled={savingRows[item.localId] || deletingRows[item.localId]}
-                                                    title="Delete Check"
-                                                    className="p-1.5 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
-                                                >
-                                                    {deletingRows[item.localId] ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
-                                                </button>
-                                            </div>
+                                            {isAdmin && (
+                                                <div className="flex items-center justify-end gap-2">
+                                                    <button
+                                                        onClick={() => handleSaveRow(item)}
+                                                        disabled={savingRows[item.localId] || deletingRows[item.localId]}
+                                                        title="Save Check"
+                                                        className="p-1.5 bg-violet-500/10 text-violet-500 hover:bg-violet-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
+                                                    >
+                                                        {savingRows[item.localId] ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleDeleteRow(item)}
+                                                        disabled={savingRows[item.localId] || deletingRows[item.localId]}
+                                                        title="Delete Check"
+                                                        className="p-1.5 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
+                                                    >
+                                                        {deletingRows[item.localId] ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+                                                    </button>
+                                                </div>
+                                            )}
                                         </td>
                                     </tr>
                                 ))

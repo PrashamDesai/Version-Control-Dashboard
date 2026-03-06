@@ -106,7 +106,7 @@ const defaultEnv = {
 };
 
 // ── Inline editable SDK URL field ───────────────────────────────────────────
-const SdkUrlEditor = ({ defaultUrl, currentUrl, onSave }) => {
+const SdkUrlEditor = ({ defaultUrl, currentUrl, onSave, canEdit = true }) => {
     const [open, setOpen] = useState(false);
     const [val, setVal] = useState(currentUrl || '');
 
@@ -131,13 +131,15 @@ const SdkUrlEditor = ({ defaultUrl, currentUrl, onSave }) => {
                 ) : (
                     <span className="w-[13px]" />
                 )}
-                <button
-                    onClick={() => setOpen(true)}
-                    className="text-zinc-700 hover:text-zinc-400 transition-colors opacity-0 group-hover/url:opacity-100"
-                    title="Edit download URL"
-                >
-                    <Pencil size={11} />
-                </button>
+                {canEdit && (
+                    <button
+                        onClick={() => setOpen(true)}
+                        className="text-zinc-700 hover:text-zinc-400 transition-colors opacity-0 group-hover/url:opacity-100"
+                        title="Edit download URL"
+                    >
+                        <Pencil size={11} />
+                    </button>
+                )}
             </div>
         );
     }
@@ -181,6 +183,9 @@ export default function Environments() {
 
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+
+    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+    const isAdmin = userInfo?.user?.role === 'admin' || userInfo?.user?.role === 'super_admin';
 
     useEffect(() => {
         const fetchEnvs = async () => {
@@ -326,14 +331,16 @@ export default function Environments() {
                     <h1 className="text-2xl font-semibold tracking-tight text-white mb-1">Env & Configs</h1>
                     <p className="text-zinc-400 text-sm">Manage bundle IDs, external links, and SDK statuses per environment.</p>
                 </div>
-                <button
-                    onClick={handleSave}
-                    disabled={saving}
-                    className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
-                >
-                    {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-                    {saving ? 'Saving...' : 'Save Changes'}
-                </button>
+                {isAdmin && (
+                    <button
+                        onClick={handleSave}
+                        disabled={saving}
+                        className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
+                    >
+                        {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                        {saving ? 'Saving...' : 'Save Changes'}
+                    </button>
+                )}
             </div>
 
             <div className="glass-panel rounded-xl flex flex-col flex-1 overflow-hidden border border-zinc-800/50">
@@ -383,6 +390,7 @@ export default function Environments() {
                                         type="text"
                                         value={currentConfig[field.key] || ''}
                                         onChange={e => handleUpdateField(field.key, e.target.value)}
+                                        readOnly={!isAdmin}
                                         className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all"
                                     />
                                 </div>
@@ -395,6 +403,7 @@ export default function Environments() {
                                 <select
                                     value={currentConfig.googlePlayStatus || 'Not Required'}
                                     onChange={e => handleUpdateField('googlePlayStatus', e.target.value)}
+                                    disabled={!isAdmin}
                                     className={cn(
                                         "w-full rounded-md border px-3 py-2 text-sm outline-none cursor-pointer",
                                         getStatusColor(currentConfig.googlePlayStatus || 'Not Required')
@@ -411,6 +420,7 @@ export default function Environments() {
                                 <select
                                     value={currentConfig.appleStoreStatus || 'Not Required'}
                                     onChange={e => handleUpdateField('appleStoreStatus', e.target.value)}
+                                    disabled={!isAdmin}
                                     className={cn(
                                         "w-full rounded-md border px-3 py-2 text-sm outline-none cursor-pointer",
                                         getStatusColor(currentConfig.appleStoreStatus || 'Not Required')
@@ -444,6 +454,7 @@ export default function Environments() {
                                                 type={item.noLink ? "text" : "url"}
                                                 value={currentConfig[item.key] || ''}
                                                 onChange={e => handleUpdateField(item.key, e.target.value)}
+                                                readOnly={!isAdmin}
                                                 className="w-full pl-9 pr-3 py-2 bg-zinc-900 border border-zinc-800 rounded-md text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all"
                                             />
                                         </div>
@@ -486,11 +497,13 @@ export default function Environments() {
                                                     },
                                                 }));
                                             }}
+                                            canEdit={isAdmin}
                                         />
                                     </div>
                                     <select
                                         value={currentConfig.sdkIntegration[key] || 'Not Required'}
                                         onChange={e => handleSDKUpdate(key, e.target.value)}
+                                        disabled={!isAdmin}
                                         className={cn(
                                             "w-full rounded border px-3 py-1.5 text-xs font-semibold uppercase tracking-wider outline-none cursor-pointer",
                                             getStatusColor(currentConfig.sdkIntegration[key] || 'Not Required')
@@ -507,13 +520,15 @@ export default function Environments() {
                             {/* Render Custom SDKs */}
                             {currentConfig.customSdks && currentConfig.customSdks.map((sdk, idx) => (
                                 <div key={`custom-${idx}`} className="bg-zinc-900/50 border border-zinc-800/80 rounded-lg p-4 flex flex-col gap-3 group relative">
-                                    <button
-                                        onClick={() => handleCustomSDKRemove(idx)}
-                                        className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                                        title="Remove custom SDK"
-                                    >
-                                        <Trash2 size={12} />
-                                    </button>
+                                    {isAdmin && (
+                                        <button
+                                            onClick={() => handleCustomSDKRemove(idx)}
+                                            className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                            title="Remove custom SDK"
+                                        >
+                                            <Trash2 size={12} />
+                                        </button>
+                                    )}
                                     <div className="flex items-center justify-between gap-2">
                                         <span className="text-xs font-medium text-zinc-300 truncate" title={sdk.name}>{sdk.name}</span>
                                         {/* Download URL link if provided */}
@@ -535,11 +550,13 @@ export default function Environments() {
                                         placeholder="Download / docs URL"
                                         value={sdk.downloadUrl || ''}
                                         onChange={e => handleCustomSDKUrl(idx, e.target.value)}
+                                        readOnly={!isAdmin}
                                         className="w-full bg-zinc-950 border border-zinc-800 rounded p-1.5 text-xs text-zinc-300 placeholder-zinc-700 focus:border-violet-500 outline-none"
                                     />
                                     <select
                                         value={sdk.status || 'Not Required'}
                                         onChange={e => handleCustomSDKUpdate(idx, e.target.value)}
+                                        disabled={!isAdmin}
                                         className={cn(
                                             "w-full rounded border px-3 py-1.5 text-xs font-semibold uppercase tracking-wider outline-none cursor-pointer",
                                             getStatusColor(sdk.status || 'Not Required')
@@ -553,26 +570,27 @@ export default function Environments() {
                                 </div>
                             ))}
 
-                            {/* Add Custom SDK button inline box */}
-                            <div className="border border-dashed border-zinc-700 hover:border-zinc-500 rounded-lg p-4 flex flex-col gap-3 justify-center transition-colors">
-                                <span className="text-sm font-medium text-zinc-500">Add Custom SDK</span>
-                                <div className="flex gap-2">
-                                    <input
-                                        type="text"
-                                        placeholder="e.g. AppsFlyer"
-                                        value={newSdkName}
-                                        onChange={e => setNewSdkName(e.target.value)}
-                                        onKeyDown={e => e.key === 'Enter' && handleCustomSDKAdd()}
-                                        className="w-full bg-zinc-900 border border-zinc-800 rounded p-1.5 text-xs text-zinc-100 focus:border-violet-500 outline-none"
-                                    />
-                                    <button
-                                        onClick={handleCustomSDKAdd}
-                                        className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 p-1.5 rounded transition-colors"
-                                    >
-                                        <Plus size={14} />
-                                    </button>
+                            {isAdmin && (
+                                <div className="border border-dashed border-zinc-700 hover:border-zinc-500 rounded-lg p-4 flex flex-col gap-3 justify-center transition-colors">
+                                    <span className="text-sm font-medium text-zinc-500">Add Custom SDK</span>
+                                    <div className="flex gap-2">
+                                        <input
+                                            type="text"
+                                            placeholder="e.g. AppsFlyer"
+                                            value={newSdkName}
+                                            onChange={e => setNewSdkName(e.target.value)}
+                                            onKeyDown={e => e.key === 'Enter' && handleCustomSDKAdd()}
+                                            className="w-full bg-zinc-900 border border-zinc-800 rounded p-1.5 text-xs text-zinc-100 focus:border-violet-500 outline-none"
+                                        />
+                                        <button
+                                            onClick={handleCustomSDKAdd}
+                                            className="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 p-1.5 rounded transition-colors"
+                                        >
+                                            <Plus size={14} />
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
 
                         </div>
                     </section>

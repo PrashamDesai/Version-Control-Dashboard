@@ -12,11 +12,6 @@ const userSchema = new mongoose.Schema(
             unique: true,
             sparse: true, // Allows null/undefined to not conflict with unique
         },
-        phone: {
-            type: String,
-            unique: true,
-            sparse: true,
-        },
         password: {
             type: String, // Made optional for Google Auth users
         },

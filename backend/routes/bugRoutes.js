@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true }); // mergeParams for :gameId
 const { getBugs, createBug, updateBug, deleteBug } = require('../controllers/bugController');
-const { protect } = require('../middleware/authMiddleware');
+const { protect, admin } = require('../middleware/authMiddleware');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -18,10 +18,10 @@ const bugUpload = multer({
     },
 });
 
-// All routes require authentication; any user can CRUD bugs
+// All routes require authentication; any user can create bugs, admins can edit/delete
 router.get('/', protect, getBugs);
 router.post('/', protect, bugUpload.array('media', 10), createBug);
-router.patch('/:id', protect, bugUpload.array('media', 10), updateBug);
-router.delete('/:id', protect, deleteBug);
+router.patch('/:id', protect, admin, bugUpload.array('media', 10), updateBug);
+router.delete('/:id', protect, admin, deleteBug);
 
 module.exports = router;

@@ -50,7 +50,7 @@ const AppStoreIcon = ({ className }) => (
 );
 
 // ── Big Store URL Card ─────────────────────────────────────────────────────
-const BigStoreLogoLink = ({ platform, icon, url, onSave }) => {
+const BigStoreLogoLink = ({ platform, icon, url, onSave, canEdit = true }) => {
     const [editing, setEditing] = useState(false);
     const [val, setVal] = useState(url || '');
     const [saving, setSaving] = useState(false);
@@ -92,7 +92,7 @@ const BigStoreLogoLink = ({ platform, icon, url, onSave }) => {
         <div className="group relative flex flex-col items-center justify-center p-3 sm:p-5 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl transition-all w-24 h-24 sm:w-28 sm:h-28">
             <a
                 href={url || '#'}
-                onClick={e => { if (!url) { e.preventDefault(); setEditing(true); } }}
+                onClick={e => { if (!url) { e.preventDefault(); if (canEdit) setEditing(true); } }}
                 target={url ? "_blank" : undefined}
                 rel="noreferrer"
                 className={`flex flex-col flex-1 w-full items-center justify-center gap-2 sm:gap-3 ${!url ? 'opacity-50 grayscale' : ''}`}
@@ -105,13 +105,15 @@ const BigStoreLogoLink = ({ platform, icon, url, onSave }) => {
                 </span>
             </a>
 
-            <button
-                onClick={(e) => { e.preventDefault(); setEditing(true); }}
-                className="absolute -top-2 -right-2 p-1.5 bg-zinc-800 border border-zinc-700 rounded-full text-zinc-400 hover:text-white opacity-0 group-hover:opacity-100 transition-all shadow-xl"
-                title={`Edit ${platform} URL`}
-            >
-                <Pencil size={12} />
-            </button>
+            {canEdit && (
+                <button
+                    onClick={(e) => { e.preventDefault(); setEditing(true); }}
+                    className="absolute -top-2 -right-2 p-1.5 bg-zinc-800 border border-zinc-700 rounded-full text-zinc-400 hover:text-white opacity-0 group-hover:opacity-100 transition-all shadow-xl"
+                    title={`Edit ${platform} URL`}
+                >
+                    <Pencil size={12} />
+                </button>
+            )}
         </div>
     );
 };
@@ -257,6 +259,7 @@ export default function Overview() {
                                 icon={<PlayStoreIcon className="w-8 h-8 sm:w-10 sm:h-10" />}
                                 url={playStoreUrl}
                                 onSave={v => saveStoreUrl('playStoreUrl', v)}
+                                canEdit={isAdmin}
                             />
                         )}
                         {isIos && (
@@ -265,6 +268,7 @@ export default function Overview() {
                                 icon={<AppStoreIcon className="w-8 h-8 sm:w-10 sm:h-10" />}
                                 url={appStoreUrl}
                                 onSave={v => saveStoreUrl('appStoreUrl', v)}
+                                canEdit={isAdmin}
                             />
                         )}
                     </div>

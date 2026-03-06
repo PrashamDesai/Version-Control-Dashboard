@@ -438,8 +438,8 @@ function BugCard({ bug, currentUser, onEdit, onDelete, onStatusChange }) {
     const isReporter = String(currentUser?.id) === String(bug.assignedBy?._id);
     const isAssignee = String(currentUser?.id) === String(bug.assignedTo?._id);
 
-    const canEditCore = isAdmin || isReporter;
-    const canChangeStatus = isAdmin || isAssignee;
+    const canEditCore = isAdmin;
+    const canChangeStatus = isAdmin;
 
     return (
         <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-6 hover:border-zinc-700 transition-all space-y-4">

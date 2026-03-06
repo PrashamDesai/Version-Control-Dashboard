@@ -10,7 +10,7 @@ const { protect, admin } = require('../middleware/authMiddleware');
 
 router.route('/')
     .get(protect, getReleases)
-    .post(protect, createRelease);
+    .post(protect, admin, createRelease);
 
 router.route('/:id')
     .put(protect, admin, updateRelease)

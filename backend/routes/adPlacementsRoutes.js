@@ -6,14 +6,14 @@ const {
     updateAdPlacement,
     deleteAdPlacement,
 } = require('../controllers/adPlacementsController');
-const { protect } = require('../middleware/authMiddleware');
+const { protect, admin } = require('../middleware/authMiddleware');
 
 router.route('/')
     .get(protect, getAdPlacements)
-    .post(protect, createAdPlacement);
+    .post(protect, admin, createAdPlacement);
 
 router.route('/:id')
-    .put(protect, updateAdPlacement)
-    .delete(protect, deleteAdPlacement);
+    .put(protect, admin, updateAdPlacement)
+    .delete(protect, admin, deleteAdPlacement);
 
 module.exports = router;

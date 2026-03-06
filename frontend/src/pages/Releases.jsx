@@ -13,6 +13,9 @@ export default function Releases() {
     const [releases, setReleases] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+    const isAdmin = userInfo?.user?.role === 'admin' || userInfo?.user?.role === 'super_admin';
+
     const [searchTerm, setSearchTerm] = useState('');
     const [filterPlatform, setFilterPlatform] = useState('');
 
@@ -128,13 +131,15 @@ export default function Releases() {
                     <h1 className="text-2xl font-semibold tracking-tight text-white mb-1">Releases</h1>
                     <p className="text-zinc-400 text-sm">Manage app versions and release history for {game?.name}.</p>
                 </div>
-                <button
-                    onClick={() => { resetForm(); setIsAddModalOpen(true); }}
-                    className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
-                >
-                    <Plus size={16} />
-                    New Release
-                </button>
+                {isAdmin && (
+                    <button
+                        onClick={() => { resetForm(); setIsAddModalOpen(true); }}
+                        className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
+                    >
+                        <Plus size={16} />
+                        New Release
+                    </button>
+                )}
             </div>
 
             <div className="glass-panel rounded-xl flex flex-col flex-1 overflow-hidden border border-zinc-800/50">
@@ -154,6 +159,7 @@ export default function Releases() {
                             className="bg-zinc-900 flex items-center gap-2 px-3 py-1.5 border border-zinc-800 hover:bg-zinc-800 rounded-md text-sm text-zinc-400 transition-colors shrink-0 outline-none cursor-pointer"
                             value={filterPlatform}
                             onChange={(e) => setFilterPlatform(e.target.value)}
+                            disabled={!isAdmin}
                             style={{ backgroundColor: '#18181b' }}
                         >
                             <option value="">All Platforms</option>
@@ -206,22 +212,24 @@ export default function Releases() {
                                         </td>
                                         <td className="px-6 py-4 text-zinc-500">{new Date(rel.releaseDate || rel.createdAt).toLocaleDateString()}</td>
                                         <td className="px-6 py-4 text-right">
-                                            <div className="opacity-0 group-hover:opacity-100 transition-opacity flex justify-end gap-1">
-                                                <button
-                                                    onClick={() => handleEdit(rel)}
-                                                    className="p-1.5 text-zinc-400 hover:text-violet-400 hover:bg-violet-500/10 rounded transition-colors"
-                                                    title="Edit"
-                                                >
-                                                    <Edit2 size={14} />
-                                                </button>
-                                                <button
-                                                    onClick={() => setConfirmDeleteId(rel._id)}
-                                                    className="p-1.5 text-zinc-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
-                                                    title="Delete"
-                                                >
-                                                    <Trash2 size={14} />
-                                                </button>
-                                            </div>
+                                            {isAdmin && (
+                                                <div className="opacity-0 group-hover:opacity-100 transition-opacity flex justify-end gap-1">
+                                                    <button
+                                                        onClick={() => handleEdit(rel)}
+                                                        className="p-1.5 text-zinc-400 hover:text-violet-400 hover:bg-violet-500/10 rounded transition-colors"
+                                                        title="Edit"
+                                                    >
+                                                        <Edit2 size={14} />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => setConfirmDeleteId(rel._id)}
+                                                        className="p-1.5 text-zinc-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
+                                                        title="Delete"
+                                                    >
+                                                        <Trash2 size={14} />
+                                                    </button>
+                                                </div>
+                                            )}
                                         </td>
                                     </tr>
                                 ))}

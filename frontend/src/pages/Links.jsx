@@ -25,6 +25,9 @@ export default function Links() {
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
 
+    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+    const isAdmin = userInfo?.user?.role === 'admin' || userInfo?.user?.role === 'super_admin';
+
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [confirmDeleteId, setConfirmDeleteId] = useState(null);
     const [formData, setFormData] = useState({
@@ -124,13 +127,15 @@ export default function Links() {
                     <h1 className="text-2xl font-semibold tracking-tight text-white mb-1">Important Links</h1>
                     <p className="text-zinc-400 text-sm">Quickly access external resources related to this game.</p>
                 </div>
-                <button
-                    onClick={handleAddNew}
-                    className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
-                >
-                    <Plus size={16} />
-                    Add Link
-                </button>
+                {isAdmin && (
+                    <button
+                        onClick={handleAddNew}
+                        className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
+                    >
+                        <Plus size={16} />
+                        Add Link
+                    </button>
+                )}
             </div>
 
             <div className="flex-1 overflow-y-auto">
@@ -148,7 +153,7 @@ export default function Links() {
                                 )}>
                                     <LinkIcon size={20} />
                                 </div>
-                                {!link.isDefaultEmpty && (
+                                {(!link.isDefaultEmpty && isAdmin) && (
                                     <div className="opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
                                         <button
                                             onClick={() => setConfirmDeleteId(link._id)}
@@ -182,12 +187,14 @@ export default function Links() {
                                     </span>
                                 </div>
                                 {link.isDefaultEmpty ? (
-                                    <button
-                                        onClick={() => handleSetupDefault(link)}
-                                        className="text-xs font-medium text-violet-500 hover:text-violet-400 flex items-center gap-1 transition-colors bg-violet-500/10 px-2 py-1 rounded"
-                                    >
-                                        <Wrench size={12} /> Setup
-                                    </button>
+                                    isAdmin ? (
+                                        <button
+                                            onClick={() => handleSetupDefault(link)}
+                                            className="text-xs font-medium text-violet-500 hover:text-violet-400 flex items-center gap-1 transition-colors bg-violet-500/10 px-2 py-1 rounded"
+                                        >
+                                            <Wrench size={12} /> Setup
+                                        </button>
+                                    ) : null
                                 ) : (
                                     <a
                                         href={link.url}

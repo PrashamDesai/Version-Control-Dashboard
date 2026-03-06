@@ -48,6 +48,9 @@ export default function StoreListing() {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
 
+    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+    const isAdmin = userInfo?.user?.role === 'admin' || userInfo?.user?.role === 'super_admin';
+
     const [data, setData] = useState({
         Android: { ...defaultListing },
         iOS: { ...defaultListing }
@@ -162,14 +165,16 @@ export default function StoreListing() {
                     <h1 className="text-2xl font-semibold tracking-tight text-white mb-1">Deploy Details</h1>
                     <p className="text-zinc-400 text-sm">Manage app store metadata and descriptive content.</p>
                 </div>
-                <button
-                    onClick={handleSave}
-                    disabled={saving}
-                    className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
-                >
-                    {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-                    {saving ? 'Saving...' : 'Save Changes'}
-                </button>
+                {isAdmin && (
+                    <button
+                        onClick={handleSave}
+                        disabled={saving}
+                        className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
+                    >
+                        {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                        {saving ? 'Saving...' : 'Save Changes'}
+                    </button>
+                )}
             </div>
 
             <div className="flex gap-4 border-b border-zinc-800/80 mb-6 shrink-0">
@@ -214,6 +219,7 @@ export default function StoreListing() {
                                     name="title"
                                     value={currentData.title || ''}
                                     onChange={handleChange}
+                                    readOnly={!isAdmin}
                                     className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
                                 />
                             </div>
@@ -224,6 +230,7 @@ export default function StoreListing() {
                                     name="shortDescription"
                                     value={currentData.shortDescription || ''}
                                     onChange={handleChange}
+                                    readOnly={!isAdmin}
                                     rows={2}
                                     className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all resize-none placeholder:text-zinc-600 focus:bg-zinc-800/50"
                                 />
@@ -235,6 +242,7 @@ export default function StoreListing() {
                                     name="longDescription"
                                     value={currentData.longDescription || ''}
                                     onChange={handleChange}
+                                    readOnly={!isAdmin}
                                     className="w-full flex-1 bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all resize-none placeholder:text-zinc-600 focus:bg-zinc-800/50 font-mono min-h-[200px]"
                                 />
                             </div>
@@ -246,6 +254,7 @@ export default function StoreListing() {
                                         name="address"
                                         value={currentData.address || ''}
                                         onChange={handleChange}
+                                        readOnly={!isAdmin}
                                         className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
                                     />
                                 </div>
@@ -255,6 +264,7 @@ export default function StoreListing() {
                                         name="postalCode"
                                         value={currentData.postalCode || ''}
                                         onChange={handleChange}
+                                        readOnly={!isAdmin}
                                         className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
                                     />
                                 </div>
@@ -276,6 +286,7 @@ export default function StoreListing() {
                                             name={field.name}
                                             value={currentData[field.name] || ''}
                                             onChange={handleChange}
+                                            readOnly={!isAdmin}
                                             rows={3}
                                             className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all resize-none placeholder:text-zinc-600 focus:bg-zinc-800/50"
                                         />
@@ -284,6 +295,7 @@ export default function StoreListing() {
                                             name={field.name}
                                             value={currentData[field.name] || ''}
                                             onChange={handleChange}
+                                            readOnly={!isAdmin}
                                             className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
                                         />
                                     )}

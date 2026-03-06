@@ -9,7 +9,7 @@ const { protect, admin } = require('../middleware/authMiddleware');
 
 router.route('/')
     .get(protect, getLinks)
-    .post(protect, createLink);
+    .post(protect, admin, createLink);
 
 router.route('/:id')
     .delete(protect, admin, deleteLink);

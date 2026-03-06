@@ -20,6 +20,9 @@ export default function AdsConfig() {
     const [activeTab, setActiveTab] = useState('Android');
     const [loading, setLoading] = useState(true);
 
+    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+    const isAdmin = userInfo?.user?.role === 'admin' || userInfo?.user?.role === 'super_admin';
+
     // Core Ad IDs Config 
     const [adIds, setAdIds] = useState({
         Android: { ...defaultIds },
@@ -285,14 +288,16 @@ export default function AdsConfig() {
                             <h2 className="text-lg font-medium text-zinc-200">Ad Unit IDs</h2>
                             <p className="text-sm text-zinc-500">Configure global App IDs and specific core Unit IDs.</p>
                         </div>
-                        <button
-                            onClick={handleSaveIds}
-                            disabled={savingIds}
-                            className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
-                        >
-                            {savingIds ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-                            {savingIds ? 'Saving...' : 'Save IDs'}
-                        </button>
+                        {isAdmin && (
+                            <button
+                                onClick={handleSaveIds}
+                                disabled={savingIds}
+                                className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
+                            >
+                                {savingIds ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                                {savingIds ? 'Saving...' : 'Save IDs'}
+                            </button>
+                        )}
                     </div>
 
                     <div className="p-6 space-y-6">
@@ -308,6 +313,7 @@ export default function AdsConfig() {
                                     type="text"
                                     value={adIds[activeTab].appId}
                                     onChange={(e) => setAdIds(p => ({ ...p, [activeTab]: { ...p[activeTab], appId: e.target.value } }))}
+                                    readOnly={!isAdmin}
                                     placeholder="ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy"
                                     className="w-full bg-zinc-900 border border-zinc-700 rounded-md py-2 px-3 text-sm font-mono text-zinc-300 focus:border-violet-500 outline-none transition-all focus:ring-1 focus:ring-violet-500"
                                 />
@@ -330,6 +336,7 @@ export default function AdsConfig() {
                                         type="text"
                                         value={adIds[activeTab][field.type]}
                                         onChange={(e) => setAdIds(p => ({ ...p, [activeTab]: { ...p[activeTab], [field.type]: e.target.value } }))}
+                                        readOnly={!isAdmin}
                                         placeholder="ca-app-pub-xxxxxxxxxxxxxxxx/zzzzzzzzzz"
                                         className="w-full bg-zinc-900 border border-zinc-700 rounded-md py-2 px-3 text-sm font-mono text-zinc-300 focus:border-violet-500 outline-none transition-all focus:ring-1 focus:ring-violet-500"
                                     />
@@ -353,12 +360,14 @@ export default function AdsConfig() {
                             <h2 className="text-lg font-medium text-zinc-200">Placements Matrix</h2>
                             <p className="text-sm text-zinc-500">Document locations, frequencies, and purposes per ad type.</p>
                         </div>
-                        <button
-                            onClick={handleAddRow}
-                            className="flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white px-3 py-1.5 rounded-md text-sm transition-colors border border-zinc-700"
-                        >
-                            <Plus size={16} /> Add Placement
-                        </button>
+                        {isAdmin && (
+                            <button
+                                onClick={handleAddRow}
+                                className="flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white px-3 py-1.5 rounded-md text-sm transition-colors border border-zinc-700"
+                            >
+                                <Plus size={16} /> Add Placement
+                            </button>
+                        )}
                     </div>
 
                     <div className="overflow-x-auto">
@@ -376,7 +385,7 @@ export default function AdsConfig() {
                                 {currentRows.length === 0 ? (
                                     <tr>
                                         <td colSpan="5" className="p-8 text-center text-zinc-500 text-sm">
-                                            No Placements added. Click "Add Placement" to generate a row.
+                                            No placements added.
                                         </td>
                                     </tr>
                                 ) : (
@@ -386,6 +395,7 @@ export default function AdsConfig() {
                                                 <select
                                                     value={row.adType}
                                                     onChange={e => handleRowChange(row.localId, 'adType', e.target.value)}
+                                                    disabled={!isAdmin}
                                                     className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-sm text-zinc-300 focus:border-violet-500 outline-none"
                                                     style={{ backgroundColor: '#18181b' }}
                                                 >
@@ -397,6 +407,7 @@ export default function AdsConfig() {
                                                 <textarea
                                                     value={row.placement}
                                                     onChange={e => handleRowChange(row.localId, 'placement', e.target.value)}
+                                                    readOnly={!isAdmin}
                                                     placeholder="Menu, Settings..."
                                                     rows={3}
                                                     className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-sm text-zinc-300 focus:border-violet-500 outline-none resize-none"
@@ -407,6 +418,7 @@ export default function AdsConfig() {
                                                 <textarea
                                                     value={row.frequency}
                                                     onChange={e => handleRowChange(row.localId, 'frequency', e.target.value)}
+                                                    readOnly={!isAdmin}
                                                     placeholder="Always visible..."
                                                     rows={3}
                                                     className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-sm text-zinc-300 focus:border-violet-500 outline-none resize-none"
@@ -417,6 +429,7 @@ export default function AdsConfig() {
                                                 <textarea
                                                     value={row.notes}
                                                     onChange={e => handleRowChange(row.localId, 'notes', e.target.value)}
+                                                    readOnly={!isAdmin}
                                                     placeholder="Avoid distraction..."
                                                     rows={3}
                                                     className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-sm text-zinc-300 focus:border-violet-500 outline-none resize-none"
@@ -424,24 +437,26 @@ export default function AdsConfig() {
                                             </td>
 
                                             <td className="p-4 text-right align-top">
-                                                <div className="flex items-center justify-end gap-2 pt-1">
-                                                    <button
-                                                        onClick={() => handleSaveRow(row)}
-                                                        disabled={savingRows[row.localId] || deletingRows[row.localId]}
-                                                        title="Save Configuration"
-                                                        className="p-2 bg-violet-500/10 text-violet-500 hover:bg-violet-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
-                                                    >
-                                                        {savingRows[row.localId] ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleDeleteRow(row)}
-                                                        disabled={savingRows[row.localId] || deletingRows[row.localId]}
-                                                        title="Delete Configuration"
-                                                        className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
-                                                    >
-                                                        {deletingRows[row.localId] ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
-                                                    </button>
-                                                </div>
+                                                {isAdmin && (
+                                                    <div className="flex items-center justify-end gap-2 pt-1">
+                                                        <button
+                                                            onClick={() => handleSaveRow(row)}
+                                                            disabled={savingRows[row.localId] || deletingRows[row.localId]}
+                                                            title="Save Configuration"
+                                                            className="p-2 bg-violet-500/10 text-violet-500 hover:bg-violet-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
+                                                        >
+                                                            {savingRows[row.localId] ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDeleteRow(row)}
+                                                            disabled={savingRows[row.localId] || deletingRows[row.localId]}
+                                                            title="Delete Configuration"
+                                                            className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
+                                                        >
+                                                            {deletingRows[row.localId] ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
+                                                        </button>
+                                                    </div>
+                                                )}
                                             </td>
                                         </tr>
                                     ))

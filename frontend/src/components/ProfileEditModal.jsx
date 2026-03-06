@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Camera, Phone, Loader2, User } from 'lucide-react';
+import { X, Camera, Loader2, User } from 'lucide-react';
 import { toast } from 'sonner';
 import api from '../services/api';
 
@@ -12,7 +12,7 @@ import api from '../services/api';
  *   onUpdated (updatedUser) => void  – called with fresh user data after save
  */
 export default function ProfileEditModal({ isOpen, user, onClose, onUpdated }) {
-    const [phone, setPhone] = useState(user?.phone || '');
+    const [name, setName] = useState(user?.name || '');
     const [avatarPreview, setAvatarPreview] = useState(user?.avatarUrl || null);
     const [avatarFile, setAvatarFile] = useState(null);
     const [saving, setSaving] = useState(false);
@@ -21,7 +21,7 @@ export default function ProfileEditModal({ isOpen, user, onClose, onUpdated }) {
     // Sync state when modal opens or user data changes (like after fetchMe or login)
     useEffect(() => {
         if (isOpen) {
-            setPhone(user?.phone || '');
+            setName(user?.name || '');
             setAvatarPreview(user?.avatarUrl || null);
             setAvatarFile(null); // reset file selection
         }
@@ -40,7 +40,7 @@ export default function ProfileEditModal({ isOpen, user, onClose, onUpdated }) {
         try {
             setSaving(true);
             const formData = new FormData();
-            if (phone !== (user?.phone || '')) formData.append('phone', phone);
+            if (name !== (user?.name || '')) formData.append('name', name);
             if (avatarFile) formData.append('avatar', avatarFile);
 
             await api.patch('/auth/profile', formData, {
@@ -123,10 +123,18 @@ export default function ProfileEditModal({ isOpen, user, onClose, onUpdated }) {
                     />
                 </div>
 
-                {/* Read-only info */}
+                {/* Editable name */}
                 <div className="space-y-1.5">
-                    <p className="text-xs text-zinc-500">Name</p>
-                    <p className="text-sm text-zinc-300 font-medium">{user?.name || '—'}</p>
+                    <label className="text-xs text-zinc-500 flex items-center gap-1">
+                        Name
+                    </label>
+                    <input
+                        type="text"
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        placeholder="Enter your name"
+                        className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-violet-500 focus:outline-none transition-colors"
+                    />
                 </div>
                 {user?.email && (
                     <div className="space-y-1.5">
@@ -135,19 +143,6 @@ export default function ProfileEditModal({ isOpen, user, onClose, onUpdated }) {
                     </div>
                 )}
 
-                {/* Editable phone */}
-                <div className="space-y-1.5">
-                    <label className="text-xs text-zinc-500 flex items-center gap-1">
-                        <Phone size={11} /> Phone
-                    </label>
-                    <input
-                        type="tel"
-                        value={phone}
-                        onChange={e => setPhone(e.target.value)}
-                        placeholder="Enter phone number"
-                        className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-violet-500 focus:outline-none transition-colors"
-                    />
-                </div>
 
                 {/* Actions */}
                 <div className="flex gap-3 justify-end pt-1 border-t border-zinc-800/50">

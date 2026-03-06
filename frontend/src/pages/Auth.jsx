@@ -13,7 +13,6 @@ export default function Auth() {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
-        phone: '',
         password: '',
         confirmPassword: ''
     });
@@ -30,7 +29,7 @@ export default function Auth() {
             if (isLogin) {
                 // Login logic
                 const res = await api.post('/auth/login', {
-                    emailOrPhone: formData.email || formData.phone,
+                    email: formData.email,
                     password: formData.password
                 });
                 // Backend returns flat: { _id, name, email, phone, avatarUrl, role, token }
@@ -46,7 +45,6 @@ export default function Auth() {
                 const res = await api.post('/auth/register', {
                     name: formData.name,
                     email: formData.email,
-                    phone: formData.phone,
                     password: formData.password
                 });
                 const { token, ...user } = res.data.data;
@@ -97,35 +95,20 @@ export default function Auth() {
 
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-zinc-300 flex items-center gap-2">
-                                <Mail size={14} className="text-zinc-500" /> Email / Phone
+                                <Mail size={14} className="text-zinc-500" /> Email
                             </label>
                             <input
-                                type="text"
-                                name={isLogin ? "email" : "email"} // In login, we treat it as emailOrPhone
+                                type="email"
+                                name="email"
                                 value={formData.email}
                                 onChange={handleChange}
                                 className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600"
-                                placeholder={isLogin ? "Email or Phone" : "name@company.com"}
+                                placeholder="name@company.com"
                                 required
                             />
                         </div>
 
-                        {!isLogin && (
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-zinc-300 flex items-center gap-2">
-                                    <Phone size={14} className="text-zinc-500" /> Phone
-                                </label>
-                                <input
-                                    type="tel"
-                                    name="phone"
-                                    value={formData.phone}
-                                    onChange={handleChange}
-                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-lg p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600"
-                                    placeholder="+91 98765 43210"
-                                    required={!isLogin}
-                                />
-                            </div>
-                        )}
+
 
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-zinc-300 flex items-center gap-2">

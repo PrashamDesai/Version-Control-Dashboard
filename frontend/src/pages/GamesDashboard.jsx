@@ -58,6 +58,9 @@ export default function GamesDashboard() {
     // { [gameId]: { android: '1.2.0' | null, ios: '1.1.0' | null } }
     const [versions, setVersions] = useState({});
 
+    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+    const isAdmin = userInfo?.user?.role === 'admin' || userInfo?.user?.role === 'super_admin';
+
     // Add form state
     const [formData, setFormData] = useState({
         name: '', description: '', platformsSupported: ['Android', 'iOS'], isActive: true
@@ -264,12 +267,14 @@ export default function GamesDashboard() {
                     <h1 className="text-3xl font-semibold tracking-tight text-white mb-1">Games Overview</h1>
                     <p className="text-zinc-400 text-sm">Manage your entire portfolio of game titles across all environments.</p>
                 </div>
-                <button
-                    onClick={() => setIsAddModalOpen(true)}
-                    className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
-                >
-                    <Plus size={16} /> Add New Game
-                </button>
+                {isAdmin && (
+                    <button
+                        onClick={() => setIsAddModalOpen(true)}
+                        className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
+                    >
+                        <Plus size={16} /> Add New Game
+                    </button>
+                )}
             </div>
 
             {/* Search */}
@@ -302,26 +307,28 @@ export default function GamesDashboard() {
                                 className="glass-panel group relative rounded-2xl p-5 flex flex-col gap-4 hover:border-zinc-600 hover:shadow-lg hover:shadow-black/50 transition-all cursor-pointer overflow-hidden border border-zinc-800/80 bg-[#121214]"
                             >
                                 {/* Action buttons – appear on hover */}
-                                <div className="absolute top-3 right-3 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                                    <button
-                                        onClick={e => openEdit(e, game)}
-                                        title="Edit game"
-                                        className="p-1.5 bg-zinc-800/90 hover:bg-violet-500/20 text-zinc-400 hover:text-violet-400 rounded-md border border-zinc-700 hover:border-violet-500/30 transition-all backdrop-blur-sm"
-                                    >
-                                        <Pencil size={13} />
-                                    </button>
-                                    <button
-                                        onClick={e => { e.stopPropagation(); setConfirmDeleteGame({ id: game._id, name: game.name }); }}
-                                        disabled={deletingId === game._id}
-                                        title="Delete game"
-                                        className="p-1.5 bg-zinc-800/90 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 rounded-md border border-zinc-700 hover:border-red-500/30 transition-all backdrop-blur-sm disabled:opacity-50"
-                                    >
-                                        {deletingId === game._id
-                                            ? <Loader2 size={13} className="animate-spin" />
-                                            : <Trash2 size={13} />
-                                        }
-                                    </button>
-                                </div>
+                                {isAdmin && (
+                                    <div className="absolute top-3 right-3 flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                                        <button
+                                            onClick={e => openEdit(e, game)}
+                                            title="Edit game"
+                                            className="p-1.5 bg-zinc-800/90 hover:bg-violet-500/20 text-zinc-400 hover:text-violet-400 rounded-md border border-zinc-700 hover:border-violet-500/30 transition-all backdrop-blur-sm"
+                                        >
+                                            <Pencil size={13} />
+                                        </button>
+                                        <button
+                                            onClick={e => { e.stopPropagation(); setConfirmDeleteGame({ id: game._id, name: game.name }); }}
+                                            disabled={deletingId === game._id}
+                                            title="Delete game"
+                                            className="p-1.5 bg-zinc-800/90 hover:bg-red-500/20 text-zinc-400 hover:text-red-400 rounded-md border border-zinc-700 hover:border-red-500/30 transition-all backdrop-blur-sm disabled:opacity-50"
+                                        >
+                                            {deletingId === game._id
+                                                ? <Loader2 size={13} className="animate-spin" />
+                                                : <Trash2 size={13} />
+                                            }
+                                        </button>
+                                    </div>
+                                )}
 
                                 {/* Icon + name */}
                                 <div className="flex items-center gap-4">

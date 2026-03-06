@@ -23,6 +23,9 @@ export default function ClosedTestReports() {
     const [saving, setSaving] = useState(false);
     const [lastSaved, setLastSaved] = useState(null);
 
+    const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+    const isAdmin = userInfo?.user?.role === 'admin' || userInfo?.user?.role === 'super_admin';
+
     useEffect(() => {
         const fetchReport = async () => {
             try {
@@ -121,6 +124,7 @@ export default function ClosedTestReports() {
                             name="recruitmentMethod"
                             value={formData.recruitmentMethod}
                             onChange={handleChange}
+                            readOnly={!isAdmin}
                             rows={2} required
                             className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-violet-500 outline-none resize-none"
                         />
@@ -135,6 +139,7 @@ export default function ClosedTestReports() {
                                         type="radio" name="testerDifficulty" value={option}
                                         checked={formData.testerDifficulty === option}
                                         onChange={handleChange}
+                                        disabled={!isAdmin}
                                         className="text-violet-500 bg-zinc-900 border-zinc-700"
                                     />
                                     {option}
@@ -149,6 +154,7 @@ export default function ClosedTestReports() {
                             name="engagementSummary"
                             value={formData.engagementSummary}
                             onChange={handleChange}
+                            readOnly={!isAdmin}
                             rows={3} required
                             className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-violet-500 outline-none resize-none"
                         />
@@ -161,6 +167,7 @@ export default function ClosedTestReports() {
                             name="feedbackSummary"
                             value={formData.feedbackSummary}
                             onChange={handleChange}
+                            readOnly={!isAdmin}
                             rows={4} required
                             className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-violet-500 outline-none resize-none"
                         />
@@ -177,6 +184,7 @@ export default function ClosedTestReports() {
                             name="intendedAudience"
                             value={formData.intendedAudience}
                             onChange={handleChange}
+                            readOnly={!isAdmin}
                             rows={2} required
                             className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-violet-500 outline-none resize-none"
                         />
@@ -188,6 +196,7 @@ export default function ClosedTestReports() {
                             name="gameStandOut"
                             value={formData.gameStandOut}
                             onChange={handleChange}
+                            readOnly={!isAdmin}
                             rows={3} required
                             className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-violet-500 outline-none resize-none"
                         />
@@ -202,6 +211,7 @@ export default function ClosedTestReports() {
                                         type="radio" name="installExpectation" value={option}
                                         checked={formData.installExpectation === option}
                                         onChange={handleChange}
+                                        disabled={!isAdmin}
                                         className="text-violet-500 bg-zinc-900 border-zinc-700"
                                     />
                                     {option}
@@ -221,6 +231,7 @@ export default function ClosedTestReports() {
                             name="productionImprovements"
                             value={formData.productionImprovements}
                             onChange={handleChange}
+                            readOnly={!isAdmin}
                             rows={3} required maxLength={300}
                             className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-violet-500 outline-none resize-none"
                         />
@@ -238,6 +249,7 @@ export default function ClosedTestReports() {
                             name="productionReadiness"
                             value={formData.productionReadiness}
                             onChange={handleChange}
+                            readOnly={!isAdmin}
                             rows={3} required maxLength={300}
                             className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-3 text-sm text-zinc-100 focus:border-violet-500 outline-none resize-none"
                         />
@@ -254,14 +266,16 @@ export default function ClosedTestReports() {
                     <div className="flex items-center gap-2 text-zinc-500 text-sm">
                         <Clock size={16} /> {lastSaved ? `Last saved ${lastSaved.toLocaleString()}` : 'Never saved'}
                     </div>
-                    <button
-                        type="submit"
-                        disabled={saving}
-                        className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white px-5 py-2.5 rounded-lg font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
-                    >
-                        {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-                        {saving ? 'Saving...' : 'Save Changes'}
-                    </button>
+                    {isAdmin && (
+                        <button
+                            type="submit"
+                            disabled={saving}
+                            className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white px-5 py-2.5 rounded-lg font-medium text-sm transition-colors shadow-sm shadow-violet-500/20"
+                        >
+                            {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                            {saving ? 'Saving...' : 'Save Changes'}
+                        </button>
+                    )}
                 </div>
             </form>
         </div>

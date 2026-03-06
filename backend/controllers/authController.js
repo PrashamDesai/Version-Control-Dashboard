@@ -11,30 +11,28 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID || 'dummy_client_id
 // @route   POST /api/auth/register
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-    const { name, email, phone, password } = req.body;
+    const { name, email, password } = req.body;
 
     if (!email) return errorResponse(res, 400, 'Email is required');
-    if (!phone) return errorResponse(res, 400, 'Phone number is required');
     if (!password) return errorResponse(res, 400, 'Password is required');
 
-    // Check if user exists by email or phone
-    const userExists = await User.findOne({ $or: [{ email }, { phone }] });
+    // Check if user exists by email
+    const userExists = await User.findOne({ email });
     if (userExists) {
-        return errorResponse(res, 400, 'User already exists with this email or phone');
+        return errorResponse(res, 400, 'User already exists with this email');
     }
 
     // Assign super_admin if it's the first user ever
     const userCount = await User.countDocuments({});
     const assignedRole = userCount === 0 ? 'super_admin' : 'user';
 
-    const user = await User.create({ name, email, phone, password, role: assignedRole });
+    const user = await User.create({ name, email, password, role: assignedRole });
 
     if (user) {
         successResponse(res, 201, 'User registered successfully', {
             _id: user._id,
             name: user.name,
             email: user.email,
-            phone: user.phone,
             role: user.role,
             token: generateToken(user._id),
         });
@@ -47,24 +45,19 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   POST /api/auth/login
 // @access  Public
 const loginUser = asyncHandler(async (req, res) => {
-    // Determine if input is email or phone based on presence of @
-    const { emailOrPhone, password } = req.body;
+    const { email, password } = req.body;
 
-    if (!emailOrPhone || !password) {
+    if (!email || !password) {
         return errorResponse(res, 400, 'Please provide credentials');
     }
 
-    const isEmail = emailOrPhone.includes('@');
-    const query = isEmail ? { email: emailOrPhone } : { phone: emailOrPhone };
-
-    const user = await User.findOne({ ...query, isDeleted: { $ne: true } });
+    const user = await User.findOne({ email, isDeleted: { $ne: true } });
 
     if (user && (await user.matchPassword(password))) {
         successResponse(res, 200, 'Login successful', {
             _id: user._id,
             name: user.name,
             email: user.email,
-            phone: user.phone,
             avatarUrl: user.avatarUrl,
             role: user.role,
             token: generateToken(user._id),
@@ -124,7 +117,6 @@ const googleAuth = asyncHandler(async (req, res) => {
             _id: user._id,
             name: user.name,
             email: user.email,
-            phone: user.phone,
             avatarUrl: user.avatarUrl,
             role: user.role,
             token: generateToken(user._id),
@@ -147,7 +139,6 @@ const getMe = asyncHandler(async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        phone: user.phone,
         avatarUrl: user.avatarUrl,
         role: user.role,
     });
@@ -162,14 +153,10 @@ const updateProfile = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     if (!user) return errorResponse(res, 404, 'User not found');
 
-    const { phone, avatarUrl } = req.body;
+    const { name, avatarUrl } = req.body;
 
-    // Phone uniqueness check – only if it changed
-    if (phone && phone !== user.phone) {
-        const exists = await User.findOne({ phone, _id: { $ne: user._id } });
-        if (exists) return errorResponse(res, 400, 'Phone number already in use');
-        user.phone = phone;
-    }
+    // Update name
+    if (name) user.name = name;
 
     // Avatar: uploaded file takes priority, else accept a URL string
     if (req.file) {
@@ -189,7 +176,6 @@ const updateProfile = asyncHandler(async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        phone: user.phone,
         avatarUrl: user.avatarUrl,
         role: user.role,
     });
