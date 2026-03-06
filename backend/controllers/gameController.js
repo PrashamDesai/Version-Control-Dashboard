@@ -7,9 +7,9 @@ const { successResponse, errorResponse } = require('../utils/responseFormat');
 // @access  Private
 const getGames = asyncHandler(async (req, res) => {
     let query = {};
-    const isAdmin = req.user.role === 'admin' || req.user.role === 'super_admin';
+    const isSuperAdmin = req.user.role === 'super_admin';
 
-    if (!isAdmin) {
+    if (!isSuperAdmin) {
         const userEmail = req.user.email || '';
         const domain = userEmail.includes('@') ? '@' + userEmail.split('@')[1] : '___no_domain___';
         query = {
@@ -28,15 +28,15 @@ const getGames = asyncHandler(async (req, res) => {
 // @route   GET /api/games/slug/:slug
 // @access  Private
 const getGameBySlug = asyncHandler(async (req, res) => {
-    const isAdmin = req.user.role === 'admin' || req.user.role === 'super_admin';
+    const isSuperAdmin = req.user.role === 'super_admin';
     const game = await Game.findOne({ slug: req.params.slug });
 
     if (!game) {
         return errorResponse(res, 404, 'Game not found');
     }
 
-    // Direct access restriction for non-admins
-    if (!isAdmin && game.accessDomain) {
+    // Direct access restriction for non-super-admins
+    if (!isSuperAdmin && game.accessDomain) {
         const userEmail = req.user.email || '';
         const domain = userEmail.includes('@') ? '@' + userEmail.split('@')[1] : '___no_domain___';
         if (game.accessDomain !== domain) {
