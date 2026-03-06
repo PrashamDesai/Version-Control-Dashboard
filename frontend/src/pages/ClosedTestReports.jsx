@@ -95,7 +95,7 @@ export default function ClosedTestReports() {
     }
 
     return (
-        <div className="space-y-6 flex flex-col h-[calc(100vh-8rem)]">
+        <div className="space-y-6 flex flex-col">
             <div className="flex-shrink-0">
                 <h1 className="text-2xl font-semibold tracking-tight text-white mb-1">Closed Test QA Answers</h1>
                 <p className="text-zinc-400 text-sm">Pre-filled answers required by Google Play Console.</p>
@@ -111,7 +111,7 @@ export default function ClosedTestReports() {
                 </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="glass-panel p-6 sm:p-8 rounded-xl border border-zinc-800/50 space-y-10 flex-1 overflow-y-auto">
+            <form onSubmit={handleSubmit} className="glass-panel p-6 sm:p-8 rounded-xl border border-zinc-800/50 space-y-10">
 
                 {/* Section 1: About your closed test */}
                 <div className="space-y-6">

@@ -370,7 +370,7 @@ export default function Environments() {
     }
 
     return (
-        <div className="space-y-6 flex flex-col h-[calc(100vh-8rem)]">
+        <div className="space-y-6 flex flex-col">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 flex-shrink-0">
                 <div>
                     <h1 className="text-2xl font-semibold tracking-tight text-white mb-1">Env & Configs</h1>
@@ -388,7 +388,7 @@ export default function Environments() {
                 )}
             </div>
 
-            <div className="glass-panel rounded-xl flex flex-col flex-1 overflow-hidden border border-zinc-800/50">
+            <div className="glass-panel rounded-xl flex flex-col flex-1 border border-zinc-800/50">
                 <div className="flex border-b border-zinc-800/80 bg-[#121214] px-4 pt-4 shrink-0">
                     {TABS.map(tab => {
                         const getTabStyle = (t, isActive) => {
@@ -413,7 +413,7 @@ export default function Environments() {
                     })}
                 </div>
 
-                <div key={activeTab} className="tab-panel flex-1 overflow-y-auto p-6 md:p-8 space-y-10">
+                <div key={activeTab} className="tab-panel flex-1 p-6 md:p-8 space-y-10">
 
                     <section>
                         <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-6">Core Configuration</h3>

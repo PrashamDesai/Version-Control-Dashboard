@@ -252,7 +252,7 @@ export default function AdsConfig() {
     ];
 
     return (
-        <div className="space-y-6 flex flex-col h-[calc(100vh-8rem)]">
+        <div className="space-y-6 flex flex-col">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 flex-shrink-0">
                 <div>
                     <h1 className="text-2xl font-semibold tracking-tight text-white mb-1">Ad Monetization Config</h1>
@@ -279,7 +279,7 @@ export default function AdsConfig() {
                 ))}
             </div>
 
-            <div key={activeTab} className="tab-panel flex-1 overflow-y-auto pr-2 space-y-6">
+            <div key={activeTab} className="tab-panel flex-1 pr-2 space-y-6">
 
                 {/* SECTION 1: CORE AD IDs */}
                 <div className="glass-panel border-zinc-800/50 rounded-xl overflow-hidden">
