@@ -39,6 +39,14 @@ const gameSchema = new mongoose.Schema(
         gitlabUrl: { type: String, default: '' },
         androidScreenshots: [{ type: String }],
         iosScreenshots: [{ type: String }],
+        organization: {
+            type: String,
+            default: '',
+        },
+        accessDomain: {
+            type: String, // e.g., '@indianic.com'
+            default: '',
+        },
     },
     {
         timestamps: true,

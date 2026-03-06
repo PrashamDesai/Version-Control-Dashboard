@@ -63,13 +63,15 @@ export default function GamesDashboard() {
 
     // Add form state
     const [formData, setFormData] = useState({
-        name: '', description: '', platformsSupported: ['Android', 'iOS'], isActive: true
+        name: '', description: '', platformsSupported: ['Android', 'iOS'], isActive: true,
+        organization: '', accessDomain: ''
     });
     const [selectedImage, setSelectedImage] = useState(null);
 
     // Edit form state
     const [editForm, setEditForm] = useState({
         name: '', description: '', platformsSupported: [], status: 'In Internal Testing',
+        organization: '', accessDomain: ''
     });
     const [editImage, setEditImage] = useState(null);
     // Live versions auto-fetched for the editing game
@@ -167,7 +169,7 @@ export default function GamesDashboard() {
             }
             toast.success('Game created!');
             setIsAddModalOpen(false);
-            setFormData({ name: '', description: '', platformsSupported: ['Android', 'iOS'], isActive: true });
+            setFormData({ name: '', description: '', platformsSupported: ['Android', 'iOS'], isActive: true, organization: '', accessDomain: '' });
             setSelectedImage(null);
             fetchGames();
         } catch (error) {
@@ -186,6 +188,8 @@ export default function GamesDashboard() {
             description: game.description || '',
             platformsSupported: [...game.platformsSupported],
             status: game.status || 'In Internal Testing',
+            organization: game.organization || '',
+            accessDomain: game.accessDomain || '',
         });
         setEditImage(null);
         setEditVersions({ android: null, ios: null });
@@ -426,6 +430,26 @@ export default function GamesDashboard() {
                             onChange={e => setFormData({ ...formData, description: e.target.value })}
                         />
                     </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-zinc-300">Organization</label>
+                            <input
+                                type="text" placeholder="e.g. Indianic"
+                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600"
+                                value={formData.organization}
+                                onChange={e => setFormData({ ...formData, organization: e.target.value })}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium text-zinc-300">Access Domain</label>
+                            <input
+                                type="text" placeholder="e.g. @indianic.com"
+                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600"
+                                value={formData.accessDomain}
+                                onChange={e => setFormData({ ...formData, accessDomain: e.target.value })}
+                            />
+                        </div>
+                    </div>
                     <div className="space-y-2">
                         <label className="text-sm font-medium text-zinc-300">Platforms</label>
                         <div className="flex gap-4">
@@ -503,6 +527,27 @@ export default function GamesDashboard() {
                                 value={editForm.description}
                                 onChange={e => setEditForm({ ...editForm, description: e.target.value })}
                             />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-zinc-300">Organization</label>
+                                <input
+                                    type="text"
+                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all"
+                                    value={editForm.organization}
+                                    onChange={e => setEditForm({ ...editForm, organization: e.target.value })}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-sm font-medium text-zinc-300">Access Domain</label>
+                                <input
+                                    type="text"
+                                    className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all"
+                                    value={editForm.accessDomain}
+                                    onChange={e => setEditForm({ ...editForm, accessDomain: e.target.value })}
+                                />
+                            </div>
                         </div>
 
                         <div className="space-y-2">

@@ -6,7 +6,21 @@ const { successResponse, errorResponse } = require('../utils/responseFormat');
 // @route   GET /api/games
 // @access  Private
 const getGames = asyncHandler(async (req, res) => {
-    const games = await Game.find().sort('-createdAt');
+    let query = {};
+    const isAdmin = req.user.role === 'admin' || req.user.role === 'super_admin';
+
+    if (!isAdmin) {
+        const userEmail = req.user.email || '';
+        const domain = userEmail.includes('@') ? '@' + userEmail.split('@')[1] : '___no_domain___';
+        query = {
+            $or: [
+                { accessDomain: '' },
+                { accessDomain: domain }
+            ]
+        };
+    }
+
+    const games = await Game.find(query).sort('-createdAt');
     successResponse(res, 200, 'Games fetched successfully', games);
 });
 
@@ -14,10 +28,22 @@ const getGames = asyncHandler(async (req, res) => {
 // @route   GET /api/games/slug/:slug
 // @access  Private
 const getGameBySlug = asyncHandler(async (req, res) => {
+    const isAdmin = req.user.role === 'admin' || req.user.role === 'super_admin';
     const game = await Game.findOne({ slug: req.params.slug });
+
     if (!game) {
         return errorResponse(res, 404, 'Game not found');
     }
+
+    // Direct access restriction for non-admins
+    if (!isAdmin && game.accessDomain) {
+        const userEmail = req.user.email || '';
+        const domain = userEmail.includes('@') ? '@' + userEmail.split('@')[1] : '___no_domain___';
+        if (game.accessDomain !== domain) {
+            return errorResponse(res, 403, 'Not authorized to access this game');
+        }
+    }
+
     successResponse(res, 200, 'Game fetched successfully', game);
 });
 
@@ -54,6 +80,8 @@ const updateGame = asyncHandler(async (req, res) => {
     if (req.body.playStoreUrl !== undefined) game.playStoreUrl = req.body.playStoreUrl;
     if (req.body.appStoreUrl !== undefined) game.appStoreUrl = req.body.appStoreUrl;
     if (req.body.gitlabUrl !== undefined) game.gitlabUrl = req.body.gitlabUrl;
+    if (req.body.organization !== undefined) game.organization = req.body.organization;
+    if (req.body.accessDomain !== undefined) game.accessDomain = req.body.accessDomain;
 
     const updatedGame = await game.save();
 
