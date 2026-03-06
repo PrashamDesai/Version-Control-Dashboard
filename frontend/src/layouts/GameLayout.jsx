@@ -12,6 +12,7 @@ export default function GameLayout() {
     const location = useLocation();
     const [game, setGame] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     useEffect(() => {
         const fetchGameContext = async () => {
@@ -41,12 +42,12 @@ export default function GameLayout() {
     if (!game) return null;
 
     return (
-        <div className="flex h-screen bg-[#09090b] text-zinc-100 overflow-hidden font-sans">
-            <Sidebar game={game} />
+        <div className="flex h-screen bg-[#09090b] text-zinc-100 overflow-hidden font-sans relative">
+            <Sidebar game={game} mobileOpen={isMobileMenuOpen} setMobileOpen={setIsMobileMenuOpen} />
             <div className="flex flex-col flex-1 min-w-0">
-                <TopNav showGameSwitcher={true} game={game} />
-                <main className="flex-1 overflow-y-auto py-10 px-6 md:px-16 pl-20 md:pl-28">
-                    <div key={location.pathname} className="tab-panel max-w-7xl mx-auto space-y-8">
+                <TopNav showGameSwitcher={true} game={game} onMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />
+                <main className="flex-1 overflow-y-auto py-6 md:py-8 px-4 md:px-6 lg:px-10 xl:px-16">
+                    <div key={location.pathname} className="tab-panel max-w-7xl mx-auto space-y-6 md:space-y-8">
                         <Outlet context={{ game }} />
                     </div>
                 </main>

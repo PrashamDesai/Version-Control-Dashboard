@@ -132,15 +132,15 @@ export default function ClosedTestReports() {
 
                     <div className="space-y-3">
                         <label className="block text-sm font-medium text-zinc-200">How easy was it to recruit testers for your game?</label>
-                        <div className="flex items-center gap-6 mt-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-3">
                             {['Very difficult', 'Difficult', 'Neither difficult or easy', 'Easy', 'Very easy'].map(option => (
-                                <label key={option} className="flex items-center gap-2 text-sm text-zinc-300">
+                                <label key={option} className="flex items-center gap-3 text-sm text-zinc-300 bg-zinc-900 border border-zinc-800 rounded-lg p-3 hover:bg-zinc-800/50 transition-colors cursor-pointer">
                                     <input
                                         type="radio" name="testerDifficulty" value={option}
                                         checked={formData.testerDifficulty === option}
                                         onChange={handleChange}
                                         disabled={!isAdmin}
-                                        className="text-violet-500 bg-zinc-900 border-zinc-700"
+                                        className="accent-violet-500 w-4 h-4 shrink-0"
                                     />
                                     {option}
                                 </label>
@@ -204,15 +204,15 @@ export default function ClosedTestReports() {
 
                     <div className="space-y-3">
                         <label className="block text-sm font-medium text-zinc-200">How many installs do you expect your game to have in your first year?</label>
-                        <div className="flex items-center gap-6 mt-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mt-3">
                             {['0 - 10K', '10K - 100K', '100K - 1M', '1M - 10M', '10M+'].map(option => (
-                                <label key={option} className="flex items-center gap-2 text-sm text-zinc-300">
+                                <label key={option} className="flex items-center gap-3 text-sm text-zinc-300 bg-zinc-900 border border-zinc-800 rounded-lg p-3 hover:bg-zinc-800/50 transition-colors cursor-pointer">
                                     <input
                                         type="radio" name="installExpectation" value={option}
                                         checked={formData.installExpectation === option}
                                         onChange={handleChange}
                                         disabled={!isAdmin}
-                                        className="text-violet-500 bg-zinc-900 border-zinc-700"
+                                        className="accent-violet-500 w-4 h-4 shrink-0"
                                     />
                                     {option}
                                 </label>

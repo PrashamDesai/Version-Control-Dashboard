@@ -91,6 +91,10 @@ const defaultEnv = {
     firebaseClientId: '',
     appId: '',
     appName: '',
+    parentAccountAndroid: '',
+    parentAccountAndroidUrl: '',
+    parentAccountiOS: '',
+    parentAccountiOSUrl: '',
     sdkIntegration: {
         firebaseAuth: 'Not Required',
         googleSignIn: 'Not Required',
@@ -106,7 +110,7 @@ const defaultEnv = {
 };
 
 // ── Inline editable SDK URL field ───────────────────────────────────────────
-const SdkUrlEditor = ({ defaultUrl, currentUrl, onSave, canEdit = true }) => {
+const SdkUrlEditor = ({ defaultUrl, currentUrl, onSave, canEdit = true, icon = <Download size={13} /> }) => {
     const [open, setOpen] = useState(false);
     const [val, setVal] = useState(currentUrl || '');
 
@@ -126,7 +130,7 @@ const SdkUrlEditor = ({ defaultUrl, currentUrl, onSave, canEdit = true }) => {
                         className="text-zinc-600 hover:text-violet-400 transition-colors flex-shrink-0"
                         title={effectiveUrl}
                     >
-                        <Download size={13} />
+                        {icon}
                     </a>
                 ) : (
                     <span className="w-[13px]" />
@@ -166,6 +170,45 @@ const SdkUrlEditor = ({ defaultUrl, currentUrl, onSave, canEdit = true }) => {
             >
                 <X size={11} />
             </button>
+        </div>
+    );
+};
+
+// ── Field with companion URL Editor ──────────────────────────────────────
+const ParentAccountField = ({ label, value, url, onValueChange, onUrlSave, isAdmin }) => {
+    return (
+        <div className="space-y-2">
+            <div className="flex items-center justify-between">
+                <label className="text-sm font-medium text-zinc-400">{label}</label>
+                <SdkUrlEditor
+                    defaultUrl=""
+                    currentUrl={url}
+                    onSave={onUrlSave}
+                    canEdit={isAdmin}
+                    icon={<LinkIcon size={13} />}
+                />
+            </div>
+            <div className="relative">
+                <input
+                    type="text"
+                    value={value || ''}
+                    onChange={e => onValueChange(e.target.value)}
+                    readOnly={!isAdmin}
+                    className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 pr-10 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all"
+                    placeholder="Enter account name or email..."
+                />
+                {url && (
+                    <a
+                        href={url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-violet-400 transition-colors"
+                        title="Open account link"
+                    >
+                        <ExternalLink size={14} />
+                    </a>
+                )}
+            </div>
         </div>
     );
 };
@@ -293,12 +336,14 @@ export default function Environments() {
         try {
             setSaving(true);
             const payload = { ...currentConfig, environment: activeTab };
+            console.log('DEBUG: Sending Payload:', JSON.stringify(payload, null, 2));
             const res = await api.put(`/games/${game._id}/environments/${activeTab.toLowerCase()}`, payload);
+            console.log('DEBUG: Received Response:', JSON.stringify(res.data.data, null, 2));
 
-            // Update local state with saved document
+            // Update local state with saved document, merging with defaults to ensure all fields persist
             setConfigs(prev => ({
                 ...prev,
-                [activeTab]: res.data.data
+                [activeTab]: { ...defaultEnv, ...res.data.data }
             }));
             toast.success(`${activeTab} Environment configuration saved!`);
         } catch (error) {
@@ -372,16 +417,12 @@ export default function Environments() {
 
                     <section>
                         <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-6">Core Configuration</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        {/* Common Fields */}
+                        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
                             {[
-                                { label: 'Android Bundle ID', key: 'bundleIdAndroid' },
-                                { label: 'iOS Bundle ID', key: 'bundleIdiOS' },
                                 { label: 'App Name', key: 'appName' },
                                 { label: 'App ID (Firebase)', key: 'appId' },
-                                { label: 'Apple SKU', key: 'appleSKU' },
-                                { label: 'Apple ID', key: 'appleId' },
-                                { label: 'Apple Development Profile', key: 'appleDevelopmentProfile' },
-                                { label: 'Apple Distribution Profile', key: 'appleDistributionProfile' },
                                 { label: 'Client ID (Google Cloud/Firebase)', key: 'firebaseClientId' },
                             ].map((field) => (
                                 <div key={field.key} className="space-y-2">
@@ -397,40 +438,161 @@ export default function Environments() {
                             ))}
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-zinc-400">Google Play Console Project</label>
-                                <select
-                                    value={currentConfig.googlePlayStatus || 'Not Required'}
-                                    onChange={e => handleUpdateField('googlePlayStatus', e.target.value)}
-                                    disabled={!isAdmin}
-                                    className={cn(
-                                        "w-full rounded-md border px-3 py-2 text-sm outline-none cursor-pointer",
-                                        getStatusColor(currentConfig.googlePlayStatus || 'Not Required')
-                                    )}
-                                    style={{ backgroundColor: '#18181b' }}
-                                >
-                                    <option value="Done" className="text-emerald-400">Done</option>
-                                    <option value="Pending" className="text-amber-400">Pending</option>
-                                    <option value="Not Required" className="text-zinc-400">Not Required</option>
-                                </select>
+                        <div className="flex flex-col gap-10 xl:max-w-5xl">
+                            {/* Android Specific */}
+                            <div className="space-y-6">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <div className="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-green-500">
+                                            <path d="M5 12V4a2 2 0 012-2h10a2 2 0 012 2v8M5 12v6a2 2 0 002 2h10a2 2 0 002-2v-6M5 12h14M12 11V3" />
+                                            <circle cx="8" cy="11" r="1" />
+                                            <circle cx="16" cy="11" r="1" />
+                                        </svg>
+                                    </div>
+                                    <h4 className="text-sm font-bold text-zinc-300 uppercase tracking-widest">Android Configuration</h4>
+                                </div>
+
+                                <div className="space-y-5 bg-zinc-900/30 p-5 rounded-xl border border-zinc-800/50">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-medium text-zinc-400">Android Bundle ID</label>
+                                            <input
+                                                type="text"
+                                                value={currentConfig.bundleIdAndroid || ''}
+                                                onChange={e => handleUpdateField('bundleIdAndroid', e.target.value)}
+                                                readOnly={!isAdmin}
+                                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all"
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-medium text-zinc-400">Google Play Console Project</label>
+                                            <select
+                                                value={currentConfig.googlePlayStatus || 'Not Required'}
+                                                onChange={e => handleUpdateField('googlePlayStatus', e.target.value)}
+                                                disabled={!isAdmin}
+                                                className={cn(
+                                                    "w-full rounded-md border px-3 py-2.5 text-sm outline-none cursor-pointer font-medium",
+                                                    getStatusColor(currentConfig.googlePlayStatus || 'Not Required')
+                                                )}
+                                                style={{ backgroundColor: '#18181b' }}
+                                            >
+                                                <option value="Done" className="text-emerald-400">Done</option>
+                                                <option value="Pending" className="text-amber-400">Pending</option>
+                                                <option value="Not Required" className="text-zinc-400">Not Required</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <ParentAccountField
+                                        label="Android Parent Account"
+                                        value={currentConfig.parentAccountAndroid}
+                                        url={currentConfig.parentAccountAndroidUrl}
+                                        onValueChange={val => handleUpdateField('parentAccountAndroid', val)}
+                                        onUrlSave={url => handleUpdateField('parentAccountAndroidUrl', url)}
+                                        isAdmin={isAdmin}
+                                    />
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium text-zinc-400">Apple AppStore Setup</label>
-                                <select
-                                    value={currentConfig.appleStoreStatus || 'Not Required'}
-                                    onChange={e => handleUpdateField('appleStoreStatus', e.target.value)}
-                                    disabled={!isAdmin}
-                                    className={cn(
-                                        "w-full rounded-md border px-3 py-2 text-sm outline-none cursor-pointer",
-                                        getStatusColor(currentConfig.appleStoreStatus || 'Not Required')
-                                    )}
-                                    style={{ backgroundColor: '#18181b' }}
-                                >
-                                    <option value="Done" className="text-emerald-400">Done</option>
-                                    <option value="Pending" className="text-amber-400">Pending</option>
-                                    <option value="Not Required" className="text-zinc-400">Not Required</option>
-                                </select>
+
+                            {/* iOS Specific */}
+                            <div className="space-y-6">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <div className="w-8 h-8 rounded-lg bg-zinc-200/10 flex items-center justify-center">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="text-zinc-300">
+                                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.37 2.83zM13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
+                                        </svg>
+                                    </div>
+                                    <h4 className="text-sm font-bold text-zinc-300 uppercase tracking-widest">iOS Configuration</h4>
+                                </div>
+
+                                <div className="space-y-5 bg-zinc-900/30 p-5 rounded-xl border border-zinc-800/50">
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-zinc-400">iOS Bundle ID</label>
+                                        <input
+                                            type="text"
+                                            value={currentConfig.bundleIdiOS || ''}
+                                            onChange={e => handleUpdateField('bundleIdiOS', e.target.value)}
+                                            readOnly={!isAdmin}
+                                            className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all"
+                                        />
+                                    </div>
+
+                                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-medium text-zinc-400">Apple ID</label>
+                                            <input
+                                                type="text"
+                                                value={currentConfig.appleId || ''}
+                                                onChange={e => handleUpdateField('appleId', e.target.value)}
+                                                readOnly={!isAdmin}
+                                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all"
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-medium text-zinc-400">Apple SKU</label>
+                                            <input
+                                                type="text"
+                                                value={currentConfig.appleSKU || ''}
+                                                onChange={e => handleUpdateField('appleSKU', e.target.value)}
+                                                readOnly={!isAdmin}
+                                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <label className="text-sm font-medium text-zinc-400">Apple AppStore Setup</label>
+                                        <select
+                                            value={currentConfig.appleStoreStatus || 'Not Required'}
+                                            onChange={e => handleUpdateField('appleStoreStatus', e.target.value)}
+                                            disabled={!isAdmin}
+                                            className={cn(
+                                                "w-full rounded-md border px-3 py-2.5 text-sm outline-none cursor-pointer font-medium",
+                                                getStatusColor(currentConfig.appleStoreStatus || 'Not Required')
+                                            )}
+                                            style={{ backgroundColor: '#18181b' }}
+                                        >
+                                            <option value="Done" className="text-emerald-400">Done</option>
+                                            <option value="Pending" className="text-amber-400">Pending</option>
+                                            <option value="Not Required" className="text-zinc-400">Not Required</option>
+                                        </select>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-medium text-zinc-400">Dev Profile</label>
+                                            <input
+                                                type="text"
+                                                value={currentConfig.appleDevelopmentProfile || ''}
+                                                onChange={e => handleUpdateField('appleDevelopmentProfile', e.target.value)}
+                                                readOnly={!isAdmin}
+                                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all"
+                                                placeholder="Profile name..."
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-sm font-medium text-zinc-400">Dist Profile</label>
+                                            <input
+                                                type="text"
+                                                value={currentConfig.appleDistributionProfile || ''}
+                                                onChange={e => handleUpdateField('appleDistributionProfile', e.target.value)}
+                                                readOnly={!isAdmin}
+                                                className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2.5 text-sm text-zinc-100 focus:border-violet-500 outline-none transition-all"
+                                                placeholder="Profile name..."
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <ParentAccountField
+                                        label="Apple Parent Account"
+                                        value={currentConfig.parentAccountiOS}
+                                        url={currentConfig.parentAccountiOSUrl}
+                                        onValueChange={val => handleUpdateField('parentAccountiOS', val)}
+                                        onUrlSave={url => handleUpdateField('parentAccountiOSUrl', url)}
+                                        isAdmin={isAdmin}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </section>

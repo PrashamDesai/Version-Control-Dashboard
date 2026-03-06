@@ -53,6 +53,7 @@ const updateGame = asyncHandler(async (req, res) => {
     if (req.body.status !== undefined) game.status = req.body.status;
     if (req.body.playStoreUrl !== undefined) game.playStoreUrl = req.body.playStoreUrl;
     if (req.body.appStoreUrl !== undefined) game.appStoreUrl = req.body.appStoreUrl;
+    if (req.body.gitlabUrl !== undefined) game.gitlabUrl = req.body.gitlabUrl;
 
     const updatedGame = await game.save();
 

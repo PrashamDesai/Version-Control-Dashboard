@@ -79,7 +79,7 @@ export default function ScreenshotGallery({ gameId, screenshots = [], isAdmin, o
             {/* Gallery Panel */}
             <div className="glass-panel p-6 rounded-2xl border border-zinc-800/50 relative">
                 {/* Header Row */}
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
                     {/* Platform Info */}
                     <div className="flex items-center gap-3">
                         <div className={cn("w-8 h-8 rounded-lg flex items-center justify-center bg-white/5 border border-white/10", accentColor)}>
@@ -96,10 +96,10 @@ export default function ScreenshotGallery({ gameId, screenshots = [], isAdmin, o
                     </div>
 
                     {/* Controls */}
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 w-full sm:w-auto overflow-x-auto sm:overflow-visible pb-1 sm:pb-0">
                         {/* Landscape / Portrait toggle — shown only when there are screenshots */}
                         {screenshots.length > 0 && (
-                            <div className="flex items-center bg-zinc-900/50 rounded-lg p-1 border border-white/5">
+                            <div className="flex items-center bg-zinc-900/50 rounded-lg p-1 border border-white/5 flex-shrink-0">
                                 {['landscape', 'portrait'].map(o => (
                                     <button
                                         key={o}
@@ -117,7 +117,7 @@ export default function ScreenshotGallery({ gameId, screenshots = [], isAdmin, o
 
                         {/* Upload button — admin only */}
                         {isAdmin && (
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 flex-shrink-0">
                                 <input
                                     type="file"
                                     multiple

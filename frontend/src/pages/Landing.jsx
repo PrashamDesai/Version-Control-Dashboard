@@ -35,31 +35,37 @@ export default function Landing() {
     return (
         <div className="min-h-screen bg-[#050505] text-white selection:bg-violet-500/30 overflow-x-hidden font-inter">
             {/* Navigation */}
-            <nav className="fixed top-0 w-full z-50 px-6 py-4 flex items-center justify-between backdrop-blur-md border-b border-white/5 bg-black/20">
+            <nav className="fixed top-0 w-full z-50 px-4 sm:px-6 py-4 flex items-center justify-between backdrop-blur-md border-b border-white/5 bg-black/20">
                 <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-violet-600 rounded-lg flex items-center justify-center shadow-lg shadow-violet-500/20">
+                    <div className="w-8 h-8 bg-violet-600 rounded-lg flex items-center justify-center shadow-lg shadow-violet-500/20 shrink-0">
                         <span className="text-sm font-black italic">EG</span>
                     </div>
-                    <span className="text-lg font-bold tracking-tight">EchoGames</span>
+                    <span className="text-base sm:text-lg font-bold tracking-tight truncate max-w-[100px] sm:max-w-none">EchoGames</span>
                 </div>
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-3 sm:gap-6">
                     {isLoggedIn ? (
                         <button
                             onClick={handleLogout}
-                            className="text-sm font-medium text-zinc-400 hover:text-white transition-colors flex items-center gap-2 group"
+                            className="text-[10px] sm:text-sm font-medium text-zinc-400 hover:text-white transition-colors flex items-center gap-1 sm:gap-2 group shrink-0"
                         >
-                            <LogOut size={16} className="group-hover:translate-x-0.5 transition-transform" /> Logout
+                            <LogOut size={14} className="group-hover:translate-x-0.5 transition-transform sm:w-[16px] sm:h-[16px]" />
+                            <span className="hidden xs:inline">Logout</span>
                         </button>
                     ) : (
-                        <button onClick={() => navigate('/login')} className="text-sm font-medium text-zinc-400 hover:text-white transition-colors">
+                        <button onClick={() => navigate('/login')} className="text-xs sm:text-sm font-medium text-zinc-400 hover:text-white transition-colors shrink-0">
                             Sign In
                         </button>
                     )}
                     <button
                         onClick={handleMainAction}
-                        className="px-4 py-2 bg-violet-600 hover:bg-violet-700 rounded-full text-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-violet-500/25"
+                        className="px-3 py-1.5 sm:px-4 sm:py-2 bg-violet-600 hover:bg-violet-700 rounded-full text-[10px] sm:text-sm font-bold transition-all hover:scale-105 active:scale-95 shadow-lg shadow-violet-500/25 shrink-0 whitespace-nowrap"
                     >
-                        {isLoggedIn ? 'Go to Dashboard' : 'Get Started'}
+                        {isLoggedIn ? (
+                            <>
+                                <span className="sm:hidden">Dashboard</span>
+                                <span className="hidden sm:inline">Go to Dashboard</span>
+                            </>
+                        ) : 'Get Started'}
                     </button>
                 </div>
             </nav>
@@ -93,30 +99,30 @@ export default function Landing() {
                 </div>
 
                 {/* Interactive Game Component */}
-                <div className="mt-20 w-full max-w-5xl relative aspect-video rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-black/40 backdrop-blur-sm px-10 group">
+                <div className="mt-12 md:mt-20 w-full max-w-5xl relative aspect-[4/3] sm:aspect-video rounded-2xl md:rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-black/40 backdrop-blur-sm px-4 sm:px-10 group">
                     {!gameStarted ? (
-                        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/60 transition-opacity duration-500">
-                            <img src={ARTIFIACT} alt="Game Core" className="w-32 h-32 mb-6 animate-bounce" />
-                            <h2 className="text-2xl font-bold mb-2 text-white">Echo Catcher</h2>
-                            <p className="text-zinc-400 mb-6 font-medium">Click the violet orbs to collect score!</p>
+                        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/60 transition-opacity duration-500 p-6 text-center">
+                            <img src={ARTIFIACT} alt="Game Core" className="w-20 h-20 sm:w-32 sm:h-32 mb-6 animate-bounce" />
+                            <h2 className="text-xl sm:text-2xl font-bold mb-2 text-white">Echo Catcher</h2>
+                            <p className="text-sm sm:text-base text-zinc-400 mb-6 font-medium">Click the violet orbs to collect score!</p>
                             <button
                                 onClick={() => setGameStarted(true)}
-                                className="px-6 py-3 bg-white text-black rounded-xl font-black hover:scale-110 active:scale-95 transition-all flex items-center gap-2 shadow-xl shadow-white/10"
+                                className="px-5 py-2.5 sm:px-6 sm:py-3 bg-white text-black rounded-xl font-black hover:scale-110 active:scale-95 transition-all flex items-center gap-2 shadow-xl shadow-white/10 text-sm sm:text-base"
                             >
                                 <Play size={18} fill="black" /> PLAY MINI-GAME
                             </button>
                         </div>
                     ) : (
-                        <div className="relative w-full h-full overflow-hidden py-10">
-                            <div className="absolute top-6 left-6 text-xl font-black text-violet-400 flex items-center gap-2 z-20">
-                                <Zap size={20} className="fill-violet-400" /> SCORE: {score}
+                        <div className="relative w-full h-full overflow-hidden py-6 sm:py-10">
+                            <div className="absolute top-4 left-4 sm:top-6 sm:left-6 text-base sm:text-xl font-black text-violet-400 flex items-center gap-2 z-20">
+                                <Zap size={16} className="fill-violet-400 sm:w-[20px] sm:h-[20px]" /> SCORE: {score}
                             </div>
 
                             <button
                                 onClick={() => { setGameStarted(false); setScore(0); }}
-                                className="absolute top-6 right-6 px-4 py-2 bg-red-500/10 hover:bg-red-500/25 border border-red-500/20 hover:border-red-500/50 rounded-xl text-xs font-black text-red-500 hover:text-red-400 transition-all flex items-center gap-2 z-20 active:scale-95 group/exit"
+                                className="absolute top-4 right-4 sm:top-6 sm:right-6 px-3 py-1.5 sm:px-4 sm:py-2 bg-red-500/10 hover:bg-red-500/25 border border-red-500/20 hover:border-red-500/50 rounded-xl text-[10px] sm:text-xs font-black text-red-500 hover:text-red-400 transition-all flex items-center gap-2 z-20 active:scale-95 group/exit"
                             >
-                                <XCircle size={16} /> EXIT GAME
+                                <XCircle size={14} className="sm:w-[16px] sm:h-[16px]" /> EXIT GAME
                             </button>
 
                             <GameArea onScore={() => setScore(s => s + 10)} />

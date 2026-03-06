@@ -19,12 +19,15 @@ const updateEnvironment = asyncHandler(async (req, res) => {
 
     // Ensure body has gameId set correctly for upsert
     req.body.gameId = gameId;
+    console.log('DEBUG BACKEND: Request Body:', JSON.stringify(req.body, null, 2));
 
     const updatedEnv = await EnvironmentConfig.findOneAndUpdate(
         { gameId, environment: environment.toUpperCase() },
         req.body,
         { new: true, runValidators: true, upsert: true }
     );
+
+    console.log('DEBUG BACKEND: Updated Doc:', JSON.stringify(updatedEnv, null, 2));
 
     successResponse(res, 200, 'Environment config updated', updatedEnv);
 });

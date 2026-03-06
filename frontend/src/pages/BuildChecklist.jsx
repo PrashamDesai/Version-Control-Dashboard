@@ -280,26 +280,18 @@ export default function BuildChecklist() {
                 </div>
 
                 <div key={platform} className="tab-panel flex-1 overflow-auto">
-                    <table className="w-full text-sm text-left">
-                        <thead className="text-xs text-zinc-500 bg-[#1a1a1c] sticky top-0 z-10 border-b border-zinc-800/80">
-                            <tr>
-                                <th className="px-6 py-4 font-medium w-[30%]">Validation Check</th>
-                                <th className="px-4 py-4 font-medium w-[15%]">Status</th>
-                                <th className="px-6 py-4 font-medium w-[45%]">Notes</th>
-                                <th className="px-4 py-4 font-medium text-right w-[10%]">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-zinc-800/50">
+                    <>
+                        {/* Mobile/Tablet Card View */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 xl:hidden">
                             {filteredChecklist.length === 0 ? (
-                                <tr>
-                                    <td colSpan="5" className="p-8 text-center text-zinc-500 text-sm">
-                                        No checks configured for {platform}.
-                                    </td>
-                                </tr>
+                                <div className="text-center text-zinc-500 text-sm p-4">
+                                    No checks configured for {platform}.
+                                </div>
                             ) : (
                                 filteredChecklist.map((item) => (
-                                    <tr key={item.localId} className={cn("hover:bg-zinc-800/20 transition-colors", item.status === 'Completed' ? "opacity-60" : "")}>
-                                        <td className="px-6 py-3">
+                                    <div key={item.localId} className={cn("bg-zinc-900/40 border rounded-xl p-4 flex flex-col gap-3 relative group", item.status === 'Completed' ? "opacity-60 border-zinc-800/50" : "border-zinc-800/80")}>
+                                        <div className="flex flex-col gap-1.5">
+                                            <label className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider block">Validation Check</label>
                                             <input
                                                 type="text"
                                                 value={item.checkName}
@@ -308,8 +300,9 @@ export default function BuildChecklist() {
                                                 placeholder="e.g., Verify Bundle ID"
                                                 className="w-full bg-zinc-900 border border-zinc-800 rounded-md px-3 py-2 text-sm text-zinc-200 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
                                             />
-                                        </td>
-                                        <td className="px-4 py-3">
+                                        </div>
+                                        <div className="flex flex-col gap-1.5">
+                                            <label className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider block">Status</label>
                                             <select
                                                 value={item.status}
                                                 onChange={(e) => handleChange(item.localId, 'status', e.target.value)}
@@ -325,8 +318,9 @@ export default function BuildChecklist() {
                                                 <option value="Attention" className="text-red-400">Attention</option>
                                                 <option value="N/A" className="text-zinc-400">N/A</option>
                                             </select>
-                                        </td>
-                                        <td className="px-6 py-3">
+                                        </div>
+                                        <div className="flex flex-col gap-1.5">
+                                            <label className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider block">Notes</label>
                                             <input
                                                 type="text"
                                                 value={item.notes}
@@ -335,34 +329,120 @@ export default function BuildChecklist() {
                                                 placeholder="Additional info..."
                                                 className="w-full bg-zinc-900 border border-zinc-800 rounded-md px-3 py-2 text-sm text-zinc-300 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
                                             />
-                                        </td>
-                                        <td className="px-4 py-3 text-right">
-                                            {isAdmin && (
-                                                <div className="flex items-center justify-end gap-2">
-                                                    <button
-                                                        onClick={() => handleSaveRow(item)}
-                                                        disabled={savingRows[item.localId] || deletingRows[item.localId]}
-                                                        title="Save Check"
-                                                        className="p-1.5 bg-violet-500/10 text-violet-500 hover:bg-violet-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
-                                                    >
-                                                        {savingRows[item.localId] ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleDeleteRow(item)}
-                                                        disabled={savingRows[item.localId] || deletingRows[item.localId]}
-                                                        title="Delete Check"
-                                                        className="p-1.5 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
-                                                    >
-                                                        {deletingRows[item.localId] ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
-                                                    </button>
-                                                </div>
-                                            )}
-                                        </td>
-                                    </tr>
+                                        </div>
+                                        {isAdmin && (
+                                            <div className="flex items-center justify-end gap-2 pt-3 border-t border-zinc-800/50 mt-1">
+                                                <button
+                                                    onClick={() => handleSaveRow(item)}
+                                                    disabled={savingRows[item.localId] || deletingRows[item.localId]}
+                                                    title="Save Check"
+                                                    className="flex-1 flex justify-center items-center gap-2 p-2 bg-violet-500/10 text-violet-500 hover:bg-violet-500 hover:text-white rounded-md transition-colors disabled:opacity-50 text-sm font-medium"
+                                                >
+                                                    {savingRows[item.localId] ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                                                    Save
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDeleteRow(item)}
+                                                    disabled={savingRows[item.localId] || deletingRows[item.localId]}
+                                                    title="Delete Check"
+                                                    className="flex-shrink-0 p-2.5 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
+                                                >
+                                                    {deletingRows[item.localId] ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
                                 ))
                             )}
-                        </tbody>
-                    </table>
+                        </div>
+
+                        {/* PC Table View */}
+                        <div className="hidden xl:block overflow-x-auto">
+                            <table className="w-full text-sm text-left min-w-[700px]">
+                                <thead className="text-xs text-zinc-500 bg-[#1a1a1c] sticky top-0 z-10 border-b border-zinc-800/80">
+                                    <tr>
+                                        <th className="px-6 py-4 font-medium w-[30%]">Validation Check</th>
+                                        <th className="px-4 py-4 font-medium w-[15%]">Status</th>
+                                        <th className="px-6 py-4 font-medium w-[45%]">Notes</th>
+                                        <th className="px-4 py-4 font-medium text-right w-[10%]">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-zinc-800/50">
+                                    {filteredChecklist.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="5" className="p-8 text-center text-zinc-500 text-sm">
+                                                No checks configured for {platform}.
+                                            </td>
+                                        </tr>
+                                    ) : (
+                                        filteredChecklist.map((item) => (
+                                            <tr key={item.localId} className={cn("hover:bg-zinc-800/20 transition-colors", item.status === 'Completed' ? "opacity-60" : "")}>
+                                                <td className="px-6 py-3">
+                                                    <input
+                                                        type="text"
+                                                        value={item.checkName}
+                                                        onChange={(e) => handleChange(item.localId, 'checkName', e.target.value)}
+                                                        readOnly={!isAdmin}
+                                                        placeholder="e.g., Verify Bundle ID"
+                                                        className="w-full bg-zinc-900 border border-zinc-800 rounded-md px-3 py-2 text-sm text-zinc-200 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
+                                                    />
+                                                </td>
+                                                <td className="px-4 py-3">
+                                                    <select
+                                                        value={item.status}
+                                                        onChange={(e) => handleChange(item.localId, 'status', e.target.value)}
+                                                        disabled={!isAdmin}
+                                                        className={cn(
+                                                            "w-full bg-zinc-900 border border-zinc-800 rounded-md px-3 py-2 text-sm font-semibold outline-none",
+                                                            getStatusColor(item.status)
+                                                        )}
+                                                        style={{ backgroundColor: '#18181b' }}
+                                                    >
+                                                        <option value="Completed" className="text-emerald-400">Completed</option>
+                                                        <option value="Remaining" className="text-amber-400">Remaining</option>
+                                                        <option value="Attention" className="text-red-400">Attention</option>
+                                                        <option value="N/A" className="text-zinc-400">N/A</option>
+                                                    </select>
+                                                </td>
+                                                <td className="px-6 py-3">
+                                                    <input
+                                                        type="text"
+                                                        value={item.notes}
+                                                        onChange={(e) => handleChange(item.localId, 'notes', e.target.value)}
+                                                        readOnly={!isAdmin}
+                                                        placeholder="Additional info..."
+                                                        className="w-full bg-zinc-900 border border-zinc-800 rounded-md px-3 py-2 text-sm text-zinc-300 focus:border-violet-500 outline-none transition-all placeholder:text-zinc-600 focus:bg-zinc-800/50"
+                                                    />
+                                                </td>
+                                                <td className="px-4 py-3 text-right">
+                                                    {isAdmin && (
+                                                        <div className="flex items-center justify-end gap-2">
+                                                            <button
+                                                                onClick={() => handleSaveRow(item)}
+                                                                disabled={savingRows[item.localId] || deletingRows[item.localId]}
+                                                                title="Save Check"
+                                                                className="p-1.5 bg-violet-500/10 text-violet-500 hover:bg-violet-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
+                                                            >
+                                                                {savingRows[item.localId] ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handleDeleteRow(item)}
+                                                                disabled={savingRows[item.localId] || deletingRows[item.localId]}
+                                                                title="Delete Check"
+                                                                className="p-1.5 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
+                                                            >
+                                                                {deletingRows[item.localId] ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </>
                 </div>
             </div>
         </div>

@@ -17,10 +17,33 @@ import ConfirmDialog from './ConfirmDialog';
 import ProfileEditModal from './ProfileEditModal';
 import api from '../services/api';
 
-export default function MainSidebar() {
+export default function MainSidebar({ mobileOpen, setMobileOpen }) {
     const navigate = useNavigate();
     const location = useLocation();
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(window.innerWidth >= 768 && window.innerWidth < 1280);
+
+    // Initial check and resize listener
+    useEffect(() => {
+        const handleResize = () => {
+            // On mobile phones (< 768px), we never want the "collapsed" (icon-only) state
+            // because the sidebar acts as a full-width drawer.
+            if (window.innerWidth < 768) {
+                setCollapsed(false);
+            } else if (window.innerWidth < 1280) {
+                // On tablets, default to collapsed to save space
+                setCollapsed(true);
+            } else {
+                // On desktop, default to expanded
+                setCollapsed(false);
+            }
+        };
+
+        // Run once on mount
+        handleResize();
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [showProfileModal, setShowProfileModal] = useState(false);
     const [userData, setUserData] = useState(null);
@@ -97,10 +120,20 @@ export default function MainSidebar() {
 
     return (
         <>
+            {/* Mobile Backdrop */}
+            {mobileOpen && (
+                <div
+                    className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+                    onClick={() => setMobileOpen(false)}
+                />
+            )}
+
             <aside
                 className={cn(
-                    'flex flex-col h-full bg-[#0a0a0a] border-r border-zinc-800/50 transition-all duration-300 relative flex-shrink-0',
-                    collapsed ? 'w-16' : 'w-60'
+                    'flex flex-col h-full bg-[#0a0a0a] border-r border-zinc-800/50 transition-all duration-300 z-50 flex-shrink-0 relative',
+                    'max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:w-64 max-md:shadow-2xl',
+                    mobileOpen ? 'max-md:translate-x-0' : 'max-md:-translate-x-full',
+                    collapsed ? 'md:w-16' : 'md:w-60'
                 )}
             >
                 {/* Logo Section */}
@@ -118,13 +151,13 @@ export default function MainSidebar() {
                 {/* Floating collapse button — same as in-game Sidebar */}
                 <button
                     onClick={() => setCollapsed(!collapsed)}
-                    className="absolute -right-3 top-20 bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-white rounded-full p-1 z-10 transition-colors shadow-sm shadow-black/50"
+                    className="absolute -right-3 top-20 bg-zinc-800 border border-zinc-700 text-zinc-400 hover:text-white rounded-full p-1 z-10 transition-colors shadow-sm shadow-black/50 hidden md:block"
                 >
                     {collapsed ? <PanelLeft size={14} /> : <PanelLeftClose size={14} />}
                 </button>
 
                 {/* Nav items */}
-                <nav className="flex-1 py-4 px-2 pr-4 space-y-1 overflow-y-auto">
+                <nav className={cn("flex-1 py-4 space-y-1 overflow-y-auto", collapsed ? "px-2" : "px-2 pr-4")}>
                     {!collapsed && (
                         <div className="px-2 mb-3 text-[10px] font-semibold text-zinc-600 uppercase tracking-wider">
                             Navigation
@@ -137,6 +170,7 @@ export default function MainSidebar() {
                         label="Games"
                         collapsed={collapsed}
                         active={location.pathname === '/games' || location.pathname === '/'}
+                        onClick={() => { if (window.innerWidth < 768) setMobileOpen(false); }}
                     />
 
                     <SidebarLink
@@ -145,6 +179,7 @@ export default function MainSidebar() {
                         label="Team"
                         collapsed={collapsed}
                         active={location.pathname === '/team'}
+                        onClick={() => { if (window.innerWidth < 768) setMobileOpen(false); }}
                     />
 
                     <SidebarLink
@@ -153,6 +188,7 @@ export default function MainSidebar() {
                         label="Settings"
                         collapsed={collapsed}
                         active={location.pathname === '/settings'}
+                        onClick={() => { if (window.innerWidth < 768) setMobileOpen(false); }}
                     />
 
                     {isAdminOrSuper && (
@@ -169,6 +205,7 @@ export default function MainSidebar() {
                                 collapsed={collapsed}
                                 active={location.pathname === '/admin'}
                                 accent="purple"
+                                onClick={() => { if (window.innerWidth < 768) setMobileOpen(false); }}
                             />
                         </>
                     )}
@@ -249,7 +286,9 @@ export default function MainSidebar() {
     );
 }
 
-function SidebarLink({ to, icon: Icon, label, collapsed, active, accent = 'violet' }) {
+
+
+function SidebarLink({ to, icon: Icon, label, collapsed, active, accent = 'violet', onClick }) {
     const accentClasses = {
         violet: active ? 'bg-violet-500/10 text-violet-400' : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/40',
         purple: active ? 'bg-purple-500/10 text-purple-400' : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/40',
@@ -262,10 +301,12 @@ function SidebarLink({ to, icon: Icon, label, collapsed, active, accent = 'viole
     return (
         <Link
             to={to}
+            onClick={onClick}
             title={collapsed ? label : undefined}
             className={cn(
                 'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all group',
-                accentClasses[accent]
+                accentClasses[accent],
+                collapsed && 'justify-center px-2'
             )}
         >
             <Icon size={17} className={cn('flex-shrink-0', iconAccent[accent])} />

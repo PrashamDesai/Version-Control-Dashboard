@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, ChevronDown } from 'lucide-react';
+import { Search, ChevronDown, Menu } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
-export default function TopNav({ showGameSwitcher = false, game = null }) {
+export default function TopNav({ showGameSwitcher = false, game = null, onMenuToggle }) {
     const [isGameSwitcherOpen, setIsGameSwitcherOpen] = useState(false);
     const [games, setGames] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -47,8 +47,16 @@ export default function TopNav({ showGameSwitcher = false, game = null }) {
         : [];
 
     return (
-        <header className="h-16 border-b border-zinc-800/50 sticky top-0 z-10 hidden sm:flex bg-[#09090b]/80 backdrop-blur-md px-6 md:px-16 pl-20 md:pl-28">
-            <div className="w-full max-w-7xl mx-auto flex items-center justify-between">
+        <header className="h-16 border-b border-zinc-800/50 flex bg-[#09090b]/80 backdrop-blur-md px-4 md:px-6 lg:px-10 xl:px-16 z-30 sticky top-0">
+            <div className="w-full max-w-7xl mx-auto flex items-center justify-between gap-4">
+                {/* Mobile Menu Button */}
+                <button
+                    onClick={onMenuToggle}
+                    className="md:hidden p-2 -ml-2 text-zinc-400 hover:text-white transition-colors"
+                >
+                    <Menu size={20} />
+                </button>
+
                 {/* Search Bar - Aligned with content left edge */}
                 <div className="flex-1 flex justify-start">
                     <div className="relative w-full max-w-md hidden md:block" ref={searchRef}>

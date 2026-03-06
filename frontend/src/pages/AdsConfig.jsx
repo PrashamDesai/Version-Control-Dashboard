@@ -370,28 +370,19 @@ export default function AdsConfig() {
                         )}
                     </div>
 
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse min-w-[1000px]">
-                            <thead className="bg-[#1a1a1c] border-b border-zinc-800">
-                                <tr>
-                                    <th className="p-4 text-xs font-semibold text-zinc-400 uppercase tracking-wider w-[15%]">Ad Type</th>
-                                    <th className="p-4 text-xs font-semibold text-zinc-400 uppercase tracking-wider w-[30%]">Placement / Screen</th>
-                                    <th className="p-4 text-xs font-semibold text-zinc-400 uppercase tracking-wider w-[25%]">Frequency</th>
-                                    <th className="p-4 text-xs font-semibold text-zinc-400 uppercase tracking-wider w-[20%]">Purpose / Notes</th>
-                                    <th className="p-4 text-xs font-semibold text-zinc-400 uppercase tracking-wider text-right w-[10%]">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-zinc-800/50">
-                                {currentRows.length === 0 ? (
-                                    <tr>
-                                        <td colSpan="5" className="p-8 text-center text-zinc-500 text-sm">
-                                            No placements added.
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    currentRows.map(row => (
-                                        <tr key={row.localId} className="hover:bg-zinc-900/30 transition-colors group">
-                                            <td className="p-4 align-top">
+                    <>
+                        {/* Mobile/Tablet Card View */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 xl:hidden">
+                            {currentRows.length === 0 ? (
+                                <div className="text-center text-zinc-500 text-sm p-4">
+                                    No placements added.
+                                </div>
+                            ) : (
+                                currentRows.map(row => (
+                                    <div key={row.localId} className="bg-zinc-900/40 border border-zinc-800/80 rounded-xl p-4 flex flex-col gap-4 relative group">
+                                        <div className="space-y-3">
+                                            <div>
+                                                <label className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-1 block">Ad Type</label>
                                                 <select
                                                     value={row.adType}
                                                     onChange={e => handleRowChange(row.localId, 'adType', e.target.value)}
@@ -401,69 +392,163 @@ export default function AdsConfig() {
                                                 >
                                                     {AD_TYPES.map(t => <option key={t} value={t}>{t} Ad</option>)}
                                                 </select>
-                                            </td>
-
-                                            <td className="p-4 align-top">
+                                            </div>
+                                            <div>
+                                                <label className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-1 block">Placement / Screen</label>
                                                 <textarea
                                                     value={row.placement}
                                                     onChange={e => handleRowChange(row.localId, 'placement', e.target.value)}
                                                     readOnly={!isAdmin}
                                                     placeholder="Menu, Settings..."
-                                                    rows={3}
+                                                    rows={2}
                                                     className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-sm text-zinc-300 focus:border-violet-500 outline-none resize-none"
                                                 />
-                                            </td>
-
-                                            <td className="p-4 align-top">
+                                            </div>
+                                            <div>
+                                                <label className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-1 block">Frequency</label>
                                                 <textarea
                                                     value={row.frequency}
                                                     onChange={e => handleRowChange(row.localId, 'frequency', e.target.value)}
                                                     readOnly={!isAdmin}
                                                     placeholder="Always visible..."
-                                                    rows={3}
+                                                    rows={2}
                                                     className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-sm text-zinc-300 focus:border-violet-500 outline-none resize-none"
                                                 />
-                                            </td>
-
-                                            <td className="p-4 align-top">
+                                            </div>
+                                            <div>
+                                                <label className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-1 block">Purpose / Notes</label>
                                                 <textarea
                                                     value={row.notes}
                                                     onChange={e => handleRowChange(row.localId, 'notes', e.target.value)}
                                                     readOnly={!isAdmin}
                                                     placeholder="Avoid distraction..."
-                                                    rows={3}
+                                                    rows={2}
                                                     className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-sm text-zinc-300 focus:border-violet-500 outline-none resize-none"
                                                 />
-                                            </td>
+                                            </div>
+                                        </div>
+                                        {isAdmin && (
+                                            <div className="flex items-center justify-end gap-2 pt-3 border-t border-zinc-800/50 mt-2">
+                                                <button
+                                                    onClick={() => handleSaveRow(row)}
+                                                    disabled={savingRows[row.localId] || deletingRows[row.localId]}
+                                                    title="Save Configuration"
+                                                    className="flex-1 flex justify-center items-center gap-2 p-2 bg-violet-500/10 text-violet-500 hover:bg-violet-500 hover:text-white rounded-md transition-colors disabled:opacity-50 text-sm font-medium"
+                                                >
+                                                    {savingRows[row.localId] ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                                                    Save
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDeleteRow(row)}
+                                                    disabled={savingRows[row.localId] || deletingRows[row.localId]}
+                                                    title="Delete Configuration"
+                                                    className="flex-shrink-0 p-2.5 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
+                                                >
+                                                    {deletingRows[row.localId] ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))
+                            )}
+                        </div>
 
-                                            <td className="p-4 text-right align-top">
-                                                {isAdmin && (
-                                                    <div className="flex items-center justify-end gap-2 pt-1">
-                                                        <button
-                                                            onClick={() => handleSaveRow(row)}
-                                                            disabled={savingRows[row.localId] || deletingRows[row.localId]}
-                                                            title="Save Configuration"
-                                                            className="p-2 bg-violet-500/10 text-violet-500 hover:bg-violet-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
-                                                        >
-                                                            {savingRows[row.localId] ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleDeleteRow(row)}
-                                                            disabled={savingRows[row.localId] || deletingRows[row.localId]}
-                                                            title="Delete Configuration"
-                                                            className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
-                                                        >
-                                                            {deletingRows[row.localId] ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
-                                                        </button>
-                                                    </div>
-                                                )}
+                        {/* PC Table View */}
+                        <div className="hidden xl:block overflow-x-auto">
+                            <table className="w-full text-left border-collapse min-w-[1000px]">
+                                <thead className="bg-[#1a1a1c] border-b border-zinc-800">
+                                    <tr>
+                                        <th className="p-4 text-xs font-semibold text-zinc-400 uppercase tracking-wider w-[15%]">Ad Type</th>
+                                        <th className="p-4 text-xs font-semibold text-zinc-400 uppercase tracking-wider w-[30%]">Placement / Screen</th>
+                                        <th className="p-4 text-xs font-semibold text-zinc-400 uppercase tracking-wider w-[25%]">Frequency</th>
+                                        <th className="p-4 text-xs font-semibold text-zinc-400 uppercase tracking-wider w-[20%]">Purpose / Notes</th>
+                                        <th className="p-4 text-xs font-semibold text-zinc-400 uppercase tracking-wider text-right w-[10%]">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-zinc-800/50">
+                                    {currentRows.length === 0 ? (
+                                        <tr>
+                                            <td colSpan="5" className="p-8 text-center text-zinc-500 text-sm">
+                                                No placements added.
                                             </td>
                                         </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
+                                    ) : (
+                                        currentRows.map(row => (
+                                            <tr key={row.localId} className="hover:bg-zinc-900/30 transition-colors group">
+                                                <td className="p-4 align-top">
+                                                    <select
+                                                        value={row.adType}
+                                                        onChange={e => handleRowChange(row.localId, 'adType', e.target.value)}
+                                                        disabled={!isAdmin}
+                                                        className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-sm text-zinc-300 focus:border-violet-500 outline-none"
+                                                        style={{ backgroundColor: '#18181b' }}
+                                                    >
+                                                        {AD_TYPES.map(t => <option key={t} value={t}>{t} Ad</option>)}
+                                                    </select>
+                                                </td>
+
+                                                <td className="p-4 align-top">
+                                                    <textarea
+                                                        value={row.placement}
+                                                        onChange={e => handleRowChange(row.localId, 'placement', e.target.value)}
+                                                        readOnly={!isAdmin}
+                                                        placeholder="Menu, Settings..."
+                                                        rows={3}
+                                                        className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-sm text-zinc-300 focus:border-violet-500 outline-none resize-none"
+                                                    />
+                                                </td>
+
+                                                <td className="p-4 align-top">
+                                                    <textarea
+                                                        value={row.frequency}
+                                                        onChange={e => handleRowChange(row.localId, 'frequency', e.target.value)}
+                                                        readOnly={!isAdmin}
+                                                        placeholder="Always visible..."
+                                                        rows={3}
+                                                        className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-sm text-zinc-300 focus:border-violet-500 outline-none resize-none"
+                                                    />
+                                                </td>
+
+                                                <td className="p-4 align-top">
+                                                    <textarea
+                                                        value={row.notes}
+                                                        onChange={e => handleRowChange(row.localId, 'notes', e.target.value)}
+                                                        readOnly={!isAdmin}
+                                                        placeholder="Avoid distraction..."
+                                                        rows={3}
+                                                        className="w-full bg-zinc-900 border border-zinc-800 rounded-md p-2 text-sm text-zinc-300 focus:border-violet-500 outline-none resize-none"
+                                                    />
+                                                </td>
+
+                                                <td className="p-4 text-right align-top">
+                                                    {isAdmin && (
+                                                        <div className="flex items-center justify-end gap-2 pt-1">
+                                                            <button
+                                                                onClick={() => handleSaveRow(row)}
+                                                                disabled={savingRows[row.localId] || deletingRows[row.localId]}
+                                                                title="Save Configuration"
+                                                                className="p-2 bg-violet-500/10 text-violet-500 hover:bg-violet-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
+                                                            >
+                                                                {savingRows[row.localId] ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handleDeleteRow(row)}
+                                                                disabled={savingRows[row.localId] || deletingRows[row.localId]}
+                                                                title="Delete Configuration"
+                                                                className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-md transition-colors disabled:opacity-50"
+                                                            >
+                                                                {deletingRows[row.localId] ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </>
                 </div>
 
             </div>

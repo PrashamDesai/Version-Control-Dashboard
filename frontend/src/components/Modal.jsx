@@ -20,7 +20,7 @@ export default function Modal({ isOpen, onClose, title, children, className }) {
                 onClick={onClose}
             />
 
-            <div className={cn("relative z-10 w-full max-w-lg bg-[#18181b] border border-zinc-800 rounded-xl shadow-2xl flex flex-col", className)}>
+            <div className={cn("relative z-10 w-[96%] sm:w-full max-w-lg max-h-[96vh] sm:max-h-[90vh] bg-[#18181b] border border-zinc-800 rounded-xl shadow-2xl flex flex-col", className)}>
                 <div className="flex items-center justify-between p-4 border-b border-zinc-800/80">
                     <h2 className="text-lg font-semibold text-white tracking-tight">{title}</h2>
                     <button

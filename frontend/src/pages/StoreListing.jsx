@@ -247,7 +247,7 @@ export default function StoreListing() {
                                 />
                             </div>
 
-                            <div className="grid grid-cols-2 gap-4 flex-shrink-0 mt-auto">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-shrink-0 mt-auto">
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-zinc-300">Address</label>
                                     <input

@@ -205,30 +205,35 @@ export default function Overview() {
                 <div className="absolute -top-16 -right-16 w-64 h-64 bg-violet-500/8 rounded-full blur-3xl pointer-events-none" />
                 <div className="absolute -bottom-16 -left-16 w-48 h-48 bg-purple-500/6 rounded-full blur-3xl pointer-events-none" />
 
-                <div className="relative z-10 flex flex-col sm:flex-row gap-5 items-start justify-between w-full">
-                    <div className="flex flex-col sm:flex-row gap-5 items-start sm:items-center flex-1 min-w-0">
+                <div className="relative z-10 flex flex-col xl:flex-row gap-8 items-start justify-between w-full">
+                    <div className="flex flex-col sm:flex-row gap-6 items-start flex-1 w-full min-w-0">
                         {/* Game icon */}
-                        <div className="w-20 h-20 rounded-2xl overflow-hidden bg-zinc-800 shadow-2xl border border-zinc-700 flex-shrink-0 flex items-center justify-center">
+                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-[2rem] overflow-hidden bg-zinc-800 shadow-2xl border border-zinc-700/50 flex-shrink-0 flex items-center justify-center group/icon transition-transform hover:scale-105 duration-300">
                             {game.iconUrl ? (
                                 <img src={`${import.meta.env.VITE_IMAGE_BASE_URL}${game.iconUrl}`} alt="Game Icon" className="w-full h-full object-cover" />
                             ) : (
-                                <span className="text-zinc-400 font-bold text-3xl">{game.name?.charAt(0)}</span>
+                                <span className="text-zinc-400 font-bold text-3xl sm:text-4xl">{game.name?.charAt(0)}</span>
                             )}
                         </div>
 
                         {/* Info */}
                         <div className="flex-1 min-w-0">
-                            <div className="flex flex-wrap items-center gap-3 mb-1">
-                                <h1 className="text-2xl font-bold tracking-tight text-white">{game.name}</h1>
+                            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white mb-2">{game.name}</h1>
+                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 mb-5 pointer-events-none">
                                 <StatusBadge status={isLive ? 'Live' : 'Pending'} />
+                                {game.slug && (
+                                    <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-zinc-900/80 border border-zinc-800 text-[10px] uppercase tracking-wider font-semibold text-zinc-500">
+                                        <Tag size={10} /> {game.slug}
+                                    </span>
+                                )}
                             </div>
 
-                            <p className="text-zinc-400 text-sm mb-3 max-w-xl leading-relaxed">
+                            <p className="text-zinc-300 text-sm sm:text-base mb-6 max-w-2xl leading-relaxed font-medium">
                                 {game.description || 'No description provided for this game.'}
                             </p>
 
                             {/* Meta row */}
-                            <div className="flex flex-wrap items-center gap-4 text-xs text-zinc-500 mb-1 pointer-events-none">
+                            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-[11px] sm:text-xs text-zinc-500 mb-1 pointer-events-none">
                                 {isAndroid && (
                                     <span className="flex items-center gap-1.5">
                                         <Smartphone size={13} className="text-green-400" /> Android
@@ -244,18 +249,18 @@ export default function Overview() {
                                         <Tag size={13} /> {game.slug}
                                     </span>
                                 )}
-                                <span className="flex items-center gap-1.5">
-                                    <CalendarDays size={13} />
-                                    Added {new Date(game.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                <span className="flex items-center gap-2">
+                                    <CalendarDays size={13} className="text-zinc-600" />
+                                    <span className="opacity-70">Added</span> <span className="text-zinc-300 font-medium">{new Date(game.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                                 </span>
                                 {liveAndroid && (
-                                    <span className="flex items-center gap-1.5 text-emerald-500">
-                                        Android live: <strong>{liveAndroid.versionName}</strong>
+                                    <span className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-emerald-500/5 border border-emerald-500/10 text-emerald-400/90 font-semibold shadow-sm shadow-emerald-500/5">
+                                        Android live: <span className="text-emerald-400 ml-1">{liveAndroid.versionName}</span>
                                     </span>
                                 )}
                                 {liveIos && (
-                                    <span className="flex items-center gap-1.5 text-violet-400">
-                                        iOS live: <strong>{liveIos.versionName}</strong>
+                                    <span className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-violet-500/5 border border-violet-500/10 text-violet-400/90 font-semibold shadow-sm shadow-violet-500/5">
+                                        iOS live: <span className="text-violet-400 ml-1">{liveIos.versionName}</span>
                                     </span>
                                 )}
                             </div>
@@ -263,7 +268,7 @@ export default function Overview() {
                     </div>
 
                     {/* Big Store Logos */}
-                    <div className="flex gap-4 sm:ml-auto self-center shrink-0">
+                    <div className="flex gap-4 w-full xl:w-auto mt-2 xl:mt-0 justify-start xl:justify-end xl:self-center shrink-0 flex-wrap lg:grid lg:grid-cols-3 xl:flex xl:flex-row">
                         {isAndroid && (
                             <BigStoreLogoLink
                                 platform="Play Store"
@@ -294,7 +299,7 @@ export default function Overview() {
             </div>
 
             {/* ── Stat cards ────────────────────────────────────────────────── */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <StatCard
                     title="Android Version"
                     value={latestAndroid?.versionName || '—'}
@@ -338,31 +343,59 @@ export default function Overview() {
                     {releases.length === 0 ? (
                         <div className="p-10 text-center text-zinc-600 text-sm">No releases found.</div>
                     ) : (
-                        <table className="w-full text-sm text-left">
-                            <thead className="text-xs text-zinc-600 bg-zinc-900/40 border-b border-zinc-800/50">
-                                <tr>
-                                    <th className="px-5 py-3 font-medium">Version</th>
-                                    <th className="px-5 py-3 font-medium">Platform</th>
-                                    <th className="px-5 py-3 font-medium">Status</th>
-                                    <th className="px-5 py-3 font-medium">Date</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-zinc-800/40">
+                        <div className="w-full">
+                            {/* Desktop Table */}
+                            <div className="hidden xl:block overflow-x-auto">
+                                <table className="w-full text-sm text-left">
+                                    <thead className="text-xs text-zinc-600 bg-zinc-900/40 border-b border-zinc-800/50">
+                                        <tr>
+                                            <th className="px-5 py-3 font-medium">Version</th>
+                                            <th className="px-5 py-3 font-medium">Platform</th>
+                                            <th className="px-5 py-3 font-medium">Status</th>
+                                            <th className="px-5 py-3 font-medium">Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-zinc-800/40">
+                                        {releases.map((release, i) => (
+                                            <tr key={i} className="hover:bg-zinc-800/20 transition-colors">
+                                                <td className="px-5 py-3.5 font-medium text-zinc-200">
+                                                    {release.versionName}
+                                                    <span className="text-zinc-600 font-normal ml-1.5 text-xs">#{release.buildNumber}</span>
+                                                </td>
+                                                <td className="px-5 py-3.5 text-zinc-400">{release.platform}</td>
+                                                <td className="px-5 py-3.5"><StatusBadge status={release.status} /></td>
+                                                <td className="px-5 py-3.5 text-zinc-600 text-xs">
+                                                    {new Date(release.releaseDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Mobile/Tablet Card Layout */}
+                            <div className="xl:hidden grid grid-cols-1 sm:grid-cols-2 divide-y sm:divide-y-0 gap-px sm:gap-4 bg-zinc-800/40 sm:bg-transparent sm:p-4">
                                 {releases.map((release, i) => (
-                                    <tr key={i} className="hover:bg-zinc-800/20 transition-colors">
-                                        <td className="px-5 py-3.5 font-medium text-zinc-200">
-                                            {release.versionName}
-                                            <span className="text-zinc-600 font-normal ml-1.5 text-xs">#{release.buildNumber}</span>
-                                        </td>
-                                        <td className="px-5 py-3.5 text-zinc-400">{release.platform}</td>
-                                        <td className="px-5 py-3.5"><StatusBadge status={release.status} /></td>
-                                        <td className="px-5 py-3.5 text-zinc-600 text-xs">
-                                            {new Date(release.releaseDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                                        </td>
-                                    </tr>
+                                    <div key={i} className="p-4 flex flex-col gap-3 hover:bg-zinc-800/20 transition-colors">
+                                        <div className="flex justify-between items-start gap-2">
+                                            <div className="min-w-0">
+                                                <div className="font-medium text-zinc-200 truncate flex items-center gap-2">
+                                                    {release.versionName}
+                                                    <span className="text-zinc-600 font-normal text-xs">#{release.buildNumber}</span>
+                                                </div>
+                                                <div className="text-zinc-500 text-xs mt-0.5">{release.platform}</div>
+                                            </div>
+                                            <div className="shrink-0 flex flex-col items-end gap-1.5">
+                                                <StatusBadge status={release.status} />
+                                                <div className="text-[10px] text-zinc-600">
+                                                    {new Date(release.releaseDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 ))}
-                            </tbody>
-                        </table>
+                            </div>
+                        </div>
                     )}
                 </div>
 

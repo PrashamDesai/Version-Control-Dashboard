@@ -143,9 +143,9 @@ export default function Releases() {
             </div>
 
             <div className="glass-panel rounded-xl flex flex-col flex-1 overflow-hidden border border-zinc-800/50">
-                <div className="p-4 border-b border-zinc-800/50 flex items-center justify-between bg-[#121214] flex-shrink-0">
-                    <div className="flex items-center gap-3 w-full max-w-lg">
-                        <div className="relative flex-1">
+                <div className="p-4 border-b border-zinc-800/50 flex flex-col sm:flex-row items-start sm:items-center justify-between bg-[#121214] flex-shrink-0 gap-3">
+                    <div className="flex flex-wrap items-center gap-3 w-full">
+                        <div className="relative flex-[2] min-w-[200px]">
                             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
                             <input
                                 type="text"
@@ -155,17 +155,19 @@ export default function Releases() {
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
-                        <select
-                            className="bg-zinc-900 flex items-center gap-2 px-3 py-1.5 border border-zinc-800 hover:bg-zinc-800 rounded-md text-sm text-zinc-400 transition-colors shrink-0 outline-none cursor-pointer"
-                            value={filterPlatform}
-                            onChange={(e) => setFilterPlatform(e.target.value)}
-                            disabled={!isAdmin}
-                            style={{ backgroundColor: '#18181b' }}
-                        >
-                            <option value="">All Platforms</option>
-                            {game?.platformsSupported?.includes('Android') && <option value="Android">Android</option>}
-                            {game?.platformsSupported?.includes('iOS') && <option value="iOS">iOS</option>}
-                        </select>
+                        <div className="flex-1 min-w-[140px]">
+                            <select
+                                className="w-full bg-zinc-900 flex items-center gap-2 px-3 py-1.5 border border-zinc-800 hover:bg-zinc-800 rounded-md text-sm text-zinc-400 transition-colors outline-none cursor-pointer"
+                                value={filterPlatform}
+                                onChange={(e) => setFilterPlatform(e.target.value)}
+                                disabled={!isAdmin}
+                                style={{ backgroundColor: '#18181b' }}
+                            >
+                                <option value="">All Platforms</option>
+                                {game?.platformsSupported?.includes('Android') && <option value="Android">Android</option>}
+                                {game?.platformsSupported?.includes('iOS') && <option value="iOS">iOS</option>}
+                            </select>
+                        </div>
                     </div>
                 </div>
 
@@ -179,62 +181,108 @@ export default function Releases() {
                             <p>No releases found.</p>
                         </div>
                     ) : (
-                        <table className="w-full text-sm text-left whitespace-nowrap">
-                            <thead className="text-xs text-zinc-500 bg-zinc-900/80 sticky top-0 z-10 border-b border-zinc-800/50 backdrop-blur-sm">
-                                <tr>
-                                    <th className="px-6 py-3 font-medium">Rel #</th>
-                                    <th className="px-6 py-3 font-medium">Platform</th>
-                                    <th className="px-6 py-3 font-medium">Version (Build)</th>
-                                    <th className="px-6 py-3 font-medium w-full">What's New</th>
-                                    <th className="px-6 py-3 font-medium">Status</th>
-                                    <th className="px-6 py-3 font-medium">Date</th>
-                                    <th className="px-6 py-3 font-medium relative"><span className="sr-only">Actions</span></th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-zinc-800/50">
+                        <>
+                            {/* Mobile/Tablet Card View */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 xl:hidden">
                                 {releases.map((rel) => (
-                                    <tr key={rel._id} className="hover:bg-zinc-800/30 transition-colors group">
-                                        <td className="px-6 py-4 font-medium text-zinc-400">#{rel.releaseNumber || '-'}</td>
-                                        <td className="px-6 py-4">
-                                            <span className={cn(
-                                                "px-2 py-0.5 rounded text-[11px] font-semibold uppercase tracking-wider",
-                                                rel.platform === 'Android' ? "bg-green-500/10 text-green-400" : "bg-violet-500/10 text-violet-400"
-                                            )}>
-                                                {rel.platform}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4 font-medium text-zinc-200">
-                                            {rel.versionName} <span className="text-zinc-500 font-normal">({rel.buildNumber})</span>
-                                        </td>
-                                        <td className="px-6 py-4 text-zinc-400 truncate max-w-xs">{rel.whatsNew}</td>
-                                        <td className="px-6 py-4">
-                                            <StatusBadge status={rel.status} />
-                                        </td>
-                                        <td className="px-6 py-4 text-zinc-500">{new Date(rel.releaseDate || rel.createdAt).toLocaleDateString()}</td>
-                                        <td className="px-6 py-4 text-right">
+                                    <div key={rel._id} className="bg-zinc-900/40 border border-zinc-800/50 rounded-xl p-4 flex flex-col gap-3 relative group">
+                                        <div className="flex justify-between items-start">
+                                            <div className="flex items-center gap-2">
+                                                <span className={cn(
+                                                    "px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider",
+                                                    rel.platform === 'Android' ? "bg-green-500/10 text-green-400" : "bg-violet-500/10 text-violet-400"
+                                                )}>
+                                                    {rel.platform}
+                                                </span>
+                                                <span className="text-xs text-zinc-500 font-medium">#{rel.releaseNumber || '-'}</span>
+                                            </div>
                                             {isAdmin && (
-                                                <div className="opacity-0 group-hover:opacity-100 transition-opacity flex justify-end gap-1">
-                                                    <button
-                                                        onClick={() => handleEdit(rel)}
-                                                        className="p-1.5 text-zinc-400 hover:text-violet-400 hover:bg-violet-500/10 rounded transition-colors"
-                                                        title="Edit"
-                                                    >
-                                                        <Edit2 size={14} />
+                                                <div className="flex gap-1.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                                                    <button onClick={() => handleEdit(rel)} className="p-1.5 text-zinc-400 hover:text-violet-400 hover:bg-violet-500/10 rounded-md transition-colors bg-zinc-800/50">
+                                                        <Edit2 size={13} />
                                                     </button>
-                                                    <button
-                                                        onClick={() => setConfirmDeleteId(rel._id)}
-                                                        className="p-1.5 text-zinc-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
-                                                        title="Delete"
-                                                    >
-                                                        <Trash2 size={14} />
+                                                    <button onClick={() => setConfirmDeleteId(rel._id)} className="p-1.5 text-zinc-400 hover:text-red-400 hover:bg-red-500/10 rounded-md transition-colors bg-zinc-800/50">
+                                                        <Trash2 size={13} />
                                                     </button>
                                                 </div>
                                             )}
-                                        </td>
-                                    </tr>
+                                        </div>
+                                        <div>
+                                            <h3 className="text-base font-semibold text-zinc-200">
+                                                {rel.versionName} <span className="text-zinc-500 font-normal text-sm">({rel.buildNumber})</span>
+                                            </h3>
+                                        </div>
+                                        <div className="text-sm text-zinc-400 line-clamp-3">
+                                            {rel.whatsNew || <span className="italic opacity-50">No release notes</span>}
+                                        </div>
+                                        <div className="flex items-center justify-between pt-3 border-t border-zinc-800/50 mt-auto">
+                                            <StatusBadge status={rel.status} />
+                                            <span className="text-xs text-zinc-500">{new Date(rel.releaseDate || rel.createdAt).toLocaleDateString()}</span>
+                                        </div>
+                                    </div>
                                 ))}
-                            </tbody>
-                        </table>
+                            </div>
+
+                            {/* PC Table View */}
+                            <div className="hidden xl:block overflow-x-auto">
+                                <table className="w-full text-sm text-left whitespace-nowrap min-w-[700px]">
+                                    <thead className="text-xs text-zinc-500 bg-zinc-900/80 sticky top-0 z-10 border-b border-zinc-800/50 backdrop-blur-sm">
+                                        <tr>
+                                            <th className="px-6 py-3 font-medium">Rel #</th>
+                                            <th className="px-6 py-3 font-medium">Platform</th>
+                                            <th className="px-6 py-3 font-medium">Version (Build)</th>
+                                            <th className="px-6 py-3 font-medium w-full">What's New</th>
+                                            <th className="px-6 py-3 font-medium">Status</th>
+                                            <th className="px-6 py-3 font-medium">Date</th>
+                                            <th className="px-6 py-3 font-medium relative"><span className="sr-only">Actions</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-zinc-800/50">
+                                        {releases.map((rel) => (
+                                            <tr key={rel._id} className="hover:bg-zinc-800/30 transition-colors group">
+                                                <td className="px-6 py-4 font-medium text-zinc-400">#{rel.releaseNumber || '-'}</td>
+                                                <td className="px-6 py-4">
+                                                    <span className={cn(
+                                                        "px-2 py-0.5 rounded text-[11px] font-semibold uppercase tracking-wider",
+                                                        rel.platform === 'Android' ? "bg-green-500/10 text-green-400" : "bg-violet-500/10 text-violet-400"
+                                                    )}>
+                                                        {rel.platform}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4 font-medium text-zinc-200">
+                                                    {rel.versionName} <span className="text-zinc-500 font-normal">({rel.buildNumber})</span>
+                                                </td>
+                                                <td className="px-6 py-4 text-zinc-400 truncate max-w-[200px]">{rel.whatsNew}</td>
+                                                <td className="px-6 py-4">
+                                                    <StatusBadge status={rel.status} />
+                                                </td>
+                                                <td className="px-6 py-4 text-zinc-500">{new Date(rel.releaseDate || rel.createdAt).toLocaleDateString()}</td>
+                                                <td className="px-6 py-4 text-right">
+                                                    {isAdmin && (
+                                                        <div className="opacity-0 group-hover:opacity-100 transition-opacity flex justify-end gap-1">
+                                                            <button
+                                                                onClick={() => handleEdit(rel)}
+                                                                className="p-1.5 text-zinc-400 hover:text-violet-400 hover:bg-violet-500/10 rounded transition-colors"
+                                                                title="Edit"
+                                                            >
+                                                                <Edit2 size={14} />
+                                                            </button>
+                                                            <button
+                                                                onClick={() => setConfirmDeleteId(rel._id)}
+                                                                className="p-1.5 text-zinc-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
+                                                                title="Delete"
+                                                            >
+                                                                <Trash2 size={14} />
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </>
                     )}
                 </div>
             </div>

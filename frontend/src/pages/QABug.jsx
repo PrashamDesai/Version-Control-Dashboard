@@ -186,8 +186,7 @@ export default function QABug() {
 
     return (
         <div className="p-6 space-y-6 max-w-5xl mx-auto">
-            {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-xl font-bold text-white flex items-center gap-2">
                         <Bug size={20} className="text-red-400" /> QA Bug Tracker
@@ -196,7 +195,7 @@ export default function QABug() {
                 </div>
                 <button
                     onClick={openCreate}
-                    className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+                    className="flex shrink-0 items-center gap-2 px-4 py-2 text-sm font-medium bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors w-full sm:w-auto justify-center"
                 >
                     <Plus size={15} /> Report Bug
                 </button>
@@ -444,8 +443,8 @@ function BugCard({ bug, currentUser, onEdit, onDelete, onStatusChange }) {
     return (
         <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-6 hover:border-zinc-700 transition-all space-y-4">
             {/* Top row */}
-            <div className="flex items-start justify-between gap-4">
-                <div className="flex items-start gap-4 flex-1 min-w-0">
+            <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
+                <div className="flex items-start gap-3 sm:gap-4 flex-1 min-w-0 w-full">
                     <div className="mt-1 flex-shrink-0 p-2 bg-red-500/10 rounded-lg">
                         <Bug size={20} className="text-red-400" />
                     </div>
@@ -455,7 +454,7 @@ function BugCard({ bug, currentUser, onEdit, onDelete, onStatusChange }) {
 
                         {/* Where */}
                         <p className="text-sm font-semibold text-zinc-300 flex items-center gap-1.5 truncate">
-                            <MapPin size={13} className="text-zinc-500" /> {bug.where}
+                            <MapPin size={13} className="text-zinc-500 shrink-0" /> <span className="truncate">{bug.where}</span>
                         </p>
 
                         {/* How */}
@@ -464,7 +463,7 @@ function BugCard({ bug, currentUser, onEdit, onDelete, onStatusChange }) {
                 </div>
 
                 {/* Status badge + quick-change */}
-                <div className="flex flex-col items-end gap-3 flex-shrink-0 mt-1">
+                <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-start w-full sm:w-auto gap-3 flex-shrink-0 sm:mt-1 pt-3 sm:pt-0 border-t sm:border-0 border-zinc-800/50">
                     <select
                         value={bug.status}
                         disabled={!canChangeStatus}

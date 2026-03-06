@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+// Schema for environment-specific configurations
 
 const environmentConfigSchema = new mongoose.Schema(
     {
@@ -24,6 +25,10 @@ const environmentConfigSchema = new mongoose.Schema(
         firebaseClientId: { type: String },
         appId: { type: String },
         appName: { type: String },
+        parentAccountAndroid: { type: String, default: '' },
+        parentAccountAndroidUrl: { type: String, default: '' },
+        parentAccountiOS: { type: String, default: '' },
+        parentAccountiOSUrl: { type: String, default: '' },
         sdkIntegration: {
             firebaseAuth: { type: String, enum: ['Done', 'Pending', 'Not Required'] },
             googleSignIn: { type: String, enum: ['Done', 'Pending', 'Not Required'] },
@@ -32,10 +37,15 @@ const environmentConfigSchema = new mongoose.Schema(
             analytics: { type: String, enum: ['Done', 'Pending', 'Not Required'] },
             fcm: { type: String, enum: ['Done', 'Pending', 'Not Required'] },
         },
+        sdkDownloadUrls: {
+            type: mongoose.Schema.Types.Mixed,
+            default: {}
+        },
         customSdks: [
             {
                 name: { type: String, required: true },
-                status: { type: String, enum: ['Done', 'Pending', 'Not Required'], default: 'Not Required' }
+                status: { type: String, enum: ['Done', 'Pending', 'Not Required'], default: 'Not Required' },
+                downloadUrl: { type: String }
             }
         ],
     },
@@ -47,3 +57,4 @@ environmentConfigSchema.index({ gameId: 1, environment: 1 }, { unique: true });
 
 const EnvironmentConfig = mongoose.model('EnvironmentConfig', environmentConfigSchema);
 module.exports = EnvironmentConfig;
+// nodemon trigger
